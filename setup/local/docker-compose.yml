@@ -1,0 +1,23 @@
+# courtesy of https://github.com/bradtraversy/docker-node-mongo
+
+version: '3'
+
+services:
+  app:
+    container_name: zkusebna-kobylisy
+    build: .
+    ports:
+      - '88:3000'
+      - '3002:3003'
+    volumes:
+      - ../../:/usr/src/app/
+      - ./run.sh:/run.sh
+      - app-node-modules:/usr/src/app/node_modules/
+  mongo:
+    container_name: zkusebna-kobylisy-mongo
+    image: mongo
+    expose:
+      - '27017'
+
+volumes:
+  app-node-modules:
