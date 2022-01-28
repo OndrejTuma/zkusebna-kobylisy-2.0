@@ -13,7 +13,7 @@ const oAuth2Client = new google.auth.OAuth2(
 
 
 type Data = {
-  list: {  }
+  events: {  }
 }
 
 export default async function handler(
@@ -30,9 +30,9 @@ export default async function handler(
 
   const calendar = google.calendar({version: 'v3', auth: oAuth2Client})
 
-  const list = await calendar.events.list({
+  const events = await calendar.events.list({
     calendarId: 'n4jnepnqpsl0nbaq0gqf8p7eco@group.calendar.google.com'
   })
 
-  res.status(200).json({ list })
+  res.status(200).json({ events })
 }
