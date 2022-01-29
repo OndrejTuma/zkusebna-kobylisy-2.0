@@ -49,8 +49,14 @@ const Calendar = ({ events, onSelectEvent }: { events: CalendarEvent[] }) => {
         endAccessor="end"
         onSelectEvent={onSelectEvent}
         views={['month']}
-        style={{ height: 500 }}
+        style={{ height: 700 }}
         messages={messages}
+        popup
+        // popupOffset={{x: 30, y: 20}}
+        selectable
+        onSelectSlot={evt => {
+          alert(JSON.stringify(evt, null, 2))
+        }}
       />
     </div>
   )
