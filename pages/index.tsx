@@ -1,13 +1,14 @@
 import type { NextPage, GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
 import { useMemo } from 'react'
-// import Image from 'next/image'
-import Calendar from '../src/components/Calendar'
+
+import Calendar from 'Components/Calendar'
 
 const parseGoogleCalendarEventsToReactCalendarEvents = events => events.map(({description, end, extendedProperties, summary, start}) => ({
   title: summary,
-  start: new Date(start.dateTime),
-  end: new Date(end.dateTime),
+  start: new Date(start.date || start.dateTime),
+  end: new Date(end.date || end.dateTime),
+  allDay: !!start.date,
   resource: {
     private: extendedProperties?.private,
     description,
@@ -26,21 +27,13 @@ const Home: NextPage = ({ events: {data: {items}} }) => {
       </Head>
 
       <Calendar events={calendarEvents} onSelectEvent={handleSelectEvent}/>
-      <pre>
-        {JSON.stringify(items, null, 2)}
-      </pre>
+      <pre>{JSON.stringify(items, null, 2)}</pre>
     </div>
   )
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const res = await fetch('http://localhost:3000/api/events', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-  })
-
+  const res = await fetch('http://localhost:3000/api/events')
   const { events } = await res.json()
 
   return {

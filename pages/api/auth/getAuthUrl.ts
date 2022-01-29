@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { google } from 'googleapis'
 
-import keys from '../../../oauth2.keys.json'
+import keys from 'Keys/oauth2.keys.json'
 
 const oAuth2Client = new google.auth.OAuth2(
   keys.web.client_id,

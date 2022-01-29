@@ -1,9 +1,10 @@
-import '../styles/globals.css'
-import '../styles/react-big-calendar.css'
 import type { AppProps } from 'next/app'
 
-function MyApp({ Component, pageProps }: AppProps) {
+import 'Styles/globals.css'
+import 'Styles/react-big-calendar.css'
+
+function ZkusebnaKobylisy({ Component, pageProps }: AppProps) {
   return <Component {...pageProps} />
 }
 
-export default MyApp
+export default ZkusebnaKobylisy
