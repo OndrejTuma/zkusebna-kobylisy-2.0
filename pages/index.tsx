@@ -7,8 +7,8 @@ import Calendar from 'Components/Calendar'
 
 const parseGoogleCalendarEventsToReactCalendarEvents = events => events.map(({description, end, extendedProperties, summary, start}) => ({
   title: summary,
-  start: new Date(start.date || start.dateTime),
-  end: new Date(end.date ? sub(new Date(end.date), { days: 1 }) : end.dateTime),
+  start: start.date || start.dateTime,
+  end: end.date ? sub(new Date(end.date), { days: 1 }) : end.dateTime,
   allDay: !!start.date,
   resource: {
     private: extendedProperties?.private,
@@ -29,7 +29,6 @@ const Home: NextPage = ({ events: {data: {items}} }) => {
 
       <Calendar events={calendarEvents} onSelectEvent={handleSelectEvent}/>
       <pre>{JSON.stringify(items, null, 2)}</pre>
-      <pre>{JSON.stringify(calendarEvents, null, 2)}</pre>
     </div>
   )
 }
