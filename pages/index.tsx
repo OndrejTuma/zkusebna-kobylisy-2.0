@@ -21,6 +21,7 @@ const Home: NextPage = ({ events: {data: {items}} }) => {
   const handleSelectEvent = e => {
     alert(JSON.stringify(e, null, 2))
   }
+
   return (
     <div>
       <Head>

@@ -36,3 +36,7 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# security files
+src/components/Auth/consts/serviceAccountKey.json
+src/keys/*
