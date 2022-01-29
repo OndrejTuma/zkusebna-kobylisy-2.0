@@ -2,7 +2,6 @@ import React, {
   useState,
   useEffect
 } from 'react'
-import Link from 'next/link'
 
 const Auth = () => {
   const [url, setUrl] = useState('')
@@ -17,7 +16,8 @@ const Auth = () => {
     if (!url) {
       return
     }
-    const frame = window.open(url, 'access', "width=800,height=1000");
+
+    window.open(url, 'access', "width=800,height=600");
 
     setUrl('')
   }, [url])

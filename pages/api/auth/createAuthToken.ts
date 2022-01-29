@@ -1,10 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import fs from 'fs'
 import { google } from 'googleapis'
 
-import dbConnect from '../../../lib/dbConnect'
-import Token from '../../../models/Token'
-import keys from '../../../oauth2.keys.json'
+import dbConnect from 'Lib/dbConnect'
+import Token from 'Models/Token'
+import keys from 'Keys/oauth2.keys.json'
 
 const oAuth2Client = new google.auth.OAuth2(
   keys.web.client_id,
