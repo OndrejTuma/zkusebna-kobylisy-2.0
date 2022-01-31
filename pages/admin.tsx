@@ -1,23 +1,14 @@
 import React from 'react'
 
-import DataPresenter from 'Components/DataPresenter'
-import Dashboard from 'Components/admin/Dashboard'
-import Login from 'Components/admin/Login'
-import { useAuth } from 'Components/Auth'
+import Auth from 'components/admin/Auth'
+import Admin from 'components/admin/Admin'
 
-const Admin = () => {
-  const auth = useAuth()
-
+const AdminPage = () => {
   return (
-    <div>
-      <DataPresenter
-        data={auth}
-        isDataEmpty={({ isLoading }) => isLoading}
-      >
-        {auth.isLogged ? <Dashboard /> : <Login />}
-      </DataPresenter>
-    </div>
+    <Auth>
+      <Admin />
+    </Auth>
   )
 }
 
-export default Admin
+export default AdminPage

@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
+
+import { AuthContext } from '../Auth'
 
 const Login = () => {
+  const { logIn } = useContext(AuthContext)
+  const email = 'tu.ondrej@gmail.com'
+  const password = 'tirisfall'
+
   return (
-    <div>
-      přihlásit se
-    </div>
+    <button onClick={() => logIn(email, password)}>přihlásit se</button>
   )
 }
 
