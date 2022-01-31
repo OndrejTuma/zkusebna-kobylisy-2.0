@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { Loader } from '@toptal/picasso'
 
 import { AuthContext } from '../Auth'
 import Dashboard from '../Dashboard'
@@ -8,7 +9,7 @@ const Admin = () => {
   const { isLogged, isBusy } = useContext(AuthContext)
 
   if (isBusy) {
-    return <p>Loading...</p>
+    return <Loader>Načítá se...</Loader>
   }
 
   return (

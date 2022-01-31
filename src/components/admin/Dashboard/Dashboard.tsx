@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import {Button} from '@toptal/picasso'
+import { Button } from '@toptal/picasso'
 
 import { AuthContext } from '../Auth'
 

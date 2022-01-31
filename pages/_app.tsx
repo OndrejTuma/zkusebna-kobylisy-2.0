@@ -6,7 +6,7 @@ import 'Styles/react-big-calendar.css'
 
 function ZkusebnaKobylisy({ Component, pageProps }: AppProps) {
   return (
-    <Provider loadFavicon={false}>
+    <Provider loadFavicon={false} fixViewport={false}>
       <Component {...pageProps} />
     </Provider>
   )

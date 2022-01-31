@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { Button } from '@toptal/picasso'
 
 import { AuthContext } from '../Auth'
 
@@ -8,7 +9,7 @@ const Login = () => {
   const password = 'tirisfall'
 
   return (
-    <button onClick={() => logIn(email, password)}>přihlásit se</button>
+    <Button onClick={() => logIn(email, password)}>přihlásit se</Button>
   )
 }
 
