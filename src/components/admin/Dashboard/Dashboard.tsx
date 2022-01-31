@@ -1,8 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
+
+import { AuthContext } from '../Auth'
 
 const Dashboard = () => {
+  const { logOut } = useContext(AuthContext)
+
   return (
-    <p>přihlášený</p>
+    <div>
+      <button onClick={() => logOut()}>Odhlásit</button>
+      <p>přihlášený</p>
+    </div>
   )
 }
 
