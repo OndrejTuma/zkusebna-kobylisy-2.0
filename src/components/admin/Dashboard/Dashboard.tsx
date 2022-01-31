@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import {Button} from '@toptal/picasso'
 
 import { AuthContext } from '../Auth'
 
@@ -7,7 +8,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <button onClick={() => logOut()}>Odhlásit</button>
+      <Button onClick={() => logOut()}>Odhlásit</Button>
       <p>přihlášený</p>
     </div>
   )
