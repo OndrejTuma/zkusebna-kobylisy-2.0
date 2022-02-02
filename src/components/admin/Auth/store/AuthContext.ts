@@ -7,6 +7,7 @@ interface AuthContextInterface {
   user: null | User,
   logIn: (email: string, password: string) => void,
   logOut: () => void,
+  error: boolean,
 }
 
 const AuthContext = React.createContext<AuthContextInterface>({
@@ -15,6 +16,7 @@ const AuthContext = React.createContext<AuthContextInterface>({
   user: null,
   logIn: () => {},
   logOut: () => {},
+  error: false,
 })
 
 export default AuthContext

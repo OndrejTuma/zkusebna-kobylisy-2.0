@@ -10,6 +10,7 @@ const auth = getAuth()
 
 const useAuth = () => {
   const [isBusy, setIsBusy] = useState(true)
+  const [error, setError] = useState(false)
   const [user, setUser] = useState(auth.currentUser)
 
   const logIn = async (email: string, password: string) => {
@@ -17,8 +18,9 @@ const useAuth = () => {
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password)
       setUser(user)
-    } catch (err) {
-      console.error(err)
+    } catch (error) {
+      console.error(error)
+      setError(true)
     } finally {
       setIsBusy(false)
     }
@@ -36,6 +38,7 @@ const useAuth = () => {
     isBusy,
     isLogged: !!user,
     user,
+    error,
     logIn,
     logOut,
   }

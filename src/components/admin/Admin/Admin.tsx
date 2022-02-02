@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Loader } from '@toptal/picasso'
+import { Container, Grid, Loader } from '@toptal/picasso'
 
 import { AuthContext } from '../Auth'
 import Dashboard from '../Dashboard'
@@ -9,14 +9,18 @@ const Admin = () => {
   const { isLogged, isBusy } = useContext(AuthContext)
 
   if (isBusy) {
-    return <Loader>Načítá se...</Loader>
+    return (
+      <Grid justifyContent={'center'}>
+        <Grid.Item>
+          <Container top={4}>
+            <Loader>Načítá se...</Loader>
+          </Container>
+        </Grid.Item>
+      </Grid>
+    )
   }
 
-  return (
-    <div>
-      {isLogged ? <Dashboard /> : <Login />}
-    </div>
-  )
+  return isLogged ? <Dashboard /> : <Login />
 }
 
 export default Admin
