@@ -10,13 +10,9 @@ const Admin = () => {
 
   if (isBusy) {
     return (
-      <Grid justifyContent={'center'}>
-        <Grid.Item>
-          <Container top={4}>
-            <Loader>Načítá se...</Loader>
-          </Container>
-        </Grid.Item>
-      </Grid>
+      <Container top={4} align={'center'}>
+        <Loader>Načítá se...</Loader>
+      </Container>
     )
   }
 
