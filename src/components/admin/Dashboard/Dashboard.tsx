@@ -2,30 +2,59 @@ import React, { useContext } from 'react'
 import { Button } from '@toptal/picasso'
 import { Admin, Resource } from 'react-admin'
 import simpleRestProvider from 'ra-data-simple-rest'
-import { List, Datagrid, TextField, DateField, BooleanField } from 'react-admin'
+import {
+  List,
+  Datagrid,
+  TextField,
+  BooleanField,
+  NumberField,
+  Edit,
+  SimpleForm,
+  TextInput,
+  required,
+  BooleanInput,
+  NumberInput,
+  ImageInput,
+  ImageField,
+} from 'react-admin'
 
 import { AuthContext } from '../Auth'
 
-const TestList = (props) => (
+const ItemList = (props) => (
   <List {...props}>
-    <Datagrid>
-      <TextField source="id" />
-      <TextField source="title" />
-      <DateField source="published_at" />
-      <TextField source="category" />
-      <BooleanField source="commentable" />
+    <Datagrid rowClick={'edit'}>
+      <TextField source={'id'} />
+      <TextField source={'title'} />
+      <NumberField source={'price'} />
+      <BooleanField source={'active'} />
     </Datagrid>
   </List>
 )
-
-const Dashboard = () => {
+const ItemEdit = (props) => (
+  <Edit {...props}>
+    <SimpleForm>
+      <TextInput disabled label={'Id'} source={'id'} />
+      <TextInput source={'title'} validate={required()} />
+      <TextInput source={'code'} validate={required()} />
+      <NumberInput label={'Cena'} source={'price'} />
+      <BooleanInput label={'Aktivní'} source={'active'}/>
+      <ImageInput source={'images'} label={'Obrázek'} accept={'image/*'}>
+        <ImageField source={'src'} title={'name'} />
+      </ImageInput>
+    </SimpleForm>
+  </Edit>
+);
+const LogoutButton = () => {
   const { logOut } = useContext(AuthContext)
 
+  return <Button onClick={() => logOut()}>Odhlásit</Button>
+}
+
+const Dashboard = () => {
   return (
     <div>
-      <Button onClick={() => logOut()}>Odhlásit</Button>
-      <Admin dataProvider={simpleRestProvider('/api')}>
-        <Resource name={'items'} list={TestList} />
+      <Admin dataProvider={simpleRestProvider('/api')} logoutButton={LogoutButton}>
+        <Resource name={'items'} list={ItemList} edit={ItemEdit} />
       </Admin>
     </div>
   )
