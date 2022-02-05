@@ -7,7 +7,7 @@ export type ItemType = {
   title: string,
   code: string,
   price: number,
-  images?: string[],
+  image?: string,
   active: boolean
 }
 
