@@ -1,26 +1,20 @@
 import type { NextPage, GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
-import { useMemo } from 'react'
-import sub from 'date-fns/sub'
+import { calendar_v3 } from 'googleapis'
+import Schema$Event = calendar_v3.Schema$Event
 
-import Calendar from 'Components/Calendar'
+import Dashboard from 'Components/client/Dashboard'
 
-const parseGoogleCalendarEventsToReactCalendarEvents = events => events.map(({description, end, extendedProperties, summary, start}) => ({
-  title: summary,
-  start: start.date || start.dateTime,
-  end: end.date ? sub(new Date(end.date), { days: 1 }) : end.dateTime,
-  allDay: !!start.date,
-  resource: {
-    private: extendedProperties?.private,
-    description,
-  },
-}))
-
-const Home: NextPage = ({ events: {data: {items}} }) => {
-  const calendarEvents = useMemo(() => parseGoogleCalendarEventsToReactCalendarEvents(items), [items])
-  const handleSelectEvent = e => {
-    alert(JSON.stringify(e, null, 2))
+type HomeProps = {
+  events: {
+    data: {
+      items: Schema$Event[]
+    }
   }
+}
+
+const Home: NextPage<HomeProps> = ({ events }) => {
+  const { data: { items }} = events
 
   return (
     <div>
@@ -28,7 +22,7 @@ const Home: NextPage = ({ events: {data: {items}} }) => {
         <title>Zkušebna Kobylisy 2.0</title>
       </Head>
 
-      <Calendar events={calendarEvents} onSelectEvent={handleSelectEvent}/>
+      <Dashboard events={items} />
       <pre>{JSON.stringify(items, null, 2)}</pre>
     </div>
   )

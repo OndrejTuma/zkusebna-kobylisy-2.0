@@ -983,6 +983,14 @@
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.4.tgz#cd667bcfdd025213aafb7ca5915a932590acdcdc"
   integrity sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==
 
+"@types/react-big-calendar@^0.36.2":
+  version "0.36.2"
+  resolved "https://registry.yarnpkg.com/@types/react-big-calendar/-/react-big-calendar-0.36.2.tgz#7f706d42b89ef87a2643693d0dd754e718a33635"
+  integrity sha512-grXQJgeHWXhgcipRB28NnUwIhD6aAKFs7IacGwy2+33hC8yAcR62nsW73aa25K3qxU8RxoLflKSCrsm4QCQpuQ==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/react" "*"
+
 "@types/react-redux@^7.1.20":
   version "7.1.22"
   resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.22.tgz#0eab76a37ef477cc4b53665aeaf29cb60631b72a"
