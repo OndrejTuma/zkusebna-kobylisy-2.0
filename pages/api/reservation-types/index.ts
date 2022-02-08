@@ -1,13 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import dbConnect from 'Lib/dbConnect'
-import Category from 'Models/Category'
+import ReservationType from 'Models/ReservationType'
 import transformRAParameters from 'Utils/transformRAParameters'
 
-type Data = CategoryType | CategoryType[]
-export type CategoryType = {
+type Data = ReservationTypeType | ReservationTypeType[]
+export type ReservationTypeType = {
   id: string | number,
   title: string,
+  discount: number,
 }
 
 export default async function handler(
@@ -22,19 +23,19 @@ export default async function handler(
       const transformed = transformRAParameters(filter as string, range as string, sort as string)
       const [from, to] = transformed.parsedRange
 
-      const categories = await Category.find().skip(from).limit(to - from + 1).sort(transformed.sort)
-      const categoriesCount = await Category.count()
+      const reservationTypes = await ReservationType.find().skip(from).limit(to - from + 1).sort(transformed.sort)
+      const reservationTypesCount = await ReservationType.count()
 
-      res.setHeader('Content-Range', `categories ${transformed.range}/${categoriesCount}`)
-      res.status(200).json(categories)
+      res.setHeader('Content-Range', `reservation-types ${transformed.range}/${reservationTypesCount}`)
+      res.status(200).json(reservationTypes)
 
       break
     case 'POST':
-      const { title, parent_id } = req.body
+      const { title, discount } = req.body
 
-      const category = await Category.create({
+      const category = await ReservationType.create({
         title,
-        parent_id,
+        discount,
       })
 
       res.status(201).json(category)

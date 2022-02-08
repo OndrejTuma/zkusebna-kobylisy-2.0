@@ -5,6 +5,10 @@ const CategorySchema = new mongoose.Schema({
     type: String,
     required: [true, 'Vyplňte název kategorie']
   },
+  parent_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
+  }
 })
 
 CategorySchema.virtual('id').get(function(){

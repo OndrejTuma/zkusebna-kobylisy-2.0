@@ -21,7 +21,8 @@
       "Models/*": ["models/*"],
       "Keys/*": ["keys/*"],
       "Components/*": ["components/*"],
-      "Hooks/*": ["hooks/*"]
+      "Hooks/*": ["hooks/*"],
+      "Utils/*": ["utils/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
