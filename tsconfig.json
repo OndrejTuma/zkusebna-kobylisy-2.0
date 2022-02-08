@@ -23,7 +23,8 @@
       "Components/*": ["components/*"],
       "Hooks/*": ["hooks/*"],
       "Utils/*": ["utils/*"]
-    }
+    },
+    "noImplicitThis": false
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
