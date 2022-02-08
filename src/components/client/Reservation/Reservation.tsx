@@ -1,5 +1,5 @@
-import React from 'react'
-import { Button, Modal } from '@toptal/picasso'
+import React, { useEffect, useState } from 'react'
+import { Button, Modal, DatePicker, DatePickerValue } from '@toptal/picasso'
 import { SlotInfo } from 'react-big-calendar'
 
 type ReservationProps = {
@@ -9,6 +9,16 @@ type ReservationProps = {
 }
 
 const Reservation = ({ onClose, open, slotInfo }: ReservationProps) => {
+  const [value, setValue] = useState<DatePickerValue>()
+
+  useEffect(() => {
+    if (!slotInfo || !slotInfo.start || !slotInfo.end) {
+      return
+    }
+
+    setValue([new Date(slotInfo.start), new Date(slotInfo.end)])
+  }, [slotInfo])
+
   if (typeof window === 'undefined') {
     return null
   }
@@ -17,7 +27,13 @@ const Reservation = ({ onClose, open, slotInfo }: ReservationProps) => {
     <Modal onClose={onClose} open={open} onBackdropClick={onClose}>
       <Modal.Title>Nová rezervace</Modal.Title>
       <Modal.Content>
-        <p>helouik</p>
+        <DatePicker
+          range
+          value={value}
+          onChange={dates => {
+            setValue(dates)
+          }}
+        />
         <pre>{JSON.stringify(slotInfo, null, 2)}</pre>
       </Modal.Content>
       <Modal.Actions>
