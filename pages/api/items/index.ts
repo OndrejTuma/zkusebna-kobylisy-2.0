@@ -1,11 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
+import dbConnect from 'Lib/dbConnect'
+import Item from 'Models/Item'
+import transformRAParameters from 'Utils/transformRAParameters'
+
 type Data = ItemType[]
 export type ItemType = {
   id: string | number,
   category_id: string | number,
   title: string,
-  code: string,
+  code?: string,
   price: number,
   image?: string,
   active: boolean
@@ -15,13 +19,37 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const { filter, range, sort } = req.query
-  console.log('!!GET ITEMS', filter, range, sort)
-  res.setHeader('Content-Range', 'items 0-24/319')
-  res.status(200).json([
-    { id: 1, category_id: 1, title: 'Zkušebna', code: '', price: 0, active: true },
-    { id: 2, category_id: 2, title: 'Basová kytara', code: 'NBk01', price: 5000, active: true },
-    { id: 3, category_id: 2, title: 'Cajón', code: 'NC01', price: 3000, active: true },
-    { id: 4, category_id: 2, title: 'Klávesy Roland', code: 'NKl01', price: 7000, active: true },
-  ])
+  await dbConnect()
+
+  switch (req.method) {
+    case 'GET':
+      const { filter, range, sort } = req.query
+      const transformed = transformRAParameters(filter as string, range as string, sort as string)
+      const [from, to] = transformed.parsedRange
+
+      const items = await Item.find().skip(from).limit(to - from + 1).sort(transformed.sort)
+      const itemsCount = await Item.count()
+
+      res.setHeader('Content-Range', `categories ${transformed.range}/${itemsCount}`)
+      res.status(200).json(items)
+
+      break
+    case 'POST':
+      const { title, category_id, code, price, image, active } = req.body
+
+      const item = await Item.create({
+        title,
+        category_id,
+        code,
+        price,
+        image,
+        active,
+      })
+
+      res.status(201).json(item)
+
+      break
+    default:
+      res.status(400).end()
+  }
 }

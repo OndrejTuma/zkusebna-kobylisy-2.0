@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import dbConnect from 'Lib/dbConnect'
-import Category from 'Models/Category'
+import ReservationType from 'Models/ReservationType'
 
-import { CategoryType } from './'
+import { ReservationTypeType } from './'
 
-type Data = CategoryType
+type Data = ReservationTypeType
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,23 +17,23 @@ export default async function handler(
 
   switch (req.method) {
     case 'GET': {
-      const category = await Category.findById(id)
+      const reservationType = await ReservationType.findById(id)
 
-      res.status(200).json(category)
+      res.status(200).json(reservationType)
 
       break
     }
     case 'PUT': {
-      const { title, parent_id } = req.body
+      const { title, discount } = req.body
 
-      await Category.findByIdAndUpdate(id, { $set: { title, parent_id } })
+      await ReservationType.findByIdAndUpdate(id, { $set: { title, discount } })
 
       res.status(200).end()
 
       break
     }
     case 'DELETE': {
-      await Category.findByIdAndDelete(id)
+      await ReservationType.findByIdAndDelete(id)
 
       res.status(200).end()
 

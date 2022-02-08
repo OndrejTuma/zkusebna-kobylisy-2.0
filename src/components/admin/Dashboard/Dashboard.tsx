@@ -10,6 +10,9 @@ import ItemList from '../items/ItemList'
 import CategoryCreate from '../categories/CategoryCreate'
 import CategoryEdit from '../categories/CategoryEdit'
 import CategoryList from '../categories/CategoryList'
+import ReservationTypeCreate from '../reservation-types/ReservationTypeCreate'
+import ReservationTypeEdit from '../reservation-types/ReservationTypeEdit'
+import ReservationTypeList from '../reservation-types/ReservationTypeList'
 
 const LogoutButton = () => {
   const { logOut } = useContext(AuthContext)
@@ -23,6 +26,7 @@ const Dashboard = () => {
       <Admin dataProvider={simpleRestProvider('/api')} logoutButton={LogoutButton}>
         <Resource name={'items'} list={ItemList} edit={ItemEdit} create={ItemCreate} />
         <Resource name={'categories'} list={CategoryList} edit={CategoryEdit} create={CategoryCreate} />
+        <Resource name={'reservation-types'} list={ReservationTypeList} edit={ReservationTypeEdit} create={ReservationTypeCreate} />
       </Admin>
     </div>
   )

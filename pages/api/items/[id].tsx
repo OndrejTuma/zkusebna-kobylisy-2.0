@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next'
 // import formidable from 'formidable'
 // import fs from 'fs'
 
+import dbConnect from 'Lib/dbConnect'
+import Item from 'Models/Item'
 import { ItemType } from './'
 
 type Data = ItemType
@@ -18,27 +20,37 @@ export default async function handler(
 ) {
   const { id } = req.query
 
-  console.log('!GET ONE CATEGORY', req.method, req.query, req.body)
+  await dbConnect()
 
   switch (req.method) {
-    case 'GET':
-      res.status(200).json({
-        id: 2,
-        category_id: 2,
-        title: 'Basová kytara',
-        code: 'NBk01',
-        price: 5000,
-        active: true
+    case 'GET': {
+      const item = await Item.findById(id)
+
+      res.status(200).json(item)
+
+      break
+    }
+    case 'PUT': {
+      const { title, category_id, code, price, image, active } = req.body
+
+      await Item.findByIdAndUpdate(id, {
+        $set: {
+          title, category_id, code, price, image, active,
+        },
       })
+
+      res.status(200).end()
+
       break
-    case 'PUT':
-      // const form = new formidable.IncomingForm()
-      // form.parse(req, async function (err, fields, files) {
-      //   console.log('!!files', files, fields, err)
-      //   await saveFile(files.file)
-      //   res.status(201).end()
-      // })
+    }
+    case 'DELETE': {
+      await Item.findByIdAndDelete(id)
+
+      res.status(200).end()
+
       break
-    case 'DELETE':
+    }
+    default:
+      res.status(400).end()
   }
 }

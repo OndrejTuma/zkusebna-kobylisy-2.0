@@ -1,5 +1,5 @@
 import React from 'react'
-import { CreateButton, Datagrid, List, TextField, TopToolbar } from 'react-admin'
+import { CreateButton, Datagrid, List, ReferenceField, TextField, TopToolbar } from 'react-admin'
 
 const ListActions = () => (
   <TopToolbar>
@@ -12,6 +12,9 @@ const CategoryList = (props: {}) => {
     <List {...props} actions={<ListActions/>}>
       <Datagrid rowClick={'edit'}>
         <TextField source={'title'} label={'Název'} />
+        <ReferenceField label={'Nadřazená kategorie'} reference={'categories'} source={'parent_id'}>
+          <TextField source={'title'} />
+        </ReferenceField>
       </Datagrid>
     </List>
   )
