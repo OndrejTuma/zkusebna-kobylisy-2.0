@@ -22,7 +22,8 @@
       "Keys/*": ["keys/*"],
       "Components/*": ["components/*"],
       "Hooks/*": ["hooks/*"],
-      "Utils/*": ["utils/*"]
+      "Utils/*": ["utils/*"],
+      "Consts/*": ["consts/*"]
     },
     "noImplicitThis": false
   },

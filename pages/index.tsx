@@ -23,7 +23,6 @@ const Home: NextPage<HomeProps> = ({ events }) => {
       </Head>
 
       <Dashboard events={items} />
-      <pre>{JSON.stringify(items, null, 2)}</pre>
     </div>
   )
 }

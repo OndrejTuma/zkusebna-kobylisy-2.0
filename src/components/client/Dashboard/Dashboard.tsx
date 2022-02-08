@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useModal } from '@toptal/picasso/utils'
 import { calendar_v3 } from 'googleapis'
+import { SlotInfo, Event } from 'react-big-calendar'
 import Schema$Event = calendar_v3.Schema$Event
 
+import Reservation from '../Reservation'
+import EventModal from '../EventModal'
 import Calendar, { onSelectEventType, onSelectSlotType } from '../Calendar'
 
 type DashboardProps = {
@@ -9,19 +13,38 @@ type DashboardProps = {
 }
 
 const Dashboard = ({ events }: DashboardProps) => {
+  const {
+    showModal: showReservation,
+    hideModal: hideReservation,
+    isOpen: isOpenReservation,
+  } = useModal()
+  const {
+    showModal: showEvent,
+    hideModal: hideEvent,
+    isOpen: isOpenEvent,
+  } = useModal()
+  const [slotInfo, setSlotInfo] = useState<SlotInfo>()
+  const [event, setEvent] = useState<Event>()
+
   const handleSelectEvent: onSelectEventType = (event) => {
-    alert(JSON.stringify(event, null, 2))
+    setEvent(event)
+    showEvent()
   }
   const handleSelectSlot: onSelectSlotType = (slotInfo) => {
-    alert(JSON.stringify(slotInfo, null, 2))
+    setSlotInfo(slotInfo)
+    showReservation()
   }
 
   return (
-    <Calendar
-      events={events}
-      onSelectEvent={handleSelectEvent}
-      onSelectSlot={handleSelectSlot}
-    />
+    <>
+      <Calendar
+        events={events}
+        onSelectEvent={handleSelectEvent}
+        onSelectSlot={handleSelectSlot}
+      />
+      <Reservation open={isOpenReservation} onClose={hideReservation} slotInfo={slotInfo} />
+      <EventModal open={isOpenEvent} onClose={hideEvent} event={event}/>
+    </>
   )
 }
 
