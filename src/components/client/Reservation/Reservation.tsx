@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Modal, DatePicker, DatePickerValue } from '@toptal/picasso'
+import { Grid, Button, Modal, DatePicker, DatePickerValue, Container, TimePicker } from '@toptal/picasso'
 import { SlotInfo } from 'react-big-calendar'
+import sub from 'date-fns/sub'
 
 type ReservationProps = {
   open: boolean
@@ -9,15 +10,19 @@ type ReservationProps = {
 }
 
 const Reservation = ({ onClose, open, slotInfo }: ReservationProps) => {
-  const [value, setValue] = useState<DatePickerValue>()
+  const [dates, setDates] = useState<DatePickerValue>()
+  const [borrowTime, setBorrowTime] = useState<string>()
+  const [returnTime, setReturnTime] = useState<string>()
 
   useEffect(() => {
     if (!slotInfo || !slotInfo.start || !slotInfo.end) {
       return
     }
 
-    setValue([new Date(slotInfo.start), new Date(slotInfo.end)])
+    setDates([new Date(slotInfo.start), sub(new Date(slotInfo.end), { seconds: 1 })])
   }, [slotInfo])
+  const handleBorrowTimeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setBorrowTime(e.target.value)
+  const handleReturnTimeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setReturnTime(e.target.value)
 
   if (typeof window === 'undefined') {
     return null
@@ -29,12 +34,21 @@ const Reservation = ({ onClose, open, slotInfo }: ReservationProps) => {
       <Modal.Content>
         <DatePicker
           range
-          value={value}
+          value={dates}
           onChange={dates => {
-            setValue(dates)
+            setDates(dates)
           }}
         />
-        <pre>{JSON.stringify(slotInfo, null, 2)}</pre>
+        <Container gap={'medium'}>
+          <div>
+            <span>Doba vypůjčení:</span>
+            <TimePicker value={borrowTime} onChange={handleBorrowTimeChange} />
+          </div>
+          <div>
+            <span>Doba vrácení:</span>
+            <TimePicker value={returnTime} onChange={handleReturnTimeChange} />
+          </div>
+        </Container>
       </Modal.Content>
       <Modal.Actions>
         <Button variant='secondary' onClick={onClose}>
