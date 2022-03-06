@@ -9,7 +9,7 @@ import EventModal from '../EventModal'
 import Calendar, { onSelectEventType, onSelectSlotType } from '../Calendar'
 
 type DashboardProps = {
-  events: Schema$Event[]
+  events?: Schema$Event[]
 }
 
 const Dashboard = ({ events }: DashboardProps) => {
@@ -38,7 +38,7 @@ const Dashboard = ({ events }: DashboardProps) => {
   return (
     <>
       <Calendar
-        events={events}
+        events={events || []}
         onSelectEvent={handleSelectEvent}
         onSelectSlot={handleSelectSlot}
       />

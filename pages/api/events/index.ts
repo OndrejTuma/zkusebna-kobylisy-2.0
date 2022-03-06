@@ -13,7 +13,7 @@ const oAuth2Client = new google.auth.OAuth2(
 
 
 type Data = {
-  events: {  }
+  events: {  } | null
 }
 
 export default async function handler(
@@ -23,6 +23,11 @@ export default async function handler(
   await dbConnect()
 
   const tokens = await Token.findOne().limit(1).sort({$natural:-1})
+
+  if (!tokens) {
+    res.status(404).json({ events: null })
+    return
+  }
 
   oAuth2Client.setCredentials({
     refresh_token: tokens.refresh_token

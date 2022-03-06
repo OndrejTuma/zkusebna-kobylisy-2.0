@@ -14,15 +14,13 @@ type HomeProps = {
 }
 
 const Home: NextPage<HomeProps> = ({ events }) => {
-  const { data: { items }} = events
-
   return (
     <div>
       <Head>
         <title>Zkušebna Kobylisy 2.0</title>
       </Head>
 
-      <Dashboard events={items} />
+      <Dashboard events={events?.data.items} />
     </div>
   )
 }
