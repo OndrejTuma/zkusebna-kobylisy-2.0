@@ -7,7 +7,7 @@ const ItemCreate = (props: {}) => {
       <SimpleForm>
         <TextInput source={'title'} label={'Název'} validate={required()} />
         <TextInput source={'code'} label={'Kód'} />
-        <NumberInput label={'Cena'} source={'price'} />
+        <NumberInput label={'Cena'} source={'price'} validate={required()} />
         <BooleanInput label={'Aktivní'} source={'active'} defaultValue={true} />
         <ImageInput source={'image'} label={'Obrázek'} accept={'image/*'}>
           <ImageField source={'src'} title={'name'} />

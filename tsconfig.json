@@ -23,7 +23,8 @@
       "Components/*": ["components/*"],
       "Hooks/*": ["hooks/*"],
       "Utils/*": ["utils/*"],
-      "Consts/*": ["consts/*"]
+      "Consts/*": ["consts/*"],
+      "LocalTypes/*": ["types/*"],
     },
     "noImplicitThis": false
   },
