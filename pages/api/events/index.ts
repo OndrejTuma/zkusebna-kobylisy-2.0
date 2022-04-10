@@ -1,43 +1,58 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
 import { google } from 'googleapis'
+import keys from 'Keys/oauth2.keys.json'
 
 import dbConnect from 'Lib/dbConnect'
 import Token from 'Models/Token'
-import keys from 'Keys/oauth2.keys.json'
+
+import type { NextApiRequest, NextApiResponse } from 'next'
+import type { BasicApiResponse, CalendarEvents } from 'LocalTypes'
 
 const oAuth2Client = new google.auth.OAuth2(
   keys.web.client_id,
   keys.web.client_secret,
-  keys.web.redirect_uris[0]
-);
+  keys.web.redirect_uris[0],
+)
 
+const calendarId = 'n4jnepnqpsl0nbaq0gqf8p7eco@group.calendar.google.com'
 
-type Data = {
-  events: {  } | null
+type Data = BasicApiResponse & {
+  events: CalendarEvents | null,
 }
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Data>,
 ) {
   await dbConnect()
 
-  const tokens = await Token.findOne().limit(1).sort({$natural:-1})
+  console.log('EVENTS METHOD', req.method)
+
+  const tokens = await Token.findOne().limit(1).sort({ $natural: -1 })
 
   if (!tokens) {
-    res.status(404).json({ events: null })
-    return
+    const error = 'Refresh token to Google Calendar does not exist'
+
+    return res.status(401).json({ events: null, error })
   }
 
   oAuth2Client.setCredentials({
-    refresh_token: tokens.refresh_token
-  });
-
-  const calendar = google.calendar({version: 'v3', auth: oAuth2Client})
-
-  const events = await calendar.events.list({
-    calendarId: 'n4jnepnqpsl0nbaq0gqf8p7eco@group.calendar.google.com'
+    refresh_token: tokens.refresh_token,
   })
 
-  res.status(200).json({ events })
+  switch (req.method) {
+    case 'GET':
+      const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
+
+      const events = await calendar.events.list({
+        calendarId,
+      })
+
+      res.status(200).json({ events })
+
+      break
+    case 'POST':
+
+  }
+
+
 }

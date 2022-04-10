@@ -1,16 +1,11 @@
 import type { NextPage, GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
-import { calendar_v3 } from 'googleapis'
-import Schema$Event = calendar_v3.Schema$Event
 
 import Dashboard from 'Components/client/Dashboard'
+import type { CalendarEvents } from 'LocalTypes'
 
 type HomeProps = {
-  events: {
-    data: {
-      items: Schema$Event[]
-    }
-  }
+  events: CalendarEvents
 }
 
 const Home: NextPage<HomeProps> = ({ events }) => {
@@ -19,6 +14,10 @@ const Home: NextPage<HomeProps> = ({ events }) => {
       <Head>
         <title>Zkušebna Kobylisy 2.0</title>
       </Head>
+
+      <pre>
+        {JSON.stringify(events, null, 2)}
+      </pre>
 
       <Dashboard events={events?.data.items} />
     </div>
