@@ -15,10 +15,6 @@ const Home: NextPage<HomeProps> = ({ events }) => {
         <title>Zkušebna Kobylisy 2.0</title>
       </Head>
 
-      <pre>
-        {JSON.stringify(events, null, 2)}
-      </pre>
-
       <Dashboard events={events?.data.items} />
     </div>
   )
