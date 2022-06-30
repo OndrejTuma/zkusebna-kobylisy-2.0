@@ -15,6 +15,8 @@ export default async function handler(
 
   await dbConnect()
 
+  console.log('CATEGORY METHOD', req.method)
+
   switch (req.method) {
     case 'GET': {
       const category = await Category.findById(id)

@@ -1,10 +1,7 @@
 /** @type {import('next').NextConfig} */
 const withTM = require('next-transpile-modules')(['@toptal/picasso'])
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = withTM({
   reactStrictMode: true,
-  experimental: { esmExternals: true }
-}
-
-module.exports = withTM(nextConfig)
+  experimental: { esmExternals: true },
+})
