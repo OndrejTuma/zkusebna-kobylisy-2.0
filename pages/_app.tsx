@@ -1,19 +1,19 @@
 import type { AppProps } from 'next/app'
-import Provider from '@toptal/picasso-provider'
+import PicassoProvider from '@toptal/picasso-provider'
 
 import 'Styles/globals.css'
 import 'Styles/react-big-calendar.css'
 
 function ZkusebnaKobylisy({ Component, pageProps }: AppProps) {
   return (
-    <Provider
+    <PicassoProvider
       loadFavicon={false}
       fixViewport={false}
       loadFonts={false}
       disableClassNamePrefix
     >
       <Component {...pageProps} />
-    </Provider>
+    </PicassoProvider>
   )
 }
 

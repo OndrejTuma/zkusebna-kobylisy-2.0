@@ -21,6 +21,8 @@ export default async function handler(
 ) {
   await dbConnect()
 
+  console.log('ITEMS METHOD', req.method)
+
   switch (req.method) {
     case 'GET':
       const { filter, range, sort } = req.query

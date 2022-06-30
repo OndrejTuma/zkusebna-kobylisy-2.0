@@ -22,6 +22,8 @@ export default async function handler(
 
   await dbConnect()
 
+  console.log('ITEM METHOD', req.method)
+
   switch (req.method) {
     case 'GET': {
       const item = await Item.findById(id)
