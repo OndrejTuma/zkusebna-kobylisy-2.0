@@ -1,3 +1,4 @@
+import EmptyList from 'Components/admin/EmptyList'
 import React from 'react'
 import { BooleanField, Datagrid, ImageField, List, NumberField, TextField, ReferenceField, TopToolbar, CreateButton } from 'react-admin'
 
@@ -9,7 +10,7 @@ const ListActions = () => (
 
 const ItemList = (props: {}) => {
   return (
-    <List {...props} actions={<ListActions/>}>
+    <List {...props} actions={<ListActions/>} empty={<EmptyList/>}>
       <Datagrid rowClick={'edit'}>
         <TextField label={'Název'} source={'title'} />
         <NumberField label={'Cena'} source={'price'} locales={'cs-CZ'} options={{ style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }} />

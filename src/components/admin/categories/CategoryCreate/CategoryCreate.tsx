@@ -5,9 +5,9 @@ const CategoryCreate = (props: {}) => {
   return (
     <Create {...props}>
       <SimpleForm>
-        <TextInput source={'title'} validate={required()} />
-        <ReferenceInput label={'Nadřazená kategorie'} reference={'categories'} source={'parent_id'}>
-          <SelectInput optionText={'title'} />
+        <TextInput label={'Název'} source={'title'} validate={required()} />
+        <ReferenceInput reference={'categories'} source={'parent_id'}>
+          <SelectInput label={'Nadřazená kategorie'} optionText={'title'} />
         </ReferenceInput>
       </SimpleForm>
     </Create>

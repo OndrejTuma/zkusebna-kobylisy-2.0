@@ -5,15 +5,15 @@ const ItemCreate = (props: {}) => {
   return (
     <Create {...props}>
       <SimpleForm>
-        <TextInput source={'title'} label={'Název'} validate={required()} />
-        <TextInput source={'code'} label={'Kód'} />
+        <TextInput label={'Název'} source={'title'} validate={required()} />
+        <TextInput label={'Kód'} source={'code'} />
         <NumberInput label={'Cena'} source={'price'} validate={required()} />
         <BooleanInput label={'Aktivní'} source={'active'} defaultValue={true} />
-        <ImageInput source={'image'} label={'Obrázek'} accept={'image/*'}>
+        <ImageInput label={'Obrázek'} source={'image'} accept={'image/*'}>
           <ImageField source={'src'} title={'name'} />
         </ImageInput>
-        <ReferenceInput label={'Kategorie'} reference={'categories'} source={'category_id'} validate={required()}>
-          <SelectInput optionText={'title'} />
+        <ReferenceInput reference={'categories'} source={'category_id'}>
+          <SelectInput label={'Kategorie'} optionText={'title'} validate={required()} />
         </ReferenceInput>
       </SimpleForm>
     </Create>

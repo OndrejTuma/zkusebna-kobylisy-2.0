@@ -1,14 +1,14 @@
-import { Value } from 'Hooks/useForm'
+import * as Yup from 'yup'
 
-export const formInputs = [
-  { name: 'email', label: 'E-mail', type: 'email' },
-  { name: 'password', label: 'Heslo', type: 'password' },
-]
-export const formInitialValues = {
-  email: '',
-  password: '',
-}
-export const formValidations = {
-  email: (value: Value) => !!value,
-  password: (value: Value) => !!value,
+export const formInputs = {
+  email: {
+    label: 'E-mail',
+    type: 'email',
+    validationSchema: Yup.string().required(),
+  },
+  password: {
+    label: 'Heslo',
+    type: 'password',
+    validationSchema: Yup.string().required(),
+  }
 }

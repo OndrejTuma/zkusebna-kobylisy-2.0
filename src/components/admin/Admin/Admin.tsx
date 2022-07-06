@@ -1,5 +1,7 @@
 import React, { useContext } from 'react'
-import { Container, Grid, Loader } from '@toptal/picasso'
+import Box from '@mui/material/Box'
+
+import Loader from 'Components/generic/Loader'
 
 import { AuthContext } from '../Auth'
 import Dashboard from '../Dashboard'
@@ -10,9 +12,9 @@ const Admin = () => {
 
   if (isBusy) {
     return (
-      <Container top={4} align={'center'}>
+      <Box pt={4}>
         <Loader>Načítá se...</Loader>
-      </Container>
+      </Box>
     )
   }
 

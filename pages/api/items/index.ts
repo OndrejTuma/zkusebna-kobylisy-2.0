@@ -4,7 +4,7 @@ import dbConnect from 'Lib/dbConnect'
 import Item from 'Models/Item'
 import transformRAParameters from 'Utils/transformRAParameters'
 
-type Data = ItemType[]
+type Data = ItemType | ItemType[]
 export type ItemType = {
   id: string | number,
   category_id: string | number,
@@ -39,7 +39,7 @@ export default async function handler(
     case 'POST':
       const { title, category_id, code, price, image, active } = req.body
 
-      const item = await Item.create({
+      const item: unknown = await Item.create({
         title,
         category_id,
         code,
@@ -48,7 +48,7 @@ export default async function handler(
         active,
       })
 
-      res.status(201).json(item)
+      res.status(201).json(item as ItemType)
 
       break
     default:

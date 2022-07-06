@@ -1,55 +1,35 @@
-import React, { FormEventHandler, useContext } from 'react'
-import { Container, Grid, Form, Button, Input } from '@toptal/picasso'
+import Container from '@mui/material/Container'
+import Grid from '@mui/material/Grid'
+import Error from 'Components/generic/Error'
+import Form, { FormValues } from 'Components/generic/Form'
+import useFormInitials from 'Components/generic/Form/utils/useFormInitials'
+import React, { useContext } from 'react'
 
-import useForm from 'Hooks/useForm'
 import { AuthContext } from '../Auth'
-import { formInitialValues, formValidations, formInputs } from './consts/formInitials'
+import { formInputs } from './consts/formInitials'
 
 const Login = () => {
   const { error, logIn } = useContext(AuthContext)
-  const { values, errors, handleChange, validateAll } = useForm(formInitialValues, formValidations)
+  const { initialValues, validationSchema } = useFormInitials(formInputs)
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault()
-
-    if (!validateAll()) {
-      return
-    }
-
-    logIn(values.email!, values.password!)
+  function handleSubmit(values: FormValues) {
+    logIn(values.email, values.password)
   }
 
   return (
-    <Grid justifyContent={'center'}>
-      <Grid.Item>
-        <Container top={4}>
-          <Form onSubmit={handleSubmit} method={'post'}>
-            {formInputs.map(({ name, label, type }) => (
-              <Form.Field key={name}>
-                <Form.Label htmlFor={name}>{label}</Form.Label>
-                <Input
-                  id={name}
-                  error={errors[name]}
-                  enableReset
-                  name={name}
-                  type={type}
-                  value={values[name]}
-                  onChange={(e) => handleChange(name, e.target.value)}
-                />
-              </Form.Field>
-            ))}
-            <Container flex direction={'column'} top={'small'} align={'center'} gap={'small'}>
-              {error && (
-                <Form.Error>
-                  Nepodařilo se přihlásit. Zkontrolujte jméno a heslo
-                </Form.Error>
-              )}
-              <Button type={'submit'}>Přihlásit se</Button>
-            </Container>
-          </Form>
-        </Container>
-      </Grid.Item>
-    </Grid>
+    <Container maxWidth={'xs'} sx={{ marginTop: 4 }}>
+      <Form onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema}>
+        <Form.InputNodes inputs={formInputs}/>
+        {error && (
+          <Grid item>
+            <Error>Nepodařilo se přihlásit. Zkontrolujte jméno a heslo</Error>
+          </Grid>
+        )}
+        <Grid item alignSelf={'center'}>
+          <Form.SubmitButton>Přihlásit se</Form.SubmitButton>
+        </Grid>
+      </Form>
+    </Container>
   )
 }
 
