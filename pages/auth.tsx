@@ -2,13 +2,15 @@ import React, {
   useState,
   useEffect
 } from 'react'
+import { Button } from '@toptal/picasso'
 
 const Auth = () => {
   const [url, setUrl] = useState('')
 
   const handleAuth = async () => {
     const res = await fetch('/api/auth/getAuthUrl')
-    const {url} = await res.json()
+    const { url } = await res.json()
+
     setUrl(url)
   }
 
@@ -24,7 +26,7 @@ const Auth = () => {
 
   return (
     <div>
-      <button onClick={handleAuth}>Get authorize url</button>
+      <Button onClick={handleAuth}>Get authorize url</Button>
     </div>
   )
 }
