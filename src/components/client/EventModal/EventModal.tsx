@@ -1,10 +1,12 @@
-import React from 'react'
-import { Button, Modal, Typography } from '@toptal/picasso'
-import { Event } from 'react-big-calendar'
-import isSameDay from 'date-fns/isSameDay'
-import format from 'date-fns/format'
+import Typography from '@mui/material/Typography'
+import Button from 'Components/generic/Button'
+import Modal from 'Components/generic/Modal'
 
 import { dateTimeFormat, timeFormat } from 'Consts/dateTimeFormats'
+import format from 'date-fns/format'
+import isSameDay from 'date-fns/isSameDay'
+import React from 'react'
+import { Event } from 'react-big-calendar'
 
 type EventProps = {
   open: boolean
@@ -24,19 +26,21 @@ const EventModal = ({ event, open, onClose }: EventProps) => {
   const isOneDayEvent = isSameDay(startDate, endDate)
 
   return (
-    <Modal onClose={onClose} open={open} onBackdropClick={onClose}>
-      <Modal.Title>{title}</Modal.Title>
+    <Modal onClose={onClose} open={open}>
+      <Modal.Title>
+        {title}
+      </Modal.Title>
       <Modal.Content>
         {isOneDayEvent ? (
           <Typography>{format(startDate, dateTimeFormat)} - {format(endDate, timeFormat)}</Typography>
         ) : (
-          <Typography>{format(startDate, dateTimeFormat)} - {format(endDate, dateTimeFormat)}</Typography>
-        )}
+           <Typography>{format(startDate, dateTimeFormat)} - {format(endDate, dateTimeFormat)}</Typography>
+         )}
 
         <div dangerouslySetInnerHTML={{ __html: description }}/>
       </Modal.Content>
       <Modal.Actions>
-        <Button variant='secondary' onClick={onClose}>
+        <Button onClick={onClose}>
           Zavřít
         </Button>
       </Modal.Actions>

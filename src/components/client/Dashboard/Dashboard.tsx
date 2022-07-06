@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useModal } from '@toptal/picasso/utils'
 import { calendar_v3 } from 'googleapis'
 import { SlotInfo, Event } from 'react-big-calendar'
 import Schema$Event = calendar_v3.Schema$Event
@@ -7,6 +6,8 @@ import Schema$Event = calendar_v3.Schema$Event
 import Reservation from '../Reservation'
 import EventModal from '../EventModal'
 import Calendar, { onSelectEventType, onSelectSlotType } from '../Calendar'
+
+import useModal from 'Components/generic/Modal/useModal'
 
 type DashboardProps = {
   events?: Schema$Event[]

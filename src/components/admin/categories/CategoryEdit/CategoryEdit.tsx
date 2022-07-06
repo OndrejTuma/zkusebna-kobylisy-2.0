@@ -5,10 +5,10 @@ const CategoryEdit = (props: {}) => {
   return (
     <Edit {...props}>
       <SimpleForm>
-        <TextInput disabled label={'Id'} source={'id'} />
-        <TextInput source={'title'} label={'Název'} validate={required()} />
-        <ReferenceInput label={'Nadřazená kategorie'} reference={'categories'} source={'parent_id'}>
-          <SelectInput optionText={'title'} />
+        <TextInput disabled source={'id'} />
+        <TextInput label={'Název'} source={'title'} validate={required()} />
+        <ReferenceInput reference={'categories'} source={'parent_id'}>
+          <SelectInput label={'Nadřazená kategorie'} optionText={'title'} />
         </ReferenceInput>
       </SimpleForm>
     </Edit>

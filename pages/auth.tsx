@@ -2,7 +2,7 @@ import React, {
   useState,
   useEffect
 } from 'react'
-import { Button } from '@toptal/picasso'
+import Button from 'Components/generic/Button'
 
 const Auth = () => {
   const [url, setUrl] = useState('')

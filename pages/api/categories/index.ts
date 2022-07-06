@@ -7,6 +7,7 @@ import transformRAParameters from 'Utils/transformRAParameters'
 type Data = CategoryType | CategoryType[]
 export type CategoryType = {
   id: string | number,
+  parent_id?: string,
   title: string,
 }
 
@@ -34,12 +35,12 @@ export default async function handler(
     case 'POST':
       const { title, parent_id } = req.body
 
-      const category = await Category.create({
+      const category: unknown = await Category.create({
         title,
-        parent_id,
+        parent_id: parent_id || undefined,
       })
 
-      res.status(201).json(category)
+      res.status(201).json(category as CategoryType)
 
       break
     default:
