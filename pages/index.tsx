@@ -11,7 +11,7 @@ const Home: NextPage<ResponseCalendarEvents> = ({ events, error }) => {
         <title>Zkušebna Kobylisy 2.0</title>
       </Head>
 
-      {error && <h2>error</h2>}
+      {error && <h2>{error}</h2>}
 
       <Dashboard events={events?.data.items} />
     </div>
