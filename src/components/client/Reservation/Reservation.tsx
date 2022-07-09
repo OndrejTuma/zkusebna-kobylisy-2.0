@@ -1,3 +1,4 @@
+import Stack from '@mui/material/Stack'
 import Button from 'Components/generic/Button'
 import Form from 'Components/generic/Form'
 import useFormInitials from 'Components/generic/Form/utils/useFormInitials'
@@ -30,8 +31,10 @@ const Reservation = ({ onClose, open, slotInfo }: ReservationProps) => {
       <Modal.Title>Nová rezervace</Modal.Title>
       <Modal.Content>
         <Form onSubmit={handleSubmit} initialValues={initialValues}>
-          <Form.DateTimePicker label={'Začátek'} name={'dateStart'} />
-          <Form.DateTimePicker label={'Konec'} name={'dateEnd'} />
+          <Stack direction="row" spacing={2}>
+            <Form.DateTimePicker label={'Začátek'} name={'dateStart'} />
+            <Form.DateTimePicker label={'Konec'} name={'dateEnd'} />
+          </Stack>
         </Form>
       </Modal.Content>
       <Modal.Actions>
