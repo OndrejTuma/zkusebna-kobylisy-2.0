@@ -5,6 +5,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { DateTimePicker as MUIDateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import Error from 'Components/generic/Error'
+import csLocale from 'date-fns/locale/cs'
 import { ErrorMessage, Field, useFormikContext } from 'formik'
 import React from 'react'
 
@@ -17,7 +18,7 @@ type Props = {
 const DateTimePicker = ({ label, name, ...rest }: Props) => {
   const {setFieldValue} = useFormikContext()
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={csLocale}>
       <Grid item mb={2}>
         <Field
           label={label}
