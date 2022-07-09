@@ -1,3 +1,4 @@
+import Error from 'Components/generic/Error'
 import type { NextPage, GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
 
@@ -11,7 +12,7 @@ const Home: NextPage<ResponseCalendarEvents> = ({ events, error }) => {
         <title>Zkušebna Kobylisy 2.0</title>
       </Head>
 
-      {error && <h2>{error}</h2>}
+      {error && <Error sx={{ marginBottom: 2 }}>{error}</Error>}
 
       <Dashboard events={events?.data.items} />
     </div>
@@ -22,16 +23,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const res = await fetch('http://localhost:3000/api/events')
   const { events, error } = await res.json()
 
-  const props = {
-    events,
-  }
-
   if (error) {
-    Object.assign(props, { error })
+    return {
+      props: {
+        error,
+      }
+    }
   }
 
   return {
-    props
+    props: {
+      events,
+    }
   }
 }
 

@@ -2,16 +2,15 @@ import Calendar, { onSelectEventType, onSelectSlotType } from 'Components/generi
 import useModal from 'Components/generic/Modal/useModal'
 import format from 'date-fns/format'
 import isBefore from 'date-fns/isBefore'
-import { calendar_v3 } from 'googleapis'
+import type { CalendarEvent } from 'LocalTypes'
 import React, { useState } from 'react'
 import { Event, SlotInfo } from 'react-big-calendar'
 import EventModal from '../EventModal'
 
 import Reservation from '../Reservation'
-import Schema$Event = calendar_v3.Schema$Event
 
 type DashboardProps = {
-  events?: Schema$Event[]
+  events?: CalendarEvent[]
 }
 
 const Dashboard = ({ events }: DashboardProps) => {

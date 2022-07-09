@@ -6,10 +6,10 @@ type Props = {
   [key: string]: any
 }
 
-const Error = ({ children, ...rest }: Props) => {
+const Success = ({ children, ...rest }: Props) => {
   return (
-    <Alert severity={'error'} {...rest}>{children}</Alert>
+    <Alert severity={'success'} {...rest}>{children}</Alert>
   )
 }
 
-export default Error
+export default Success
