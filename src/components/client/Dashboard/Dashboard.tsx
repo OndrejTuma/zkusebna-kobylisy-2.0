@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
+import Calendar, { onSelectEventType, onSelectSlotType } from 'Components/generic/Calendar'
+import useModal from 'Components/generic/Modal/useModal'
+import format from 'date-fns/format'
+import isBefore from 'date-fns/isBefore'
 import { calendar_v3 } from 'googleapis'
-import { SlotInfo, Event } from 'react-big-calendar'
-import Schema$Event = calendar_v3.Schema$Event
+import React, { useState } from 'react'
+import { Event, SlotInfo } from 'react-big-calendar'
+import EventModal from '../EventModal'
 
 import Reservation from '../Reservation'
-import EventModal from '../EventModal'
-import Calendar, { onSelectEventType, onSelectSlotType } from '../Calendar'
-
-import useModal from 'Components/generic/Modal/useModal'
+import Schema$Event = calendar_v3.Schema$Event
 
 type DashboardProps = {
   events?: Schema$Event[]
@@ -24,14 +25,17 @@ const Dashboard = ({ events }: DashboardProps) => {
     hideModal: hideEvent,
     isOpen: isOpenEvent,
   } = useModal()
-  const [slotInfo, setSlotInfo] = useState<SlotInfo>()
-  const [event, setEvent] = useState<Event>()
+  const [ slotInfo, setSlotInfo ] = useState<SlotInfo>()
+  const [ event, setEvent ] = useState<Event>()
 
   const handleSelectEvent: onSelectEventType = (event) => {
     setEvent(event)
     showEvent()
   }
   const handleSelectSlot: onSelectSlotType = (slotInfo) => {
+    if (isBefore(new Date(format(slotInfo.start, 'MM-dd-yyyy')), new Date(format(new Date(), 'MM-dd-yyyy')))) {
+      return
+    }
     setSlotInfo(slotInfo)
     showReservation()
   }
@@ -43,7 +47,7 @@ const Dashboard = ({ events }: DashboardProps) => {
         onSelectEvent={handleSelectEvent}
         onSelectSlot={handleSelectSlot}
       />
-      <Reservation open={isOpenReservation} onClose={hideReservation} slotInfo={slotInfo} />
+      <Reservation open={isOpenReservation} onClose={hideReservation} slotInfo={slotInfo}/>
       <EventModal open={isOpenEvent} onClose={hideEvent} event={event}/>
     </>
   )
