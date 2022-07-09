@@ -4,10 +4,9 @@ import cs from 'date-fns/locale/cs'
 import parse from 'date-fns/parse'
 import startOfWeek from 'date-fns/startOfWeek'
 import sub from 'date-fns/sub'
-import { calendar_v3 } from 'googleapis'
+import type { CalendarEvent } from 'LocalTypes'
 import { useMemo } from 'react'
 import { Calendar as ReactCalendar, dateFnsLocalizer, Event, SlotInfo } from 'react-big-calendar'
-import Schema$Event = calendar_v3.Schema$Event
 
 const localizer = dateFnsLocalizer({
   format,
@@ -34,7 +33,7 @@ const messages = {
   showMore: (total: number) => `+ Zobrazit další (${total})`,
 }
 
-const parseGoogleCalendarEventsToReactCalendarEvents = (events: Schema$Event[]) => events.map(({
+const parseGoogleCalendarEventsToReactCalendarEvents = (events: CalendarEvent[]) => events.map(({
   description,
   end,
   extendedProperties,
@@ -55,7 +54,7 @@ export type onSelectEventType = (event: Event) => void
 export type onSelectSlotType = (slotInfo: SlotInfo) => void
 
 type CalendarProps = {
-  events: Schema$Event[],
+  events: CalendarEvent[],
   onSelectEvent: onSelectEventType,
   onSelectSlot: onSelectSlotType,
 }

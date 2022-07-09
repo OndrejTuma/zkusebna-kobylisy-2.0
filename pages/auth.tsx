@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box'
 import React, {
   useState,
   useEffect
@@ -25,9 +26,9 @@ const Auth = () => {
   }, [url])
 
   return (
-    <div>
-      <Button onClick={handleAuth}>Get authorize url</Button>
-    </div>
+    <Box textAlign="center" mt={4}>
+      <Button onClick={handleAuth}>Získej Google token</Button>
+    </Box>
   )
 }
 

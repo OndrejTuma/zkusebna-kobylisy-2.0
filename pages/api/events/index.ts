@@ -13,8 +13,6 @@ const oAuth2Client = new google.auth.OAuth2(
   keys.web.redirect_uris[0],
 )
 
-const calendarId = 'n4jnepnqpsl0nbaq0gqf8p7eco@group.calendar.google.com'
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseCalendarEvents>,
@@ -23,12 +21,18 @@ export default async function handler(
 
   console.log('EVENTS METHOD', req.method)
 
-  const tokens = await Token.findOne().limit(1).sort({ $natural: -1 })
+  const tokens = await Token.findOne().sort({ $natural: -1 })
 
   if (!tokens) {
-    const error = 'Refresh token to Google Calendar does not exist. Visit /auth page to generate it'
+    const error = 'Chybí token pro Google kalendář a nelze zobrazit eventy. Navštivte stránku /auth kde si token vygenerujete'
 
-    return res.status(401).json({ events: null, error })
+    return res.status(401).json({ error })
+  }
+
+  if (!tokens.calendar_id) {
+    const error = 'Není definovaný kalendář pro rezervace. Navštivte stránku /auth kde si vygenerujete token a zvolíte kalendář'
+
+    return res.status(401).json({ error })
   }
 
   oAuth2Client.setCredentials({
@@ -37,13 +41,18 @@ export default async function handler(
 
   switch (req.method) {
     case 'GET':
-      const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
 
-      const events = await calendar.events.list({
-        calendarId,
-      })
+      try {
+        const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
 
-      res.status(200).json({ events })
+        const events = await calendar.events.list({
+          calendarId: tokens.calendar_id,
+        })
+
+        res.status(200).json({ events })
+      } catch (err) {
+        res.status(400).json({ error: err.message })
+      }
 
       break
     case 'POST':

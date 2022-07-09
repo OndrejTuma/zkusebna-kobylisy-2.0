@@ -11,23 +11,40 @@ const oAuth2Client = new google.auth.OAuth2(
   keys.web.redirect_uris[0]
 );
 
-type Data = {
-  tokens: {}
-}
+import type { ResponseCalendarList } from 'LocalTypes'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<ResponseCalendarList>
 ) {
   const { code } = req.body
 
   const { tokens } = await oAuth2Client.getToken(code);
 
   await dbConnect()
-  await Token.create({
+
+  // remove all previous tokens - we want to keep only current one
+  await Token.remove({})
+
+  const { id: tokenId } = await Token.create({
     access_token: tokens.access_token,
     refresh_token: tokens.refresh_token,
   })
 
-  res.status(200).json({ tokens: tokens })
+  try {
+    oAuth2Client.setCredentials({
+      refresh_token: tokens.refresh_token,
+    })
+
+    const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
+
+    const calendars = await calendar.calendarList.list()
+
+    res.status(200).json({
+      calendars,
+      tokenId
+    })
+  } catch (err) {
+    res.status(400).json({ error: err.message })
+  }
 }
