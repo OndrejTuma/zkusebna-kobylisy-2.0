@@ -1,3 +1,4 @@
+import { NetworkState } from 'LocalTypes'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { google } from 'googleapis'
 
@@ -11,11 +12,11 @@ const oAuth2Client = new google.auth.OAuth2(
   keys.web.redirect_uris[0]
 );
 
-import type { ResponseCalendarList } from 'LocalTypes'
+import type { ResponseAuthToken, NetworkFailedState } from 'LocalTypes'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseCalendarList>
+  res: NextApiResponse<ResponseAuthToken | NetworkFailedState>
 ) {
   const { code } = req.body
 

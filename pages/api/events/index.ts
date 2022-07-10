@@ -5,7 +5,7 @@ import dbConnect from 'Lib/dbConnect'
 import Token from 'Models/Token'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type { ResponseCalendarEvents } from 'LocalTypes'
+import type { NetworkFailedState, ResponseCalendarEvents } from 'LocalTypes'
 
 const oAuth2Client = new google.auth.OAuth2(
   keys.web.client_id,
@@ -15,7 +15,7 @@ const oAuth2Client = new google.auth.OAuth2(
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseCalendarEvents>,
+  res: NextApiResponse<ResponseCalendarEvents | NetworkFailedState>,
 ) {
   await dbConnect()
 

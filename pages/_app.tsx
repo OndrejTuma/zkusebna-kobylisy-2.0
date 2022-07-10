@@ -3,6 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 import createEmotionCache from 'Styles/createEmotionCache'
 
@@ -15,19 +16,28 @@ interface ZkusebnaKobylisyAppProps extends AppProps {
 }
 
 const clientSideEmotionCache = createEmotionCache()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 
 function ZkusebnaKobylisy({ Component, pageProps, emotionCache = clientSideEmotionCache }: ZkusebnaKobylisyAppProps) {
   return (
-    <CacheProvider value={emotionCache}>
-      <Head>
-        <meta name="viewport" content="initial-scale=1, width=device-width"/>
-      </Head>
-      <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline/>
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </CacheProvider>
+    <QueryClientProvider client={queryClient}>
+      <CacheProvider value={emotionCache}>
+        <Head>
+          <meta name="viewport" content="initial-scale=1, width=device-width"/>
+        </Head>
+        <ThemeProvider theme={theme}>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline/>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </CacheProvider>
+    </QueryClientProvider>
   )
 }
 
