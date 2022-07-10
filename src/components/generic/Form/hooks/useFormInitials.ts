@@ -4,8 +4,6 @@ import * as Yup from 'yup'
 
 export type Inputs = {
   [key: string]: {
-    label?: string,
-    type?: string,
     initialValue?: any,
     validationSchema?: any,
   }
