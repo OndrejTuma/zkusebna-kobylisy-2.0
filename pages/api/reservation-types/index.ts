@@ -33,12 +33,12 @@ export default async function handler(
     case 'POST':
       const { title, discount } = req.body
 
-      const category = await ReservationType.create({
+      const reservationType = await ReservationType.create({
         title,
         discount,
       })
 
-      res.status(201).json(category)
+      res.status(201).json(reservationType)
 
       break
     default:

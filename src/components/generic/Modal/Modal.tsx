@@ -2,9 +2,11 @@ import Backdrop from '@mui/material/Backdrop'
 import Box from '@mui/material/Box'
 import Fade from '@mui/material/Fade'
 import MUIModal from '@mui/material/Modal'
+import Close from '@mui/icons-material/Close'
+import Button from 'Components/generic/Button'
 import React from 'react'
 
-const style = {
+const modalStyle = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
@@ -13,6 +15,13 @@ const style = {
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
+}
+const closeButtonStyle = {
+  position: 'absolute',
+  right: 0,
+  top: 0,
+  p: 1,
+  minWidth: 0,
 }
 
 type Props = {
@@ -35,7 +44,10 @@ const Modal = ({ children, open, onClose }: Props) => {
       }}
     >
       <Fade in={open}>
-        <Box sx={style}>
+        <Box sx={modalStyle}>
+          <Button variant="text" sx={closeButtonStyle}>
+            <Close onClick={onClose}/>
+          </Button>
           {children}
         </Box>
       </Fade>

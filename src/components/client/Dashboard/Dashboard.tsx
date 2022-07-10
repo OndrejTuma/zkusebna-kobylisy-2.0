@@ -5,9 +5,9 @@ import isBefore from 'date-fns/isBefore'
 import type { CalendarEvent } from 'LocalTypes'
 import React, { useState } from 'react'
 import { Event, SlotInfo } from 'react-big-calendar'
-import EventModal from '../EventModal'
 
-import Reservation from '../Reservation'
+import EventModal from '../EventModal'
+import ReservationModal from '../reservation/ReservationModal'
 
 type DashboardProps = {
   events?: CalendarEvent[]
@@ -46,7 +46,7 @@ const Dashboard = ({ events }: DashboardProps) => {
         onSelectEvent={handleSelectEvent}
         onSelectSlot={handleSelectSlot}
       />
-      <Reservation open={isOpenReservation} onClose={hideReservation} slotInfo={slotInfo}/>
+      <ReservationModal open={isOpenReservation} onClose={hideReservation} slotInfo={slotInfo}/>
       <EventModal open={isOpenEvent} onClose={hideEvent} event={event}/>
     </>
   )
