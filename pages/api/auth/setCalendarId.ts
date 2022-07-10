@@ -4,11 +4,11 @@ import { google } from 'googleapis'
 import dbConnect from 'Lib/dbConnect'
 import Token from 'Models/Token'
 
-import { BasicApiResponse } from 'LocalTypes'
+import { NetworkFailedState } from 'LocalTypes'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<BasicApiResponse>,
+  res: NextApiResponse<null | NetworkFailedState>,
 ) {
   const { calendarId: calendar_id, tokenId } = req.body
 

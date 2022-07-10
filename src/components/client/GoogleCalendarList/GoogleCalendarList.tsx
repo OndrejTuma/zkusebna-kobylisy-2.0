@@ -1,57 +1,39 @@
-import Container from '@mui/material/Container'
-import Error from 'Components/generic/Error'
-import Success from 'Components/generic/Success'
-import { CalendarEntry } from 'LocalTypes'
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import CalendarMonth from '@mui/icons-material/CalendarMonth'
-import React, { useState } from 'react'
+import Container from '@mui/material/Container'
+import List from '@mui/material/List'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import axios, { AxiosResponse, AxiosError } from 'axios'
+import ErrorAxios from 'Components/generic/ErrorAxios'
+import Success from 'Components/generic/Success'
+import { CalendarEntry, RequestSetCalendarId } from 'LocalTypes'
+import React  from 'react'
+import { useMutation } from 'react-query'
 
 type Props = {
   calendars?: CalendarEntry[],
-  tokenId?: string,
+  tokenId: string,
 }
 
+const setCalendarId = (requestData: RequestSetCalendarId) => axios.post('/api/auth/setCalendarId', requestData)
+
 const GoogleCalendarList = ({ calendars, tokenId }: Props) => {
-  const [error, setError] = useState<string>()
-  const [success, setSuccess] = useState<string>()
+  const { isError, error, mutate, isSuccess } = useMutation<AxiosResponse, AxiosError, RequestSetCalendarId>('setCalendarId', setCalendarId)
 
-  const handleCalendarSelect = async (calendarId: string) => {
-    const res = await fetch('/api/auth/setCalendarId', {
-      method: 'POST',
-      body: JSON.stringify({
-        calendarId,
-        tokenId,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-
-    if (res.status === 200) {
-      setSuccess('Je to připravené!')
-
-      return
-    }
-
-    const { error } = await res.json()
-
-    setError(error)
-  }
+  const handleCalendarSelect = async (calendarId: string) => mutate({ calendarId, tokenId })
 
   return (
     <Container>
-      {error && <Error>{error}</Error>}
-      {success ? <Success>{success}</Success> : (
+      {isError && <ErrorAxios error={error}/>}
+      {isSuccess ? <Success>Je to připravené!</Success> : (
         <List>
           {calendars?.map(({ id, summary }) => (
             <ListItemButton key={id} onClick={() => handleCalendarSelect(id!)}>
               <ListItemIcon>
-                <CalendarMonth />
+                <CalendarMonth/>
               </ListItemIcon>
-              <ListItemText primary={summary} />
+              <ListItemText primary={summary}/>
             </ListItemButton>
           ))}
         </List>
