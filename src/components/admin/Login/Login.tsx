@@ -21,7 +21,7 @@ const Login = () => {
       <Form onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema}>
         <Form.InputNodes inputs={formInputs}/>
         {error && (
-          <Grid item>
+          <Grid item mb={2}>
             <Error>Nepodařilo se přihlásit. Zkontrolujte jméno a heslo</Error>
           </Grid>
         )}
