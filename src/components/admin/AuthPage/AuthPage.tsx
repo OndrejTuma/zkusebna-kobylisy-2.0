@@ -4,10 +4,13 @@ import Box from '@mui/material/Box'
 import Loader from 'Components/generic/Loader'
 
 import { AuthContext } from '../Auth'
-import Dashboard from '../Dashboard'
 import Login from '../Login'
 
-const Admin = () => {
+type Props = {
+  children: React.ReactNode
+}
+
+const AuthPage = ({ children }: Props) => {
   const { isLogged, isBusy } = useContext(AuthContext)
 
   if (isBusy) {
@@ -18,7 +21,7 @@ const Admin = () => {
     )
   }
 
-  return isLogged ? <Dashboard /> : <Login />
+  return isLogged ? <>{children}</> : <Login />
 }
 
-export default Admin
+export default AuthPage
