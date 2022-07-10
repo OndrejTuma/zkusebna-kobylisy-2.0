@@ -1,14 +1,16 @@
+import AuthPage from 'Components/admin/AuthPage'
+import Auth from 'Components/admin/Auth'
+import Dashboard from 'Components/admin/Dashboard'
 import React from 'react'
 
-import Auth from 'Components/admin/Auth'
-import Admin from 'Components/admin/Admin'
-
-const AdminPage = () => {
+const Admin = () => {
   return (
     <Auth>
-      <Admin />
+      <AuthPage>
+        <Dashboard/>
+      </AuthPage>
     </Auth>
   )
 }
 
-export default AdminPage
+export default Admin
