@@ -1,26 +1,29 @@
 import Stack from '@mui/material/Stack'
-import Error from 'Components/generic/Error'
+import axios, { AxiosError, AxiosResponse } from 'axios'
+import ErrorAxios from 'Components/generic/ErrorAxios'
 import Form from 'Components/generic/Form'
-import { ReservationType } from 'LocalTypes'
-import React, { useState, useEffect } from 'react'
+import { ResponseReservationTypes } from 'LocalTypes'
+import React from 'react'
+import { useQuery } from 'react-query'
+
+const getAllReservationTypes = () => axios.get('/api/reservation-types?range=[0,99]')
 
 const ChooseReservationType = () => {
-  const [items, setItems] = useState([])
-  const [error, setError] = useState()
-
-  useEffect(() => {
-    fetch('/api/reservation-types?range=[0,99]').then(res => res.json()).then(reservationTypes => {
-      setItems(reservationTypes.map(({ title, id }) => ({
-        label: title,
-        value: id,
-      })))
-    }).catch(err => setError(err.message))
-  }, [])
+  const {
+    error,
+    isError,
+    isSuccess,
+    data,
+  } = useQuery<AxiosResponse<ResponseReservationTypes>, AxiosError>('getAllReservationTypes', getAllReservationTypes)
 
   return (
     <Stack direction="row" justifyContent="space-between" spacing={2}>
-      {error ? <Error>{error}</Error> : (
-        <Form.Select name="reservationType" items={items} />
+      {isError && <ErrorAxios error={error} />}
+      {isSuccess && (
+        <Form.Select name="reservationType" items={data.data.items.map(({ title: label, id: value }) => ({
+          label,
+          value
+        }))} />
       )}
     </Stack>
   )

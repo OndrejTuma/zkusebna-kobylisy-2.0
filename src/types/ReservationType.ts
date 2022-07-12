@@ -3,3 +3,7 @@ export type ReservationType = {
   title: string,
   discount: number,
 }
+
+export type ResponseReservationTypes = {
+  items: ReservationType[]
+}
