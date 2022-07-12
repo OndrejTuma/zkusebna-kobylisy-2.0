@@ -4,6 +4,4 @@ export type ReservationType = {
   discount: number,
 }
 
-export type ResponseReservationTypes = {
-  items: ReservationType[]
-}
+export type ResponseReservationTypes = ReservationType[]
