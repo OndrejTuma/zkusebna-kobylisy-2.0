@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
-import ChooseDate from 'Components/client/reservation/ChooseDate'
-import ChooseItems from 'Components/client/reservation/ChooseItems'
-import ChooseReservationType from 'Components/client/reservation/ChooseReservationType'
+import ChooseDate from '../ChooseDate'
+import ChooseItems from '../ChooseItems'
+import ChooseReservationType from '../ChooseReservationType'
 import Button from 'Components/generic/Button'
 import Form, { useFormInitials } from 'Components/generic/Form'
 import Modal from 'Components/generic/Modal'
@@ -62,7 +62,11 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
       <Modal.Actions>
         <Stack justifyContent="space-between" direction="row">
           <Button disabled={activeStep === 0} variant="outlined" onClick={handleBack}>Zpět</Button>
-          <Button disabled={activeStep + 1 === steps.length} onClick={handleNext}>Pokračovat</Button>
+          {activeStep + 1 === steps.length ? (
+            <Form.SubmitButton>Vytvořit rezervaci</Form.SubmitButton>
+          ) : (
+            <Button onClick={handleNext}>Pokračovat</Button>
+          )}
         </Stack>
       </Modal.Actions>
     </Modal>
