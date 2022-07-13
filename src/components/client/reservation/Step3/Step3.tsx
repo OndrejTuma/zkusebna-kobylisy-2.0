@@ -1,7 +1,7 @@
 import Stack from '@mui/material/Stack'
 import React from 'react'
 
-const ChooseItems = () => {
+const Step3 = () => {
   return (
     <Stack direction="row" justifyContent="space-between" spacing={2}>
       Vyber položky
@@ -9,4 +9,4 @@ const ChooseItems = () => {
   )
 }
 
-export default ChooseItems
+export default Step3

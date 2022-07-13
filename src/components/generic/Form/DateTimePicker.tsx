@@ -12,10 +12,11 @@ import React from 'react'
 type Props = {
   name: string,
   label?: string,
+  size?: 'small' | 'medium',
   [key: string]: any,
 }
 
-const DateTimePicker = ({ label, name, ...rest }: Props) => {
+const DateTimePicker = ({ label, name, size = 'small', ...rest }: Props) => {
   const {setFieldValue} = useFormikContext()
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={csLocale}>
@@ -25,7 +26,7 @@ const DateTimePicker = ({ label, name, ...rest }: Props) => {
           as={MUIDateTimePicker}
           name={name}
           displayStaticWrapperAs="desktop"
-          renderInput={(props: any) => <TextField {...props} />}
+          renderInput={(props: any) => <TextField {...props} fullWidth size={size} />}
           ampm={false}
           disablePast
           inputFormat={'dd.MM. yyyy H:mm'}
