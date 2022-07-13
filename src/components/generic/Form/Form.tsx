@@ -11,16 +11,17 @@ type Props = {
   onSubmit?: (values: FormValues) => void,
   initialValues: FormValues,
   validationSchema?: SchemaOf<FormValues>,
+  [key: string]: any,
 }
 
-const Form = ({ children, initialValues, onSubmit, validationSchema }: Props) => {
+const Form = ({ children, initialValues, onSubmit, validationSchema, ...rest }: Props) => {
   const handleSubmit = (values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) => {
     onSubmit?.(values)
     setSubmitting(false)
   }
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
+    <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} {...rest}>
       <FormikForm>
         <Grid container direction={'column'}>
           {children}

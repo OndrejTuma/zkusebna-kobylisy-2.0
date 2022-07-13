@@ -1,10 +1,10 @@
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
+import ContinueButton from 'Components/client/reservation/ContinueButton'
 import Button from 'Components/generic/Button'
 import Form, { useFormInitials } from 'Components/generic/Form'
 import Modal from 'Components/generic/Modal'
 import Stepper, { useStepper } from 'Components/generic/Stepper'
-import { useFormikContext } from 'formik'
 import React from 'react'
 import { SlotInfo } from 'react-big-calendar'
 import * as Yup from 'yup'
@@ -42,7 +42,7 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
       validationSchema: Yup.string().required('Vyplňte název akce'),
     },
     name: {
-      initialValue: 'hoven',
+      initialValue: '',
       validationSchema: Yup.string().required('Vyplňte své jméno').min(5, 'To se zdá být příliš krátké'),
     },
     phone: {
@@ -85,8 +85,8 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
             {activeStep + 1 === steps.length ? (
               <Form.SubmitButton>Vytvořit rezervaci</Form.SubmitButton>
             ) : (
-               <Button onClick={handleNext}>Pokračovat</Button>
-             )}
+              <ContinueButton activeStep={activeStep} handleNext={handleNext}/>
+            )}
           </Stack>
         </Modal.Actions>
       </Form>
