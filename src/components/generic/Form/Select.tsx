@@ -1,10 +1,11 @@
 import Box from '@mui/material/Box'
 import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import MUISelect from '@mui/material/Select'
 import Error from 'Components/generic/Error'
-import React from 'react'
 import { ErrorMessage, Field } from 'formik'
+import React from 'react'
 
 type SelectItem = {
   label: string,
@@ -20,7 +21,8 @@ type Props = {
 const Select = ({ name, label, items }: Props) => {
   return (
     <FormControl fullWidth>
-      <Field as={MUISelect} name={name} label={label}>
+      <InputLabel>{label}</InputLabel>
+      <Field as={MUISelect} name={name}>
         {items?.map(({ label, value }) => (
           <MenuItem key={value} value={value}>{label}</MenuItem>
         ))}
