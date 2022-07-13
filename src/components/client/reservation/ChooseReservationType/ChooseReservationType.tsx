@@ -20,7 +20,7 @@ const ChooseReservationType = () => {
     <Stack direction="row" justifyContent="space-between" spacing={2}>
       {isError && <ErrorAxios error={error}/>}
       {isSuccess && (
-        <Form.Select name="reservationType" items={data.data.map(({ title: label, id: value }) => ({
+        <Form.Select label="Typ rezervace" name="reservationType" items={data.data.map(({ title: label, id: value }) => ({
           label,
           value,
         }))}/>

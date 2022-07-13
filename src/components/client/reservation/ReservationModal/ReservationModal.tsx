@@ -20,8 +20,8 @@ type ReservationProps = {
 }
 
 const steps = [
-  'Vyber datum',
-  'Vyber typ rezervace',
+  'Vyber datum a typ',
+  'Vyplň své údaje',
   'Vyber položky',
 ]
 
