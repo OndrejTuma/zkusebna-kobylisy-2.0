@@ -8,10 +8,9 @@ import Stepper, { useStepper } from 'Components/generic/Stepper'
 import React from 'react'
 import { SlotInfo } from 'react-big-calendar'
 import * as Yup from 'yup'
-import ChooseDate from '../ChooseDate'
-import ChooseItems from '../ChooseItems'
-import ChooseReservationType from '../ChooseReservationType'
-import FillReservationInfo from '../FillReservationInfo'
+import Step1 from '../Step1'
+import Step2 from '../Step2'
+import Step3 from '../Step3'
 
 type ReservationProps = {
   open: boolean
@@ -69,14 +68,11 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
             <Stepper activeStep={activeStep} steps={steps}/>
           </Box>
           {activeStep === 0 ? (
-            <>
-              <ChooseDate/>
-              <ChooseReservationType/>
-            </>
+            <Step1/>
           ) : activeStep === 1 ? (
-            <FillReservationInfo/>
+            <Step2/>
           ) : (
-            <ChooseItems/>
+            <Step3/>
           )}
         </Modal.Content>
         <Modal.Actions>
@@ -85,8 +81,8 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
             {activeStep + 1 === steps.length ? (
               <Form.SubmitButton>Vytvořit rezervaci</Form.SubmitButton>
             ) : (
-              <ContinueButton activeStep={activeStep} handleNext={handleNext}/>
-            )}
+               <ContinueButton activeStep={activeStep} handleNext={handleNext}/>
+             )}
           </Stack>
         </Modal.Actions>
       </Form>

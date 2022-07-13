@@ -9,12 +9,13 @@ type Props = {
   name: string,
   label?: string,
   type?: string,
+  size?: 'small' | 'medium',
 }
 
-const Input = ({ name, label, type }: Props) => {
+const Input = ({ name, label, type, size = 'small' }: Props) => {
   return (
     <Grid item mb={2}>
-      <Field label={label} as={TextField} size={'small'} fullWidth type={type} name={name}/>
+      <Field label={label} as={TextField} size={size} fullWidth type={type} name={name}/>
       <Box mt={1}>
         <ErrorMessage name={name} component={Error}/>
       </Box>

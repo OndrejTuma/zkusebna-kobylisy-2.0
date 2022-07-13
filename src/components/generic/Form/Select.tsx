@@ -16,11 +16,12 @@ type Props = {
   name: string,
   items: SelectItem[],
   label?: string,
+  size?: 'small' | 'medium',
 }
 
-const Select = ({ name, label, items }: Props) => {
+const Select = ({ name, label, items, size = 'small' }: Props) => {
   return (
-    <FormControl fullWidth>
+    <FormControl fullWidth size={size}>
       <InputLabel>{label}</InputLabel>
       <Field as={MUISelect} name={name}>
         {items?.map(({ label, value }) => (
