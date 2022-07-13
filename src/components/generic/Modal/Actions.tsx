@@ -7,7 +7,7 @@ type Props = {
 
 const Actions = ({ children }: Props) => {
   return (
-    <Typography component="div" textAlign="center">
+    <Typography component="div" textAlign="center" mt={4}>
       {children}
     </Typography>
   )
