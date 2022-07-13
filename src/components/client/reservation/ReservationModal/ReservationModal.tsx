@@ -33,27 +33,27 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
       initialValue: slotInfo?.end,
     },
     reservationType: {
-      initialValue: '',
+      initialValue: '62cac3de6c722ddc352a8cea',
       validationSchema: Yup.string().required('Musíte vybrat typ rezervace'),
     },
     reservationName: {
-      initialValue: '',
+      initialValue: 'Testus',
       validationSchema: Yup.string().required('Vyplňte název akce'),
     },
     name: {
-      initialValue: '',
+      initialValue: 'Ondřej Tůma',
       validationSchema: Yup.string().required('Vyplňte své jméno').min(5, 'To se zdá být příliš krátké'),
     },
     phone: {
-      initialValue: '',
+      initialValue: '732524691',
       validationSchema: Yup.string().required('Vyplňte svůj telefon').matches(/^((\+420|1) ?)?([0-9]{3} ?){3}$/, 'Telefonní číslo není ve správném formátu'),
     },
     email: {
-      initialValue: '',
+      initialValue: 'ondr@centrum.cz',
       validationSchema: Yup.string().required('Vyplňte svůj email').email('Email není ve správném formátu'),
     },
   })
-  const { activeStep, handleNext, handleBack } = useStepper()
+  const { activeStep, handleNext, handleBack } = useStepper(2)
 
   const handleSubmit = (values: {}) => {
     alert(JSON.stringify(values, null, 2))
