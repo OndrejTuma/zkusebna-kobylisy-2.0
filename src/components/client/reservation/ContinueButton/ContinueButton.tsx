@@ -29,10 +29,12 @@ const ContinueButton = ({ activeStep, handleNext }: Props) => {
         if (await areFieldsValid(['reservationType'], setFieldTouched)) {
           return handleNext()
         }
+        break
       case 1:
         if (await areFieldsValid(['reservationName', 'name', 'phone', 'email'], setFieldTouched)) {
           return handleNext()
         }
+        break
     }
   }
 
