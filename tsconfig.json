@@ -25,7 +25,7 @@
       "Hooks/*": ["src/hooks/*"],
       "Utils/*": ["src/utils/*"],
       "Consts/*": ["src/consts/*"],
-      "LocalTypes": ["src/types/index.ts"],
+      "LocalTypes": ["src/types/index.ts"]
     },
     "noImplicitThis": false
   },
