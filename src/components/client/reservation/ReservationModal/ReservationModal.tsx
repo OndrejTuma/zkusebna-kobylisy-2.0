@@ -52,6 +52,10 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
       initialValue: 'ondr@centrum.cz',
       validationSchema: Yup.string().required('Vyplňte svůj email').email('Email není ve správném formátu'),
     },
+    items: {
+      initialValue: [],
+      validationSchema: Yup.array().required('Musíte vybrat alespoň jednu položku'),
+    }
   })
   const { activeStep, handleNext, handleBack } = useStepper(2)
 
