@@ -5,10 +5,11 @@ import TreeItem, { treeItemClasses, TreeItemProps } from '@mui/lab/TreeItem'
 import TreeView from '@mui/lab/TreeView'
 import { alpha, styled } from '@mui/material/styles'
 import { useField } from 'formik'
-import { ReservationItem, ReservationItemCategory } from 'LocalTypes'
+import { ReservationItem, ReservationItemCategory, ReservationType } from 'LocalTypes'
 import React, { useMemo, useState } from 'react'
 import CategoryItem from '../CategoryItem'
 import Item from '../Item'
+import { Provider as ReservationTypeProvider } from '../ReservationTypeContext'
 import SelectableItem from '../SelectableItem'
 import getSubcategoriesAndItems from './utils/getSubcategoriesAndItems'
 
@@ -46,10 +47,11 @@ const renderStructuredCategory = ({ id, title, items, subcategories }: Structure
 
 type Props = {
   categories: ReservationItemCategory[],
-  items: ReservationItem[]
+  items: ReservationItem[],
+  reservationType: ReservationType,
 }
 
-const ItemsTree = ({ categories, items }: Props) => {
+const ItemsTree = ({ categories, items, reservationType }: Props) => {
   const structuredCategories: StructuredCategory[] = useMemo(() => categories.filter(({ parent_id }) => !parent_id).map(category => getSubcategoriesAndItems(category, categories, items)), [ categories, items ])
   const [ selectedItemIds, setSelectedItemIds ] = useState<Set<string>>(new Set())
   const [ , , { setValue } ] = useField('items')
@@ -66,23 +68,24 @@ const ItemsTree = ({ categories, items }: Props) => {
     })
 
   return (
-    <TreeView
-      aria-label="customized"
-      defaultExpanded={[ '1' ]}
-      defaultCollapseIcon={<IndeterminateCheckBoxOutlinedIcon/>}
-      defaultExpandIcon={<AddBoxOutlinedIcon/>}
-      defaultEndIcon={<CheckBoxOutlineBlankIcon/>}
-      sx={{ height: 264, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
-      multiSelect
-      onNodeSelect={onSelect}
-      selected={Array.from(selectedItemIds)}
-    >
-      {structuredCategories.map(category => (
-        <React.Fragment key={category.id}>
-          {renderStructuredCategory(category)}
-        </React.Fragment>
-      ))}
-    </TreeView>
+    <ReservationTypeProvider value={reservationType}>
+      <TreeView
+        aria-label="customized"
+        defaultCollapseIcon={<IndeterminateCheckBoxOutlinedIcon/>}
+        defaultExpandIcon={<AddBoxOutlinedIcon/>}
+        defaultEndIcon={<CheckBoxOutlineBlankIcon/>}
+        sx={{ height: 300, flexGrow: 1, overflowY: 'auto' }}
+        multiSelect
+        onNodeSelect={onSelect}
+        selected={Array.from(selectedItemIds)}
+      >
+        {structuredCategories.map(category => (
+          <React.Fragment key={category.id}>
+            {renderStructuredCategory(category)}
+          </React.Fragment>
+        ))}
+      </TreeView>
+    </ReservationTypeProvider>
   )
 }
 
