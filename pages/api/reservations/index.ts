@@ -1,11 +1,9 @@
 import { google } from 'googleapis'
 import keys from 'Keys/oauth2.keys.json'
-
 import dbConnect from 'Lib/dbConnect'
 import Token from 'Models/Token'
-
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type { NetworkFailedState, ResponseCalendarEvents, ResponseCalendarEvent } from 'LocalTypes'
+import type { NetworkFailedState, ResponseCalendarEvents, ResponseCalendarEvent, CalendarEvent } from 'LocalTypes'
 import transformRAParameters from 'Utils/transformRAParameters'
 
 const oAuth2Client = new google.auth.OAuth2(
@@ -26,7 +24,7 @@ const splitItemsInChunks = (items: string[], chunkSize = 40) => {
   return chunks
 }
 
-type Data = ResponseCalendarEvent | ResponseCalendarEvents
+type Data = ResponseCalendarEvent | CalendarEvent[] | undefined
 
 export default async function handler(
   req: NextApiRequest,
@@ -56,18 +54,19 @@ export default async function handler(
 
   switch (req.method) {
     case 'GET':
-      // const { filter, range, sort } = req.query
-      // const transformed = transformRAParameters(filter as string, range as string, sort as string)
-      // const [from, to] = transformed.parsedRange
+      const { filter, range, sort } = req.query
+      const transformed = transformRAParameters(filter as string, range as string, sort as string)
+      const [from, to] = transformed.parsedRange
 
       try {
         const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
 
-        const events = await calendar.events.list({
+        const eventsData = await calendar.events.list({
           calendarId: tokens.calendar_id,
         })
+        const events = eventsData?.data?.items
 
-        // res.setHeader('Content-Range', `categories ${transformed.range}/${reservationsCount}`)
+        res.setHeader('Content-Range', `categories ${transformed.range}/${events?.length || 0}`)
         res.status(200).json(events)
       } catch (err) {
         res.status(400).json({ error: err.message })
