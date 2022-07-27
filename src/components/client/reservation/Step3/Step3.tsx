@@ -1,17 +1,14 @@
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import ErrorAxios from 'Components/generic/ErrorAxios'
 import Loader from 'Components/generic/Loader'
 import { useField } from 'formik'
+import { getAllCategories, getAllItems, getReservationType } from 'Lib/queries'
 import React from 'react'
 import { useQueries } from 'react-query'
 import ItemsTree from '../items-tree'
 
-const getAllItems = () => axios.get('/api/items?range=[0,999]')
-const getAllCategories = () => axios.get('/api/categories?range=[0,99]')
-const getReservationType = (id: string) => axios.get(`/api/reservation-types/${id}`)
-
 const Step3 = () => {
-  const [{ value: reservationTypeId }] = useField('reservationType')
+  const [ { value: reservationTypeId } ] = useField('reservationType')
   const [ {
     error: itemsError,
     isError: itemsIsError,
@@ -43,7 +40,8 @@ const Step3 = () => {
   }
 
   if (itemsIsSuccess && categoriesIsSuccess && reservationTypeIsSuccess) {
-    return <ItemsTree items={itemsData!.data} categories={categoriesData!.data} reservationType={reservationTypeData!.data}/>
+    return <ItemsTree items={itemsData!.data} categories={categoriesData!.data}
+                      reservationType={reservationTypeData!.data}/>
   }
 
   return <Loader/>
