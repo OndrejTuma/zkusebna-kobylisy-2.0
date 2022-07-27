@@ -3,8 +3,7 @@ import getDay from 'date-fns/getDay'
 import cs from 'date-fns/locale/cs'
 import parse from 'date-fns/parse'
 import startOfWeek from 'date-fns/startOfWeek'
-import sub from 'date-fns/sub'
-import type { CalendarEvent } from 'LocalTypes'
+import type { Reservation } from 'LocalTypes'
 import React, { useMemo } from 'react'
 import { Calendar as ReactCalendar, CalendarProps as ReactCalendarProps, dateFnsLocalizer, Event, SlotInfo } from 'react-big-calendar'
 
@@ -33,21 +32,17 @@ const messages = {
   showMore: (total: number) => `+ Zobrazit další (${total})`,
 }
 
-const parseGoogleCalendarEventsToReactCalendarEvents = (events: CalendarEvent[]) => events.map(({
-  description,
-  end,
-  extendedProperties,
-  summary,
-  start,
+const parseGoogleCalendarEventsToReactCalendarEvents = (events: Reservation[]) => events.map(({
+  dateStart,
+  dateEnd,
+  itemIds,
+  reservationName,
 }) => ({
-  title: summary,
-  start: start?.date ? new Date(start.date) : start?.dateTime ? new Date(start.dateTime) : undefined,
-  end: end?.date ? sub(new Date(end.date), { days: 1 }) : end?.dateTime ? new Date(end.dateTime) : undefined,
-  allDay: !!start?.date,
+  title: reservationName,
+  start: dateStart ? new Date(dateStart) : undefined,
+  end: dateEnd ? new Date(dateEnd) : undefined,
   resource: {
-    private: extendedProperties?.private,
-    shared: extendedProperties?.shared,
-    description,
+    itemIds
   },
 }))
 
@@ -57,7 +52,7 @@ export type onSelectSlotType = (slotInfo: SlotInfo) => void
 const ReactBigCalendar = ReactCalendar as React.ComponentType<ReactCalendarProps<Event>>
 
 type CalendarProps = {
-  events: CalendarEvent[],
+  events: Reservation[],
   onSelectEvent: onSelectEventType,
   onSelectSlot: onSelectSlotType,
 }

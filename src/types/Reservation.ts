@@ -1,12 +1,13 @@
 export type Reservation = {
-  dateStart: string,
-  dateEnd: string,
-  reservationType: string,
-  reservationName: string,
-  name: string,
-  phone: string,
-  email: string,
-  items: string[],
+  id?: string | null,
+  dateStart?: string | null,
+  dateEnd?: string | null,
+  reservationType?: string,
+  reservationName?: string | null,
+  name?: string,
+  phone?: string,
+  email?: string,
+  itemIds: string[],
 }
 
 export type ReservationItemCategory = {
