@@ -3,8 +3,9 @@ import keys from 'Keys/oauth2.keys.json'
 import dbConnect from 'Lib/dbConnect'
 import Token from 'Models/Token'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type { NetworkFailedState, ResponseCalendarEvents, ResponseCalendarEvent, CalendarEvent } from 'LocalTypes'
+import type { NetworkFailedState, ResponseCalendarEvents, Reservation, ResponseCalendarEvent, CalendarEvent } from 'LocalTypes'
 import transformRAParameters from 'Utils/transformRAParameters'
+import { joinItemIdsFromChunks, splitItemIdsInChunks } from 'Utils/itemsChunks'
 
 const oAuth2Client = new google.auth.OAuth2(
   keys.web.client_id,
@@ -12,19 +13,7 @@ const oAuth2Client = new google.auth.OAuth2(
   keys.web.redirect_uris[0],
 )
 
-const splitItemsInChunks = (items: string[], chunkSize = 40) => {
-  const chunks = {}
-
-  for (let i = 0; i < items.length; i += chunkSize) {
-    Object.assign(chunks, {
-      [`items_${i}`]: items.slice(i, i + chunkSize).join(',')
-    })
-  }
-
-  return chunks
-}
-
-type Data = ResponseCalendarEvent | CalendarEvent[] | undefined
+export type Data = ResponseCalendarEvent | Reservation[] | undefined
 
 export default async function handler(
   req: NextApiRequest,
@@ -54,9 +43,10 @@ export default async function handler(
 
   switch (req.method) {
     case 'GET':
+      // TODO: make sorting work
       const { filter, range, sort } = req.query
       const transformed = transformRAParameters(filter as string, range as string, sort as string)
-      const [from, to] = transformed.parsedRange
+      const [ from, to ] = transformed.parsedRange
 
       try {
         const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
@@ -66,8 +56,27 @@ export default async function handler(
         })
         const events = eventsData?.data?.items
 
-        res.setHeader('Content-Range', `categories ${transformed.range}/${events?.length || 0}`)
-        res.status(200).json(events)
+        if (!events) {
+          res.setHeader('Content-Range', `reservations ${transformed.range}/0`)
+          res.status(200).json([])
+
+          return
+        }
+
+        const formattedEvents = events.map(({id, start, end, summary, extendedProperties}) => ({
+          id,
+          dateStart: start?.date || start?.dateTime,
+          dateEnd: end?.date || end?.dateTime,
+          reservationType: extendedProperties?.shared?.reservationType,
+          reservationName: summary,
+          name: extendedProperties?.shared?.name,
+          phone: extendedProperties?.shared?.phone,
+          email: extendedProperties?.shared?.email,
+          itemIds: joinItemIdsFromChunks(extendedProperties?.shared),
+        }))
+
+        res.setHeader('Content-Range', `reservations ${transformed.range}/${formattedEvents.length}`)
+        res.status(200).json(formattedEvents)
       } catch (err) {
         res.status(400).json({ error: err.message })
       }
@@ -86,7 +95,7 @@ export default async function handler(
               dateTime: dateStart,
             },
             end: {
-              dateTime: dateEnd
+              dateTime: dateEnd,
             },
             summary: reservationName,
             extendedProperties: {
@@ -95,10 +104,10 @@ export default async function handler(
                 name,
                 phone,
                 email,
-                ...splitItemsInChunks(items),
-              }
-            }
-          }
+                ...splitItemIdsInChunks(items),
+              },
+            },
+          },
         })
 
         res.status(201).json(event)

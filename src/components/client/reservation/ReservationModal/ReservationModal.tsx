@@ -74,6 +74,7 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
   const handleSubmit = (values: FormValues) => {
     // TODO: make Form accept generic Values
     mutate(values as Reservation)
+    // TODO: close when done
   }
 
   return (

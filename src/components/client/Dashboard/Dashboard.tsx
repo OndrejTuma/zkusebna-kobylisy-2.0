@@ -2,7 +2,7 @@ import Calendar, { onSelectEventType, onSelectSlotType } from 'Components/generi
 import useModal from 'Components/generic/Modal/useModal'
 import format from 'date-fns/format'
 import isBefore from 'date-fns/isBefore'
-import type { CalendarEvent } from 'LocalTypes'
+import type { Reservation } from 'LocalTypes'
 import React, { useState } from 'react'
 import { Event, SlotInfo } from 'react-big-calendar'
 
@@ -10,10 +10,10 @@ import EventModal from '../EventModal'
 import ReservationModal from '../reservation/ReservationModal'
 
 type DashboardProps = {
-  events?: CalendarEvent[]
+  reservations?: Reservation[]
 }
 
-const Dashboard = ({ events }: DashboardProps) => {
+const Dashboard = ({ reservations }: DashboardProps) => {
   const {
     showModal: showReservation,
     hideModal: hideReservation,
@@ -42,7 +42,7 @@ const Dashboard = ({ events }: DashboardProps) => {
   return (
     <>
       <Calendar
-        events={events || []}
+        events={reservations || []}
         onSelectEvent={handleSelectEvent}
         onSelectSlot={handleSelectSlot}
       />

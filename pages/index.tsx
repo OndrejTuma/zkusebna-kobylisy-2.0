@@ -43,7 +43,7 @@ const Home: NextPage = () => {
                     error={(reservationsError || itemsError || categoriesError) as AxiosError}/>
       )}
       {(reservationsIsSuccess && itemsIsSuccess && categoriesIsSuccess) && (
-        <Dashboard events={reservationsData!.data.data.items}/>
+        <Dashboard reservations={reservationsData!.data}/>
       )}
     </div>
   )
