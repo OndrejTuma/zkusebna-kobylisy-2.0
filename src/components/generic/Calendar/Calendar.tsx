@@ -5,8 +5,8 @@ import parse from 'date-fns/parse'
 import startOfWeek from 'date-fns/startOfWeek'
 import sub from 'date-fns/sub'
 import type { CalendarEvent } from 'LocalTypes'
-import { useMemo } from 'react'
-import { Calendar as ReactCalendar, dateFnsLocalizer, Event, SlotInfo } from 'react-big-calendar'
+import React, { useMemo } from 'react'
+import { Calendar as ReactCalendar, CalendarProps as ReactCalendarProps, dateFnsLocalizer, Event, SlotInfo } from 'react-big-calendar'
 
 const localizer = dateFnsLocalizer({
   format,
@@ -46,12 +46,15 @@ const parseGoogleCalendarEventsToReactCalendarEvents = (events: CalendarEvent[])
   allDay: !!start?.date,
   resource: {
     private: extendedProperties?.private,
+    shared: extendedProperties?.shared,
     description,
   },
 }))
 
 export type onSelectEventType = (event: Event) => void
 export type onSelectSlotType = (slotInfo: SlotInfo) => void
+
+const ReactBigCalendar = ReactCalendar as React.ComponentType<ReactCalendarProps<Event>>
 
 type CalendarProps = {
   events: CalendarEvent[],
@@ -63,23 +66,21 @@ const Calendar = ({ events, onSelectEvent, onSelectSlot }: CalendarProps) => {
   const reservations: Event[] = useMemo(() => parseGoogleCalendarEventsToReactCalendarEvents(events), [ events ])
 
   return (
-    <div>
-      <ReactCalendar
-        culture={'cs'}
-        localizer={localizer}
-        events={reservations}
-        startAccessor="start"
-        endAccessor="end"
-        onSelectEvent={onSelectEvent}
-        views={[ 'month' ]}
-        style={{ height: 700 }}
-        messages={messages}
-        popup
-        // popupOffset={{x: 30, y: 20}}
-        selectable
-        onSelectSlot={onSelectSlot}
-      />
-    </div>
+    <ReactBigCalendar
+      culture={'cs'}
+      localizer={localizer}
+      events={reservations}
+      startAccessor="start"
+      endAccessor="end"
+      onSelectEvent={onSelectEvent}
+      views={[ 'month' ]}
+      style={{ height: 700 }}
+      messages={messages}
+      popup
+      // popupOffset={{x: 30, y: 20}}
+      selectable
+      onSelectSlot={onSelectSlot}
+    />
   )
 }
 

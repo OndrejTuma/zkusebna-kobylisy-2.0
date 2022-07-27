@@ -1,12 +1,16 @@
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 import ContinueButton from 'Components/client/reservation/ContinueButton'
 import Button from 'Components/generic/Button'
-import Form, { useFormInitials } from 'Components/generic/Form'
+import ErrorAxios from 'Components/generic/ErrorAxios'
+import Form, { FormValues, useFormInitials } from 'Components/generic/Form'
 import Modal from 'Components/generic/Modal'
 import Stepper, { useStepper } from 'Components/generic/Stepper'
+import { Reservation } from 'LocalTypes'
 import React from 'react'
 import { SlotInfo } from 'react-big-calendar'
+import { useMutation } from 'react-query'
 import * as Yup from 'yup'
 import Step1 from '../Step1'
 import Step2 from '../Step2'
@@ -23,6 +27,8 @@ const steps = [
   'Vyplň své údaje',
   'Vyber položky',
 ]
+
+const createReservation = (values: Reservation) => axios.post('/api/reservations', values)
 
 const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
   const { initialValues, validationSchema } = useFormInitials({
@@ -55,12 +61,19 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
     items: {
       initialValue: [],
       validationSchema: Yup.array().required('Musíte vybrat alespoň jednu položku'),
-    }
+    },
   })
   const { activeStep, handleNext, handleBack } = useStepper(2)
 
-  const handleSubmit = (values: {}) => {
-    alert(JSON.stringify(values, null, 2))
+  const {
+    mutate,
+    isError,
+    error,
+  } = useMutation<AxiosResponse, AxiosError, Reservation>('createReservation', createReservation)
+
+  const handleSubmit = (values: FormValues) => {
+    // TODO: make Form accept generic Values
+    mutate(values as Reservation)
   }
 
   return (
@@ -71,13 +84,14 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
           <Box mb={4}>
             <Stepper activeStep={activeStep} steps={steps}/>
           </Box>
+          {isError && <ErrorAxios sx={{ marginBottom: 2 }} error={error}/>}
           {activeStep === 0 ? (
             <Step1/>
           ) : activeStep === 1 ? (
             <Step2/>
           ) : (
-            <Step3/>
-          )}
+                <Step3/>
+              )}
         </Modal.Content>
         <Modal.Actions>
           <Stack justifyContent="space-between" direction="row">
