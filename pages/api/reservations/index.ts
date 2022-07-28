@@ -41,15 +41,12 @@ export default async function handler(
     refresh_token: tokens.refresh_token,
   })
 
-  switch (req.method) {
-    case 'GET':
-      // TODO: make sorting work
-      const { filter, range, sort } = req.query
-      const transformed = transformRAParameters(filter as string, range as string, sort as string)
-      const [ from, to ] = transformed.parsedRange
+  try {
+    const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
 
-      try {
-        const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
+    switch (req.method) {
+      case 'GET':
+        const { range, parsedRange: [ from, to ], sort } = transformRAParameters(req.query.filter as string, req.query.range as string, req.query.sort as string)
 
         const eventsData = await calendar.events.list({
           calendarId: tokens.calendar_id,
@@ -57,13 +54,13 @@ export default async function handler(
         const events = eventsData?.data?.items
 
         if (!events) {
-          res.setHeader('Content-Range', `reservations ${transformed.range}/0`)
+          res.setHeader('Content-Range', `reservations ${range}/0`)
           res.status(200).json([])
 
           return
         }
 
-        const formattedEvents = events.map(({id, start, end, summary, extendedProperties}) => ({
+        const formattedEvents: Reservation[] = events.map(({id, start, end, summary, extendedProperties}) => ({
           id,
           dateStart: start?.date || start?.dateTime,
           dateEnd: end?.date || end?.dateTime,
@@ -75,18 +72,21 @@ export default async function handler(
           itemIds: joinItemIdsFromChunks(extendedProperties?.shared),
         }))
 
-        res.setHeader('Content-Range', `reservations ${transformed.range}/${formattedEvents.length}`)
-        res.status(200).json(formattedEvents)
-      } catch (err) {
-        res.status(400).json({ error: err.message })
-      }
+        const sortKey = Object.keys(sort)[0] as keyof Reservation
+        const sortValue = Object.values(sort)[0] as number
 
-      break
-    case 'POST':
-      const { dateStart, dateEnd, reservationType, reservationName, name, phone, email, items } = req.body
+        formattedEvents.sort((a, b) => {
+          // TODO: fix
+          // @ts-ignore
+          return (a[sortKey] > b[sortKey] ? 1 : -1) * sortValue
+        })
 
-      try {
-        const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
+        res.setHeader('Content-Range', `reservations ${range}/${formattedEvents.length}`)
+        res.status(200).json(formattedEvents.slice(from, to + 1))
+
+        break
+      case 'POST':
+        const { dateStart, dateEnd, reservationType, reservationName, name, phone, email, items } = req.body
 
         const event = await calendar.events.insert({
           calendarId: tokens.calendar_id,
@@ -111,12 +111,12 @@ export default async function handler(
         })
 
         res.status(201).json(event)
-      } catch (err) {
-        res.status(400).json({ error: err.message })
-      }
 
-      break
-    default:
-      res.status(400).end()
+        break
+      default:
+        res.status(400).end()
+    }
+  } catch (err) {
+    res.status(400).json({ error: err.message })
   }
 }

@@ -1,3 +1,5 @@
+import { SortOrder } from 'mongoose'
+
 const transformRAParameters = (filter: string, range?: string, sort?: string) => {
   const parsedFilter: {} = filter ? JSON.parse(filter) : {}
   const parsedRange: number[] = range ? JSON.parse(range) : [0, 9]
@@ -8,7 +10,7 @@ const transformRAParameters = (filter: string, range?: string, sort?: string) =>
     filter: parsedFilter,
     range: parsedRange.join('-'),
     sort: {
-      [parsedSort[0]]: parsedSort[1] === 'ASC' ? 1 : -1,
+      [parsedSort[0]]: parsedSort[1] === 'ASC' ? 1 : -1 as SortOrder,
     },
   }
 }
