@@ -13,6 +13,7 @@ import ReservationTypeCreate from '../menu-items/reservation-types/ReservationTy
 import ReservationTypeEdit from '../menu-items/reservation-types/ReservationTypeEdit'
 import ReservationTypeList from '../menu-items/reservation-types/ReservationTypeList'
 import ReservationList from '../menu-items/reservations/ReservationList'
+import ReservationEdit from '../menu-items/reservations/ReservationEdit'
 
 const Dashboard = () => {
   return (
@@ -24,7 +25,7 @@ const Dashboard = () => {
         <Resource options={{ label: 'Typy rezervací' }} name={'reservation-types'} list={ReservationTypeList}
                   edit={ReservationTypeEdit}
                   create={ReservationTypeCreate}/>
-        <Resource options={{ label: 'Rezervace' }} name={'reservations'} list={ReservationList}/>
+        <Resource options={{ label: 'Rezervace' }} name={'reservations'} list={ReservationList} edit={ReservationEdit}/>
       </Admin>
     </div>
   )
