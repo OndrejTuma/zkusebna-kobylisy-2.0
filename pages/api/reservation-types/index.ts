@@ -19,14 +19,12 @@ export default async function handler(
 
   switch (req.method) {
     case 'GET':
-      const { filter, range, sort } = req.query
-      const transformed = transformRAParameters(filter as string, range as string, sort as string)
-      const [from, to] = transformed.parsedRange
+      const { range, parsedRange: [ from, to ], sort } = transformRAParameters(req.query.filter as string, req.query.range as string, req.query.sort as string)
 
-      const reservationTypes = await ReservationType.find().skip(from).limit(to - from + 1).sort(transformed.sort)
+      const reservationTypes = await ReservationType.find().skip(from).limit(to - from + 1).sort(sort)
       const reservationTypesCount = await ReservationType.count()
 
-      res.setHeader('Content-Range', `reservation-types ${transformed.range}/${reservationTypesCount}`)
+      res.setHeader('Content-Range', `reservation-types ${range}/${reservationTypesCount}`)
       res.status(200).json(reservationTypes)
 
       break
