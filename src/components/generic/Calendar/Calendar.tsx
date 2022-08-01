@@ -7,6 +7,8 @@ import type { Reservation } from 'LocalTypes'
 import React, { useMemo } from 'react'
 import { Calendar as ReactCalendar, CalendarProps as ReactCalendarProps, dateFnsLocalizer, Event, SlotInfo } from 'react-big-calendar'
 
+console.log(cs)
+
 const localizer = dateFnsLocalizer({
   format,
   parse,
@@ -54,7 +56,7 @@ const ReactBigCalendar = ReactCalendar as React.ComponentType<ReactCalendarProps
 type CalendarProps = {
   events: Reservation[],
   onSelectEvent: onSelectEventType,
-  onSelectSlot: onSelectSlotType,
+  onSelectSlot?: onSelectSlotType,
 }
 
 const Calendar = ({ events, onSelectEvent, onSelectSlot }: CalendarProps) => {
@@ -72,7 +74,7 @@ const Calendar = ({ events, onSelectEvent, onSelectSlot }: CalendarProps) => {
       style={{ height: 700 }}
       messages={messages}
       popup
-      // popupOffset={{x: 30, y: 20}}
+      popupOffset={{x: 30, y: 20}}
       selectable
       onSelectSlot={onSelectSlot}
     />
