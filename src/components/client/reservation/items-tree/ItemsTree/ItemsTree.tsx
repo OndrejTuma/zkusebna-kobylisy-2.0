@@ -4,7 +4,8 @@ import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/Indeterminate
 import TreeItem, { treeItemClasses, TreeItemProps } from '@mui/lab/TreeItem'
 import TreeView from '@mui/lab/TreeView'
 import { alpha, styled } from '@mui/material/styles'
-import { useField } from 'formik'
+import Error from 'Components/generic/Error'
+import { ErrorMessage, useField } from 'formik'
 import { ReservationItem, ReservationItemCategory, ReservationType } from 'LocalTypes'
 import React, { useMemo, useState } from 'react'
 import CategoryItem from '../CategoryItem'
@@ -50,11 +51,12 @@ type Props = {
   items: ReservationItem[],
   reservationType: ReservationType,
 }
+const itemsName = 'itemIds'
 
 const ItemsTree = ({ categories, items, reservationType }: Props) => {
   const structuredCategories: StructuredCategory[] = useMemo(() => categories.filter(({ parent_id }) => !parent_id).map(category => getSubcategoriesAndItems(category, categories, items)), [ categories, items ])
   const [ selectedItemIds, setSelectedItemIds ] = useState<Set<string>>(new Set())
-  const [ , , { setValue } ] = useField('items')
+  const [, , { setValue } ] = useField(itemsName)
 
   const onSelect = (event: React.SyntheticEvent, selectedItemIds: string[]) =>
     setSelectedItemIds(itemIdsSet => {
@@ -85,6 +87,7 @@ const ItemsTree = ({ categories, items, reservationType }: Props) => {
           </React.Fragment>
         ))}
       </TreeView>
+      <ErrorMessage name={itemsName} component={Error}/>
     </ReservationTypeProvider>
   )
 }

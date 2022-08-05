@@ -4,6 +4,8 @@ import dbConnect from 'Lib/dbConnect'
 import { NetworkFailedState } from 'LocalTypes'
 import Token from 'Models/Token'
 import { NextApiRequest, NextApiResponse } from 'next'
+import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReservation'
+import convertReservationToCalendarEvent from 'Utils/convertReservationToCalendarEvent'
 import { joinItemIdsFromChunks, splitItemIdsInChunks } from 'Utils/itemsChunks'
 
 import type { Data } from './'
@@ -54,46 +56,15 @@ export default async function handler(
           eventId: id,
         })
 
-        const { start, end, extendedProperties, summary } = reservation.data
-
-        res.status(200).json({
-          id,
-          dateStart: start?.date || start?.dateTime,
-          dateEnd: end?.date || end?.dateTime,
-          reservationType: extendedProperties?.shared?.reservationType,
-          reservationName: summary,
-          name: extendedProperties?.shared?.name,
-          phone: extendedProperties?.shared?.phone,
-          email: extendedProperties?.shared?.email,
-          itemIds: joinItemIdsFromChunks(extendedProperties?.shared),
-        })
+        res.status(200).json(convertCalendarEventToReservation(reservation.data))
 
         break
       }
       case 'PUT': {
-        const {reservationName, name, email, phone, dateStart, dateEnd, reservationType, itemIds, id} = req.body
-
         await calendar.events.update({
           calendarId: tokens.calendar_id,
           eventId: id,
-          requestBody: {
-            start: {
-              dateTime: dateStart,
-            },
-            end: {
-              dateTime: dateEnd,
-            },
-            summary: reservationName,
-            extendedProperties: {
-              shared: {
-                reservationType,
-                name,
-                phone,
-                email,
-                ...splitItemIdsInChunks(itemIds),
-              },
-            },
-          }
+          requestBody: convertReservationToCalendarEvent(req.body),
         })
 
         res.status(200).end()

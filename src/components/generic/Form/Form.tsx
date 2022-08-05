@@ -8,16 +8,16 @@ export interface FormValues {
 }
 type Props = {
   children?: React.ReactNode,
-  onSubmit?: (values: FormValues) => void,
+  onSubmit?: (values: FormValues, helpers: FormikHelpers<FormValues>) => void,
   initialValues: FormValues,
   validationSchema?: SchemaOf<FormValues>,
   [key: string]: any,
 }
 
 const Form = ({ children, initialValues, onSubmit, validationSchema, ...rest }: Props) => {
-  const handleSubmit = (values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) => {
-    onSubmit?.(values)
-    setSubmitting(false)
+  const handleSubmit = (values: FormValues, helpers: FormikHelpers<FormValues>) => {
+    onSubmit?.(values, helpers)
+    helpers.setSubmitting(false)
   }
 
   return (
