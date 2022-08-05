@@ -20,6 +20,9 @@ const StyledTreeItem = styled((props: TreeItemProps) => (
   [`& .${treeItemClasses.content}:not(.${treeItemClasses.selected}):hover`]: {
     backgroundColor: 'transparent',
   },
+  [`& .${treeItemClasses.content}`]: {
+    paddingBottom: 5,
+  },
   [`& .${treeItemClasses.group}`]: {
     marginLeft: 19,
     paddingLeft: 15,
