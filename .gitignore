@@ -38,5 +38,4 @@ yarn-error.log*
 *.tsbuildinfo
 
 # security files
-src/components/Auth/consts/serviceAccountKey.json
 src/keys/*
