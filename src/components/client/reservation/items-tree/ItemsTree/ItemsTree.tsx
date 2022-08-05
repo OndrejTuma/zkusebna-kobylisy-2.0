@@ -79,7 +79,7 @@ const ItemsTree = ({ categories, items, reservationType }: Props) => {
         defaultCollapseIcon={<IndeterminateCheckBoxOutlinedIcon/>}
         defaultExpandIcon={<AddBoxOutlinedIcon/>}
         defaultEndIcon={<CheckBoxOutlineBlankIcon/>}
-        sx={{ height: 300, flexGrow: 1, overflowY: 'auto' }}
+        sx={{ maxHeight: 500, flexGrow: 1, overflowY: 'auto' }}
         multiSelect
         onNodeSelect={onSelect}
         selected={Array.from(selectedItemIds)}
