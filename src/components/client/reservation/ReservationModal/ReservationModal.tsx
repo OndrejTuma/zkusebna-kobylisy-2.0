@@ -13,6 +13,7 @@ import React, { useEffect } from 'react'
 import { SlotInfo } from 'react-big-calendar'
 import { useMutation, useQueryClient } from 'react-query'
 import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReservation'
+import getStartEndDatetimeFromBigCalendarSlotInfo from 'Utils/getStartEndDatetimeFromBigCalendarSlotInfo'
 import * as Yup from 'yup'
 import Step1 from '../Step1'
 import Step2 from '../Step2'
@@ -33,12 +34,13 @@ const steps = [
 const createReservation = (values: Reservation) => axios.post('/api/reservations', values)
 
 const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
+  const [start, end] = getStartEndDatetimeFromBigCalendarSlotInfo(slotInfo)
   const { initialValues, validationSchema } = useFormInitials({
     dateStart: {
-      initialValue: slotInfo?.start,
+      initialValue: start,
     },
     dateEnd: {
-      initialValue: slotInfo?.end,
+      initialValue: end,
     },
     reservationType: {
       initialValue: '62cac3de6c722ddc352a8cea',
@@ -66,7 +68,7 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
     },
   })
   const queryClient = useQueryClient()
-  const { activeStep, handleNext, handleBack } = useStepper(2)
+  const { activeStep, handleNext, handleBack } = useStepper()
 
   const {
     mutate,
