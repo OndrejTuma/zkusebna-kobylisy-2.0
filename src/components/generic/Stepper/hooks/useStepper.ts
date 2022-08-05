@@ -17,6 +17,7 @@ const useStepper = (initialStep = 0) => {
 
   return {
     activeStep,
+    setStep: setActiveStep,
     handleBack,
     handleNext,
     handleReset

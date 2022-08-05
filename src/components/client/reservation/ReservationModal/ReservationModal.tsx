@@ -1,9 +1,9 @@
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
-import axios, { AxiosError, AxiosResponse } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import ContinueButton from 'Components/client/reservation/ContinueButton'
 import Button from 'Components/generic/Button'
-import ErrorAxios from 'Components/generic/ErrorAxios'
+import Error from 'Components/generic/Error'
 import Form, { FormValues, useFormInitials } from 'Components/generic/Form'
 import Modal from 'Components/generic/Modal'
 import Stepper, { useStepper } from 'Components/generic/Stepper'
@@ -15,6 +15,7 @@ import { useMutation, useQueryClient } from 'react-query'
 import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReservation'
 import getStartEndDatetimeFromBigCalendarSlotInfo from 'Utils/getStartEndDatetimeFromBigCalendarSlotInfo'
 import * as Yup from 'yup'
+import Price from '../Price'
 import Step1 from '../Step1'
 import Step2 from '../Step2'
 import Step3 from '../Step3'
@@ -34,7 +35,7 @@ const steps = [
 const createReservation = (values: Reservation) => axios.post('/api/reservations', values)
 
 const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
-  const [start, end] = getStartEndDatetimeFromBigCalendarSlotInfo(slotInfo)
+  const [ start, end ] = getStartEndDatetimeFromBigCalendarSlotInfo(slotInfo)
   const { initialValues, validationSchema } = useFormInitials({
     dateStart: {
       initialValue: start,
@@ -68,7 +69,7 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
     },
   })
   const queryClient = useQueryClient()
-  const { activeStep, handleNext, handleBack } = useStepper()
+  const { activeStep, handleNext, handleBack, setStep } = useStepper()
 
   const {
     mutate,
@@ -76,7 +77,7 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
     isLoading,
     isSuccess,
     error,
-  } = useMutation<AxiosResponse, AxiosError, Reservation>('createReservation', createReservation, {
+  } = useMutation<AxiosResponse, string, Reservation>('createReservation', createReservation, {
     onSuccess: ({ data: { data } }) => {
       const reservations = queryClient.getQueryData<AxiosResponse<Reservation[]>>('getAllReservations')
 
@@ -84,13 +85,13 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
         ...reservations,
         data: [
           ...reservations.data,
-          {...convertCalendarEventToReservation(data)}
+          { ...convertCalendarEventToReservation(data) },
         ],
       })
-    }
+    },
   })
 
-  const handleSubmit = async (values: FormValues, { setFieldTouched, validateForm }: FormikHelpers<FormValues>) => {
+  const handleSubmit = async (values: FormValues, { setFieldTouched }: FormikHelpers<FormValues>) => {
     // validate items
     await setFieldTouched('itemIds', true, true)
     // TODO: make Form accept generic Values
@@ -101,7 +102,11 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
     if (isSuccess) {
       onClose()
     }
-  }, [isSuccess])
+  }, [ isSuccess ])
+
+  useEffect(() => {
+    setStep(0)
+  }, [ slotInfo ])
 
   return (
     <Modal onClose={onClose} open={open}>
@@ -111,7 +116,7 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
           <Box mb={4}>
             <Stepper activeStep={activeStep} steps={steps}/>
           </Box>
-          {isError && <ErrorAxios sx={{ marginBottom: 2 }} error={error}/>}
+          {isError && <Error sx={{ marginBottom: 2 }}>{error}</Error>}
           {activeStep === 0 ? (
             <Step1/>
           ) : activeStep === 1 ? (
@@ -124,7 +129,7 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
           <Stack justifyContent="space-between" direction="row">
             <Button disabled={activeStep === 0} variant="outlined" onClick={handleBack}>Zpět</Button>
             {activeStep + 1 === steps.length ? (
-              <Form.SubmitButton disabled={isLoading}>Vytvořit rezervaci</Form.SubmitButton>
+              <Form.SubmitButton disabled={isLoading}>Vytvořit rezervaci (<Price/>)</Form.SubmitButton>
             ) : (
                <ContinueButton activeStep={activeStep} handleNext={handleNext}/>
              )}
