@@ -8,9 +8,10 @@ import Form, { FormValues, useFormInitials } from 'Components/generic/Form'
 import Modal from 'Components/generic/Modal'
 import Stepper, { useStepper } from 'Components/generic/Stepper'
 import { Reservation } from 'LocalTypes'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SlotInfo } from 'react-big-calendar'
-import { useMutation } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
+import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReservation'
 import * as Yup from 'yup'
 import Step1 from '../Step1'
 import Step2 from '../Step2'
@@ -63,19 +64,39 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
       validationSchema: Yup.array().required('Musíte vybrat alespoň jednu položku'),
     },
   })
+  const queryClient = useQueryClient()
   const { activeStep, handleNext, handleBack } = useStepper(2)
 
   const {
     mutate,
     isError,
+    isLoading,
+    isSuccess,
     error,
-  } = useMutation<AxiosResponse, AxiosError, Reservation>('createReservation', createReservation)
+  } = useMutation<AxiosResponse, AxiosError, Reservation>('createReservation', createReservation, {
+    onSuccess: ({ data: { data } }) => {
+      const reservations = queryClient.getQueryData<AxiosResponse<Reservation[]>>('getAllReservations')
 
-  const handleSubmit = (values: FormValues) => {
+      reservations && queryClient.setQueryData('getAllReservations', {
+        ...reservations,
+        data: [
+          ...reservations.data,
+          {...convertCalendarEventToReservation(data)}
+        ],
+      })
+    }
+  })
+
+  const handleSubmit = async (values: FormValues) => {
     // TODO: make Form accept generic Values
     mutate(values as Reservation)
-    // TODO: close when done
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      onClose()
+    }
+  }, [isSuccess])
 
   return (
     <Modal onClose={onClose} open={open}>
@@ -98,7 +119,7 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
           <Stack justifyContent="space-between" direction="row">
             <Button disabled={activeStep === 0} variant="outlined" onClick={handleBack}>Zpět</Button>
             {activeStep + 1 === steps.length ? (
-              <Form.SubmitButton>Vytvořit rezervaci</Form.SubmitButton>
+              <Form.SubmitButton disabled={isLoading}>Vytvořit rezervaci</Form.SubmitButton>
             ) : (
                <ContinueButton activeStep={activeStep} handleNext={handleNext}/>
              )}
