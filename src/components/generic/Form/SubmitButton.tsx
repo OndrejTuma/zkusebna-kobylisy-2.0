@@ -4,13 +4,14 @@ import React from 'react'
 
 type Props = {
   children?: React.ReactNode,
+  [key: string]: any,
 }
 
-const SubmitButton = ({ children }: Props) => {
+const SubmitButton = ({ children, ...rest }: Props) => {
   const { isSubmitting } = useFormikContext()
 
   return (
-    <Button disabled={isSubmitting} type={'submit'}>{children}</Button>
+    <Button disabled={isSubmitting} type={'submit'} {...rest}>{children}</Button>
   )
 }
 
