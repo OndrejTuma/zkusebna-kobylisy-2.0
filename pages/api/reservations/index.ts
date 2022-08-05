@@ -12,6 +12,7 @@ import type {
   ResponseCalendarEvent,
   CalendarEvent, ReservationItem, ReservationType
 } from 'LocalTypes'
+import calculatePriceForReservation from 'Utils/calculatePriceForReservation'
 import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReservation'
 import convertReservationToCalendarEvent from 'Utils/convertReservationToCalendarEvent'
 import getDiscountPrice from 'Utils/getDiscountPrice'
@@ -23,18 +24,6 @@ const oAuth2Client = new google.auth.OAuth2(
   keys.web.client_secret,
   keys.web.redirect_uris[0],
 )
-
-const getReservationWithPrices = (reservations: Reservation[], items: ReservationItem[], reservationTypes: ReservationType[]) =>
-  reservations.map(reservation => {
-    const reservationType = reservationTypes.find(({id}) => id === reservation.reservationType)
-    const price: number = items.filter(({id}) => reservation.itemIds.includes(id)).map(({price}) => price).reduce<number>((sum, price) => sum + price, 0)
-    const reducedPrice = getDiscountPrice(price, reservationType!.discount)
-
-    return {
-      ...reservation,
-      price: reducedPrice,
-    }
-  })
 
 export type Data = ResponseCalendarEvent | Reservation[] | undefined
 
@@ -92,7 +81,10 @@ export default async function handler(
         const items = await Item.find()
         const reservationTypes = await ReservationTypeModel.find()
 
-        const reservationsWithPrice = getReservationWithPrices(reservations, items, reservationTypes)
+        const reservationsWithPrice = reservations.map(reservation => ({
+          ...reservation,
+          price: calculatePriceForReservation(reservation, items, reservationTypes),
+        }))
 
         const sortKey = Object.keys(sort)[0] as keyof Reservation
         const sortValue = Object.values(sort)[0] as number
