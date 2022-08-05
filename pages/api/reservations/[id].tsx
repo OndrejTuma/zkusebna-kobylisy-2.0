@@ -1,14 +1,12 @@
 import { google } from 'googleapis'
 import keys from 'Keys/oauth2.keys.json'
 import dbConnect from 'Lib/dbConnect'
-import { NetworkFailedState } from 'LocalTypes'
+import { NetworkFailedState, Reservation } from 'LocalTypes'
 import Token from 'Models/Token'
 import { NextApiRequest, NextApiResponse } from 'next'
 import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReservation'
 import convertReservationToCalendarEvent from 'Utils/convertReservationToCalendarEvent'
 import { joinItemIdsFromChunks, splitItemIdsInChunks } from 'Utils/itemsChunks'
-
-import type { Data } from './'
 
 const oAuth2Client = new google.auth.OAuth2(
   keys.web.client_id,
@@ -18,15 +16,15 @@ const oAuth2Client = new google.auth.OAuth2(
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data | NetworkFailedState>,
+  res: NextApiResponse<Reservation | NetworkFailedState>,
 ) {
-  // TODO: create a middleware for tokens validation
   const { id } = req.query
 
   await dbConnect()
 
   console.log('RESERVATION METHOD', req.method)
 
+  // TODO: create a middleware for tokens validation
   const tokens = await Token.findOne().sort({ $natural: -1 })
 
   if (!tokens) {
@@ -53,8 +51,8 @@ export default async function handler(
 
         const reservation = await calendar.events.get({
           calendarId: tokens.calendar_id,
-          eventId: id,
-        })
+          eventId: id as string,
+        }, {})
 
         res.status(200).json(convertCalendarEventToReservation(reservation.data))
 
@@ -63,9 +61,9 @@ export default async function handler(
       case 'PUT': {
         await calendar.events.update({
           calendarId: tokens.calendar_id,
-          eventId: id,
+          eventId: id as string,
           requestBody: convertReservationToCalendarEvent(req.body),
-        })
+        }, {})
 
         res.status(200).end()
 
@@ -74,8 +72,8 @@ export default async function handler(
       case 'DELETE': {
         await calendar.events.delete({
           calendarId: tokens.calendar_id,
-          eventId: id,
-        })
+          eventId: id as string,
+        }, {})
 
         res.status(200).end()
 
