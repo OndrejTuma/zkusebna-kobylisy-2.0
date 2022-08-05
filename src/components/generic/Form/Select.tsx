@@ -23,7 +23,7 @@ const Select = ({ name, label, items, size = 'small' }: Props) => {
   return (
     <FormControl fullWidth size={size}>
       <InputLabel>{label}</InputLabel>
-      <Field as={MUISelect} name={name}>
+      <Field as={MUISelect} name={name} label={label}>
         {items?.map(({ label, value }) => (
           <MenuItem key={value} value={value}>{label}</MenuItem>
         ))}
