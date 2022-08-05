@@ -7,6 +7,7 @@ import ErrorAxios from 'Components/generic/ErrorAxios'
 import Form, { FormValues, useFormInitials } from 'Components/generic/Form'
 import Modal from 'Components/generic/Modal'
 import Stepper, { useStepper } from 'Components/generic/Stepper'
+import { FormikHelpers } from 'formik'
 import { Reservation } from 'LocalTypes'
 import React, { useEffect } from 'react'
 import { SlotInfo } from 'react-big-calendar'
@@ -59,9 +60,9 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
       initialValue: 'ondr@centrum.cz',
       validationSchema: Yup.string().required('Vyplňte svůj email').email('Email není ve správném formátu'),
     },
-    items: {
+    itemIds: {
       initialValue: [],
-      validationSchema: Yup.array().required('Musíte vybrat alespoň jednu položku'),
+      validationSchema: Yup.array().min(1, 'Musíte vybrat alespoň jednu položku'),
     },
   })
   const queryClient = useQueryClient()
@@ -87,7 +88,9 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
     }
   })
 
-  const handleSubmit = async (values: FormValues) => {
+  const handleSubmit = async (values: FormValues, { setFieldTouched, validateForm }: FormikHelpers<FormValues>) => {
+    // validate items
+    await setFieldTouched('itemIds', true, true)
     // TODO: make Form accept generic Values
     mutate(values as Reservation)
   }

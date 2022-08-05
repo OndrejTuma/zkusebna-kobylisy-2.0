@@ -7,8 +7,6 @@ import type { Reservation } from 'LocalTypes'
 import React, { useMemo } from 'react'
 import { Calendar as ReactCalendar, CalendarProps as ReactCalendarProps, dateFnsLocalizer, Event, SlotInfo } from 'react-big-calendar'
 
-console.log(cs)
-
 const localizer = dateFnsLocalizer({
   format,
   parse,

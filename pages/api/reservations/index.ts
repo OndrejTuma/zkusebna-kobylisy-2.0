@@ -3,7 +3,15 @@ import keys from 'Keys/oauth2.keys.json'
 import dbConnect from 'Lib/dbConnect'
 import Token from 'Models/Token'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type { NetworkFailedState, ResponseCalendarEvents, Reservation, ResponseCalendarEvent, CalendarEvent } from 'LocalTypes'
+import type {
+  NetworkFailedState,
+  ResponseCalendarEvents,
+  Reservation,
+  ResponseCalendarEvent,
+  CalendarEvent,
+} from 'LocalTypes'
+import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReservation'
+import convertReservationToCalendarEvent from 'Utils/convertReservationToCalendarEvent'
 import transformRAParameters from 'Utils/transformRAParameters'
 import { joinItemIdsFromChunks, splitItemIdsInChunks } from 'Utils/itemsChunks'
 
@@ -46,7 +54,11 @@ export default async function handler(
 
     switch (req.method) {
       case 'GET':
-        const { range, parsedRange: [ from, to ], sort } = transformRAParameters(req.query.filter as string, req.query.range as string, req.query.sort as string)
+        const {
+          range,
+          parsedRange: [ from, to ],
+          sort,
+        } = transformRAParameters(req.query.filter as string, req.query.range as string, req.query.sort as string)
 
         const eventsData = await calendar.events.list({
           calendarId: tokens.calendar_id,
@@ -60,17 +72,7 @@ export default async function handler(
           return
         }
 
-        const formattedEvents: Reservation[] = events.map(({id, start, end, summary, extendedProperties}) => ({
-          id,
-          dateStart: start?.date || start?.dateTime,
-          dateEnd: end?.date || end?.dateTime,
-          reservationType: extendedProperties?.shared?.reservationType,
-          reservationName: summary,
-          name: extendedProperties?.shared?.name,
-          phone: extendedProperties?.shared?.phone,
-          email: extendedProperties?.shared?.email,
-          itemIds: joinItemIdsFromChunks(extendedProperties?.shared),
-        }))
+        const formattedEvents: Reservation[] = events.map(convertCalendarEventToReservation)
 
         const sortKey = Object.keys(sort)[0] as keyof Reservation
         const sortValue = Object.values(sort)[0] as number
@@ -86,28 +88,9 @@ export default async function handler(
 
         break
       case 'POST':
-        const { dateStart, dateEnd, reservationType, reservationName, name, phone, email, items } = req.body
-
         const event = await calendar.events.insert({
           calendarId: tokens.calendar_id,
-          requestBody: {
-            start: {
-              dateTime: dateStart,
-            },
-            end: {
-              dateTime: dateEnd,
-            },
-            summary: reservationName,
-            extendedProperties: {
-              shared: {
-                reservationType,
-                name,
-                phone,
-                email,
-                ...splitItemIdsInChunks(items),
-              },
-            },
-          },
+          requestBody: convertReservationToCalendarEvent(req.body),
         })
 
         res.status(201).json(event)
