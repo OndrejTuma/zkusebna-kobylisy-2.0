@@ -43,23 +43,23 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
       initialValue: end,
     },
     reservationType: {
-      initialValue: '62cac3de6c722ddc352a8cea',
+      initialValue: '',
       validationSchema: Yup.string().required('Musíte vybrat typ rezervace'),
     },
     reservationName: {
-      initialValue: 'Testus',
+      initialValue: '',
       validationSchema: Yup.string().required('Vyplňte název akce'),
     },
     name: {
-      initialValue: 'Ondřej Tůma',
+      initialValue: '',
       validationSchema: Yup.string().required('Vyplňte své jméno').min(5, 'To se zdá být příliš krátké'),
     },
     phone: {
-      initialValue: '732524691',
+      initialValue: '',
       validationSchema: Yup.string().required('Vyplňte svůj telefon').matches(/^((\+420|1) ?)?([0-9]{3} ?){3}$/, 'Telefonní číslo není ve správném formátu'),
     },
     email: {
-      initialValue: 'ondr@centrum.cz',
+      initialValue: '',
       validationSchema: Yup.string().required('Vyplňte svůj email').email('Email není ve správném formátu'),
     },
     itemIds: {
