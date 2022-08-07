@@ -19,7 +19,7 @@ const Login = () => {
     <Container maxWidth={'xs'} sx={{ marginTop: 4 }}>
       <Form onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema}>
         <Form.Input label="E-mail" name="email" />
-        <Form.Input label="Heslo" name="password" />
+        <Form.Input label="Heslo" name="password" type="password" />
         {error && (
           <Grid item mb={2}>
             <Error>Nepodařilo se přihlásit. Zkontrolujte jméno a heslo</Error>
