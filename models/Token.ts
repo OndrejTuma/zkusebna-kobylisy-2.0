@@ -7,7 +7,7 @@ const TokenSchema = new mongoose.Schema({
   },
   access_token: {
     type: String,
-    required: [true, 'Please provide a refresh token'],
+    required: [true, 'Please provide an access token'],
   },
   calendar_id: {
     type: String,

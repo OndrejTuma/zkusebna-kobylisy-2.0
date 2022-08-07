@@ -27,12 +27,12 @@ export default async function handler(
   // remove all previous tokens - we want to keep only current one
   await Token.remove({})
 
-  const { id: tokenId } = await Token.create({
-    access_token: tokens.access_token,
-    refresh_token: tokens.refresh_token,
-  })
-
   try {
+    const { id: tokenId } = await Token.create({
+      access_token: tokens.access_token,
+      refresh_token: tokens.refresh_token,
+    })
+
     oAuth2Client.setCredentials({
       refresh_token: tokens.refresh_token,
     })
