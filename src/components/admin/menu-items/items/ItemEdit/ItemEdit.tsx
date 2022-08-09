@@ -7,7 +7,7 @@ const ItemEdit = (props: {}) => {
       <SimpleForm>
         <TextInput disabled source={'id'} />
         <TextInput label={'Název'} source={'title'} validate={required()} />
-        <TextInput label={'Kód'} source={'code'} validate={required()} />
+        <TextInput label={'Kód'} source={'code'} />
         <NumberInput label={'Cena'} source={'price'} />
         <BooleanInput label={'Aktivní'} source={'active'}/>
         <ImageInput label={'Obrázek'} source={'image'} accept={'image/*'}>
