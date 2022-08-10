@@ -27,6 +27,13 @@ export default async function handler(
     case 'GET':
       const { sort, range, parsedRange: [from, to], filter } = transformRAParameters(req.query.filter, req.query.range, req.query.sort)
 
+      // TODO: validate authorization token in firebase
+      if (!req.headers.authorization) {
+        Object.assign(filter, {
+          active: true
+        })
+      }
+
       const items = await Item.find(filter).skip(from).limit(to - from + 1).sort(sort)
       const itemsCount = await Item.count()
 
