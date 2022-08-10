@@ -1,3 +1,4 @@
+import { NetworkFailedState } from 'LocalTypes'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import dbConnect from 'Lib/dbConnect'
@@ -13,7 +14,7 @@ export type CategoryType = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Data | NetworkFailedState>
 ) {
   await dbConnect()
 
@@ -21,14 +22,12 @@ export default async function handler(
 
   switch (req.method) {
     case 'GET':
-      const { filter, range, sort } = req.query
-      const transformed = transformRAParameters(filter as string, range as string, sort as string)
-      const [from, to] = transformed.parsedRange
+      const { sort, range, parsedRange: [from, to], filter } = transformRAParameters(req.query.filter, req.query.range, req.query.sort)
 
-      const categories = await Category.find().skip(from).limit(to - from + 1).sort(transformed.sort)
+      const categories = await Category.find(filter).skip(from).limit(to - from + 1).sort(sort)
       const categoriesCount = await Category.count()
 
-      res.setHeader('Content-Range', `categories ${transformed.range}/${categoriesCount}`)
+      res.setHeader('Content-Range', `categories ${range}/${categoriesCount}`)
       res.status(200).json(categories)
 
       break

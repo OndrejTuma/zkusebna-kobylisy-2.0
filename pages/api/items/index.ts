@@ -25,14 +25,12 @@ export default async function handler(
 
   switch (req.method) {
     case 'GET':
-      const { filter, range, sort } = req.query
-      const transformed = transformRAParameters(filter as string, range as string, sort as string)
-      const [from, to] = transformed.parsedRange
+      const { sort, range, parsedRange: [from, to], filter } = transformRAParameters(req.query.filter, req.query.range, req.query.sort)
 
-      const items = await Item.find().skip(from).limit(to - from + 1).sort(transformed.sort)
+      const items = await Item.find(filter).skip(from).limit(to - from + 1).sort(sort)
       const itemsCount = await Item.count()
 
-      res.setHeader('Content-Range', `categories ${transformed.range}/${itemsCount}`)
+      res.setHeader('Content-Range', `categories ${range}/${itemsCount}`)
       res.status(200).json(items)
 
       break
