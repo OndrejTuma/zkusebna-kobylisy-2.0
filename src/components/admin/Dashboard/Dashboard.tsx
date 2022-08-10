@@ -1,7 +1,8 @@
 import Layout from 'Components/admin/Layout'
 import simpleRestProvider from 'ra-data-simple-rest'
-import React from 'react'
-import { Admin, Resource } from 'react-admin'
+import React, { useCallback } from 'react'
+import { Admin, fetchUtils, Resource } from 'react-admin'
+import { useAuth } from '../Auth'
 
 import CategoryCreate from '../menu-items/categories/CategoryCreate'
 import CategoryEdit from '../menu-items/categories/CategoryEdit'
@@ -12,13 +13,32 @@ import ItemList from '../menu-items/items/ItemList'
 import ReservationTypeCreate from '../menu-items/reservation-types/ReservationTypeCreate'
 import ReservationTypeEdit from '../menu-items/reservation-types/ReservationTypeEdit'
 import ReservationTypeList from '../menu-items/reservation-types/ReservationTypeList'
-import ReservationList from '../menu-items/reservations/ReservationList'
 import ReservationEdit from '../menu-items/reservations/ReservationEdit'
+import ReservationList from '../menu-items/reservations/ReservationList'
 
 const Dashboard = () => {
+  const { isBusy, user } = useAuth()
+
+  const httpClient = useCallback(async (url: any, options?: fetchUtils.Options) => {
+    if (!options) {
+      options = {}
+
+      if (!options.headers) {
+        options.headers = new Headers({ Accept: 'application/json' })
+      }
+    }
+
+    options.user = {
+      authenticated: true,
+      token: await user?.getIdToken(),
+    }
+
+    return fetchUtils.fetchJson(url, options)
+  }, [isBusy])
+
   return (
     <div>
-      <Admin dataProvider={simpleRestProvider('/api')} layout={Layout}>
+      <Admin dataProvider={simpleRestProvider('/api', httpClient)} layout={Layout}>
         <Resource options={{ label: 'Položky' }} name={'items'} list={ItemList} edit={ItemEdit} create={ItemCreate}/>
         <Resource options={{ label: 'Kategorie' }} name={'categories'} list={CategoryList} edit={CategoryEdit}
                   create={CategoryCreate}/>
