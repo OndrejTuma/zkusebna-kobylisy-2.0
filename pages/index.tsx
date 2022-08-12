@@ -35,7 +35,7 @@ const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Zkušebna Kobylisy 2.0</title>
+        <title>Zkušebna Kobylisy</title>
       </Head>
 
       {(reservationsIsError || itemsIsError || categoriesIsError) && (
