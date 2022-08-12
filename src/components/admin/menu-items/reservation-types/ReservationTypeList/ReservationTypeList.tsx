@@ -3,7 +3,7 @@ import React from 'react'
 import { CreateButton, Datagrid, List, NumberField, TextField, TopToolbar, TextInput } from 'react-admin'
 
 const filters = [
-  <TextInput size="small" key="title" source="title" label="Název" alwaysOn/>
+  <TextInput key="title" source="title" label="Název" alwaysOn/>
 ]
 
 const ListActions = () => (
