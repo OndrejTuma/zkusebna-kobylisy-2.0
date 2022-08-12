@@ -42,8 +42,9 @@ const renderStructuredCategory = ({ id, title, items, subcategories }: Structure
         {renderStructuredCategory(category)}
       </React.Fragment>
     ))}
-    {items.map(({ id, title, code, price }) => (
-      <StyledTreeItem ContentComponent={SelectableItem} key={id} nodeId={id}
+    {items.map(({ id, title, code, price, busy }) => (
+      <StyledTreeItem ContentComponent={SelectableItem} key={id} nodeId={id} disabled={busy}
+                      title={busy ? 'Položka je rezervovaná' : undefined}
                       label={<Item title={title} code={code} price={price}/>}/>
     ))}
   </StyledTreeItem>
@@ -59,7 +60,7 @@ const itemsName = 'itemIds'
 const ItemsTree = ({ categories, items, reservationType }: Props) => {
   const structuredCategories: StructuredCategory[] = useMemo(() => categories.filter(({ parent_id }) => !parent_id).map(category => getSubcategoriesAndItems(category, categories, items)), [ categories, items ])
   const [ selectedItemIds, setSelectedItemIds ] = useState<Set<string>>(new Set())
-  const [, , { setValue } ] = useField(itemsName)
+  const [ , , { setValue } ] = useField(itemsName)
 
   const onSelect = (event: React.SyntheticEvent, selectedItemIds: string[]) =>
     setSelectedItemIds(itemIdsSet => {

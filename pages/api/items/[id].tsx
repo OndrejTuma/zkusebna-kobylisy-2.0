@@ -1,12 +1,11 @@
+import { NetworkFailedState, ReservationItem } from 'LocalTypes'
 import { NextApiRequest, NextApiResponse } from 'next'
 // import formidable from 'formidable'
 // import fs from 'fs'
-
 import dbConnect from 'Lib/dbConnect'
 import Item from 'Models/Item'
-import { ItemType } from './'
 
-type Data = ItemType
+type Data = ReservationItem
 
 // const saveFile = async (file) => {
 //   const data = fs.readFileSync(file.path)
