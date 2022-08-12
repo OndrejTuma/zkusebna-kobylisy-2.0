@@ -1,18 +1,10 @@
 import { NetworkState } from 'LocalTypes'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { google } from 'googleapis'
-
 import dbConnect from 'Lib/dbConnect'
 import Token from 'Models/Token'
-import keys from 'Keys/oauth2.keys.json'
-
-const oAuth2Client = new google.auth.OAuth2(
-  keys.web.client_id,
-  keys.web.client_secret,
-  keys.web.redirect_uris[0]
-);
-
 import type { ResponseAuthToken, NetworkFailedState } from 'LocalTypes'
+import oAuth2Client, { setOAuthCredentials } from 'Utils/api/oAuth'
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,22 +12,25 @@ export default async function handler(
 ) {
   const { code } = req.body
 
-  const { tokens } = await oAuth2Client.getToken(code);
-
-  await dbConnect()
-
-  // remove all previous tokens - we want to keep only current one
-  await Token.remove({})
 
   try {
+    const { tokens } = await oAuth2Client.getToken(code);
+
+    if (!tokens.refresh_token) {
+      throw new Error('Google Refresh Token nebyl vygenerován. Zkuste odhlásit aplikaci Zkušebna Kobylisy zde: https://myaccount.google.com/u/0/permissions')
+    }
+
+    await dbConnect()
+
+    // remove all previous tokens - we want to keep only current one
+    await Token.remove({})
+
     const { id: tokenId } = await Token.create({
       access_token: tokens.access_token,
       refresh_token: tokens.refresh_token,
     })
 
-    oAuth2Client.setCredentials({
-      refresh_token: tokens.refresh_token,
-    })
+    setOAuthCredentials(tokens.refresh_token)
 
     const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
 
