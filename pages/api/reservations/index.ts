@@ -1,5 +1,4 @@
 import { google } from 'googleapis'
-import keys from 'Keys/oauth2.keys.json'
 import dbConnect from 'Lib/dbConnect'
 import Item from 'Models/Item'
 import ReservationTypeModel from 'Models/ReservationType'
@@ -12,18 +11,14 @@ import type {
   ResponseCalendarEvent,
   CalendarEvent, ReservationItem, ReservationType
 } from 'LocalTypes'
+import getTokenData from 'Utils/api/getTokenData'
+import oAuth2Client, { setOAuthCredentials } from 'Utils/api/oAuth'
 import calculatePriceForReservation from 'Utils/calculatePriceForReservation'
 import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReservation'
 import convertReservationToCalendarEvent from 'Utils/convertReservationToCalendarEvent'
 import getDiscountPrice from 'Utils/getDiscountPrice'
 import transformRAParameters from 'Utils/transformRAParameters'
 import { joinItemIdsFromChunks, splitItemIdsInChunks } from 'Utils/itemsChunks'
-
-const oAuth2Client = new google.auth.OAuth2(
-  keys.web.client_id,
-  keys.web.client_secret,
-  keys.web.redirect_uris[0],
-)
 
 export type Data = ResponseCalendarEvent | Reservation[] | undefined
 
@@ -35,25 +30,11 @@ export default async function handler(
 
   console.log('RESERVATIONS METHOD', req.method)
 
-  const tokens = await Token.findOne().sort({ $natural: -1 })
-
-  if (!tokens) {
-    const error = 'Chybí token pro Google kalendář a nelze zobrazit rezervace. Navštivte stránku /auth kde si token vygenerujete'
-
-    return res.status(401).json({ error })
-  }
-
-  if (!tokens.calendar_id) {
-    const error = 'Není definovaný kalendář pro rezervace. Navštivte stránku /auth kde si vygenerujete token a zvolíte kalendář'
-
-    return res.status(401).json({ error })
-  }
-
-  oAuth2Client.setCredentials({
-    refresh_token: tokens.refresh_token,
-  })
-
   try {
+    const { calendarId, token } = await getTokenData(res)
+
+    setOAuthCredentials(token)
+
     const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
 
     switch (req.method) {
@@ -61,7 +42,7 @@ export default async function handler(
         const { sort, range, parsedRange: [from, to] } = transformRAParameters(req.query.filter, req.query.range, req.query.sort)
 
         const eventsData = await calendar.events.list({
-          calendarId: tokens.calendar_id,
+          calendarId,
         })
         const events = eventsData?.data?.items
 
@@ -97,7 +78,7 @@ export default async function handler(
         break
       case 'POST':
         const event = await calendar.events.insert({
-          calendarId: tokens.calendar_id,
+          calendarId,
           requestBody: convertReservationToCalendarEvent(req.body),
         })
 
