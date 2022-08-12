@@ -24,6 +24,7 @@ export type ReservationItem = {
   active: boolean,
   image?: string,
   category_id: string,
+  busy?: boolean,
 }
 
 export type ReservationType = {
