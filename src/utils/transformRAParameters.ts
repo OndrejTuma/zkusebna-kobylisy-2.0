@@ -11,7 +11,7 @@ const getParsedFilter = (filter?: string | string[]): {} => {
     if (key !== 'id') {
       return {
         ...result,
-        [key]: Array.isArray(value) ? { $in: value } : value
+        [key]: Array.isArray(value) ? { $in: value } : {$regex: value, $options: 'i'}
       }
     }
 
