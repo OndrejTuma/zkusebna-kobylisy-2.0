@@ -2,8 +2,10 @@ import Layout from 'Components/admin/Layout'
 import simpleRestProvider from 'ra-data-simple-rest'
 import React, { useCallback } from 'react'
 import { Admin, fetchUtils, Resource } from 'react-admin'
+import CategoryIcon from '@mui/icons-material/Category'
+import EventSeatIcon from '@mui/icons-material/EventSeat'
+import PercentIcon from '@mui/icons-material/Percent'
 import { useAuth } from '../Auth'
-
 import CategoryCreate from '../menu-items/categories/CategoryCreate'
 import CategoryEdit from '../menu-items/categories/CategoryEdit'
 import CategoryList from '../menu-items/categories/CategoryList'
@@ -40,12 +42,12 @@ const Dashboard = () => {
     <div>
       <Admin dataProvider={simpleRestProvider('/api', httpClient)} layout={Layout}>
         <Resource options={{ label: 'Položky' }} name={'items'} list={ItemList} edit={ItemEdit} create={ItemCreate}/>
-        <Resource options={{ label: 'Kategorie' }} name={'categories'} list={CategoryList} edit={CategoryEdit}
+        <Resource options={{ label: 'Kategorie' }} icon={CategoryIcon} name={'categories'} list={CategoryList} edit={CategoryEdit}
                   create={CategoryCreate}/>
-        <Resource options={{ label: 'Typy rezervací' }} name={'reservation-types'} list={ReservationTypeList}
+        <Resource options={{ label: 'Typy rezervací' }} icon={PercentIcon} name={'reservation-types'} list={ReservationTypeList}
                   edit={ReservationTypeEdit}
                   create={ReservationTypeCreate}/>
-        <Resource options={{ label: 'Rezervace' }} name={'reservations'} list={ReservationList} edit={ReservationEdit}/>
+        <Resource options={{ label: 'Rezervace' }} icon={EventSeatIcon} name={'reservations'} list={ReservationList} edit={ReservationEdit}/>
       </Admin>
     </div>
   )
