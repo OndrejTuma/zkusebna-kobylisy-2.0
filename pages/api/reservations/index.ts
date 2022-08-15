@@ -89,6 +89,8 @@ export default async function handler(
         res.status(400).end()
     }
   } catch (err) {
+    console.log('Request to /api/reservations failed')
+    console.error(err)
     res.status(400).json({ error: err.message })
   }
 }
