@@ -41,8 +41,11 @@ export default async function handler(
       case 'GET':
         const { sort, range, parsedRange: [from, to] } = transformRAParameters(req.query.filter, req.query.range, req.query.sort)
 
+        const parsedFilter = req.query.filter ? JSON.parse(req.query.filter as string) : {}
+
         const eventsData = await calendar.events.list({
           calendarId,
+          q: parsedFilter.title,
         })
         const events = eventsData?.data?.items
 
