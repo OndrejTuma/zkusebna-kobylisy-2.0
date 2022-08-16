@@ -1,6 +1,21 @@
 import EmptyList from 'Components/admin/EmptyList'
 import React from 'react'
-import { BooleanField, Datagrid, ImageField, List, NumberField, TextField, ReferenceField, TopToolbar, CreateButton } from 'react-admin'
+import {
+  BooleanField,
+  Datagrid,
+  ImageField,
+  List,
+  NumberField,
+  TextField,
+  ReferenceField,
+  TopToolbar,
+  CreateButton,
+  TextInput,
+} from 'react-admin'
+
+const filters = [
+  <TextInput key="title" source="title" label="Název" alwaysOn/>
+]
 
 const ListActions = () => (
   <TopToolbar>
@@ -10,7 +25,7 @@ const ListActions = () => (
 
 const ItemList = (props: {}) => {
   return (
-    <List {...props} actions={<ListActions/>} empty={<EmptyList/>}>
+    <List {...props} actions={<ListActions/>} empty={<EmptyList/>} filters={filters}>
       <Datagrid rowClick={'edit'}>
         <TextField label={'Název'} source={'title'} />
         <NumberField label={'Cena'} source={'price'} locales={'cs-CZ'} options={{ style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }} />

@@ -9,12 +9,16 @@ import {
   ReferenceArrayField,
   ReferenceField,
   SingleFieldList,
-  TextField,
+  TextField, TextInput,
 } from 'react-admin'
+
+const filters = [
+  <TextInput key="title" source="title" label="Název" alwaysOn/>
+]
 
 const ReservationList = (props: {}) => {
   return (
-    <List {...props} empty={<EmptyList/>}>
+    <List {...props} empty={<EmptyList/>} filters={filters}>
       <Datagrid rowClick="edit">
         <TextField label="Název" source="reservationName"/>
         <TextField label="Jméno" source="name"/>
