@@ -15,7 +15,7 @@ const ReservationEdit = (props: {}) => {
         <ReferenceInput reference={'reservation-types'} source={'reservationType'}>
           <SelectInput label={'Typ rezervace'} optionText={'title'} />
         </ReferenceInput>
-        <ReferenceArrayInput reference={'items'} source={'itemIds'} sort={{ field: 'title', order: 'ASC' }}>
+        <ReferenceArrayInput reference={'items'} perPage={999} source={'itemIds'} sort={{ field: 'title', order: 'ASC' }}>
           <SelectArrayInput label={'Položky'} optionText={'title'} />
         </ReferenceArrayInput>
       </SimpleForm>
