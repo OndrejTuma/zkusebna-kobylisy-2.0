@@ -7,6 +7,8 @@ export type Reservation = {
   name?: string,
   phone?: string,
   email?: string,
+  archived?: boolean,
+  price?: number,
   itemIds: string[],
 }
 

@@ -1,6 +1,7 @@
 import EmptyList from 'Components/admin/EmptyList'
 import React from 'react'
 import {
+  BooleanField,
   ChipField,
   Datagrid,
   DateField,
@@ -25,6 +26,7 @@ const ReservationList = (props: {}) => {
         <TextField label="E-mail" source="email"/>
         <TextField label="Telefon" source="phone"/>
         <NumberField label="Cena" source="price"/>
+        <BooleanField label="Archivovaná" source="archived"/>
         <DateField label="Začátek" source="dateStart"/>
         <ReferenceField label="Typ rezervace" reference="reservation-types" source="reservationType">
           <TextField source="title"/>
