@@ -63,7 +63,9 @@ export default async function handler(
 
         const reservationsWithPrice = reservations.map(reservation => ({
           ...reservation,
-          price: calculatePriceForReservation(reservation, items, reservationTypes),
+          price: reservation.archived
+                 ? reservation.price
+                 : calculatePriceForReservation(reservation, items, reservationTypes),
         }))
 
         const sortKey = Object.keys(sort)[0] as keyof Reservation

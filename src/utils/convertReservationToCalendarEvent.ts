@@ -2,7 +2,7 @@ import { CalendarEvent, Reservation } from 'LocalTypes'
 import { splitItemIdsInChunks } from './itemsChunks'
 
 const convertReservationToCalendarEvent = (reservation: Reservation): CalendarEvent => {
-  const { dateStart, dateEnd, reservationType, reservationName, name, phone, email, itemIds } = reservation
+  const { archived, dateStart, dateEnd, price, reservationType, reservationName, name, phone, email, itemIds } = reservation
 
   return {
     start: {
@@ -14,6 +14,8 @@ const convertReservationToCalendarEvent = (reservation: Reservation): CalendarEv
     summary: reservationName,
     extendedProperties: {
       shared: {
+        archived: archived ? 'true' : '',
+        price: price ? String(price) : '',
         reservationType: reservationType || '',
         name: name || '',
         phone: phone || '',

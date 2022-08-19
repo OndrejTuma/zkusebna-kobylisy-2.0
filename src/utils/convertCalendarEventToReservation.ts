@@ -5,15 +5,17 @@ const convertCalendarEventToReservation = (event: CalendarEvent): Reservation =>
   const { id, start, end, summary, extendedProperties } = event
 
   return {
+    archived: Boolean(extendedProperties?.shared?.archived),
     id,
     dateStart: start?.date || start?.dateTime,
     dateEnd: end?.date || end?.dateTime,
-    reservationType: extendedProperties?.shared?.reservationType,
-    reservationName: summary,
-    name: extendedProperties?.shared?.name,
-    phone: extendedProperties?.shared?.phone,
     email: extendedProperties?.shared?.email,
     itemIds: joinItemIdsFromChunks(extendedProperties?.shared),
+    name: extendedProperties?.shared?.name,
+    phone: extendedProperties?.shared?.phone,
+    price: extendedProperties?.shared?.price ? parseInt(extendedProperties?.shared?.price) : 0,
+    reservationName: summary,
+    reservationType: extendedProperties?.shared?.reservationType,
   }
 }
 
