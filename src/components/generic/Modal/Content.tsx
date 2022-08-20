@@ -5,10 +5,22 @@ type Props = {
   children?: React.ReactNode,
 }
 
+const contentStyle = {
+  display: 'flex',
+  flex: '1 1 auto',
+  overflowY: 'hidden',
+}
+const contentInnerStyle = {
+  flex: '1 1 auto',
+  overflow: 'auto',
+}
+
 const Content = ({ children }: Props) => {
   return (
-    <Box id="modal-description">
-      {children}
+    <Box id="modal-description" sx={contentStyle}>
+      <Box sx={contentInnerStyle}>
+        {children}
+      </Box>
     </Box>
   )
 }

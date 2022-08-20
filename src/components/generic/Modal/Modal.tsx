@@ -6,15 +6,24 @@ import Close from '@mui/icons-material/Close'
 import Button from 'Components/generic/Button'
 import React from 'react'
 
+const modalWrapperStyle = {
+  display: 'flex',
+  width: '100%',
+  height: '100%',
+  justifyContent: 'center',
+  alignItems: 'center',
+  p: 4,
+}
 const modalStyle = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: 'relative',
   minWidth: 300,
   maxWidth: 600,
   bgcolor: 'background.paper',
   boxShadow: 24,
+  maxHeight: '100%',
+  overflowY: 'auto',
+  display: 'flex',
+  flexDirection: 'column',
   p: 4,
 }
 const closeButtonStyle = {
@@ -45,11 +54,13 @@ const Modal = ({ children, open, onClose }: Props) => {
       }}
     >
       <Fade in={open}>
-        <Box sx={modalStyle}>
-          <Button variant="text" sx={closeButtonStyle}>
-            <Close onClick={onClose}/>
-          </Button>
-          {children}
+        <Box sx={modalWrapperStyle}>
+          <Box sx={modalStyle}>
+            <Button variant="text" sx={closeButtonStyle}>
+              <Close onClick={onClose}/>
+            </Button>
+            {children}
+          </Box>
         </Box>
       </Fade>
     </MUIModal>
