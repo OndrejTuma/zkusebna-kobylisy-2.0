@@ -44,7 +44,7 @@ const Dashboard = () => {
         <Resource options={{ label: 'Položky' }} name={'items'} list={ItemList} edit={ItemEdit} create={ItemCreate}/>
         <Resource options={{ label: 'Kategorie' }} icon={CategoryIcon} name={'categories'} list={CategoryList} edit={CategoryEdit}
                   create={CategoryCreate}/>
-        <Resource options={{ label: 'Typy rezervací' }} icon={PercentIcon} name={'reservation-types'} list={ReservationTypeList}
+        <Resource options={{ label: 'Účely rezervací' }} icon={PercentIcon} name={'reservation-types'} list={ReservationTypeList}
                   edit={ReservationTypeEdit}
                   create={ReservationTypeCreate}/>
         <Resource options={{ label: 'Rezervace' }} icon={EventSeatIcon} name={'reservations'} list={ReservationList} edit={ReservationEdit}/>

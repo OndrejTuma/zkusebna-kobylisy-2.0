@@ -45,7 +45,7 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
     },
     reservationType: {
       initialValue: '',
-      validationSchema: Yup.string().required('Musíte vybrat typ rezervace'),
+      validationSchema: Yup.string().required('Musíte vybrat účel rezervace'),
     },
     reservationName: {
       initialValue: '',

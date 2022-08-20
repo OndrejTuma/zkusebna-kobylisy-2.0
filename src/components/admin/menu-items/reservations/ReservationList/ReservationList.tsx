@@ -28,14 +28,14 @@ const ReservationList = (props: {}) => {
         <NumberField label="Cena" source="price"/>
         <BooleanField label="Archivovaná" source="archived"/>
         <DateField label="Začátek" source="dateStart"/>
-        <ReferenceField label="Typ rezervace" reference="reservation-types" source="reservationType">
+        <ReferenceField label="Účel rezervace" reference="reservation-types" source="reservationType">
           <TextField source="title"/>
         </ReferenceField>
-        <ReferenceArrayField label="Položky" reference="items" source="itemIds" perPage={5} pagination={<Pagination/>}>
-          <SingleFieldList>
-            <ChipField source="title"/>
-          </SingleFieldList>
-        </ReferenceArrayField>
+        {/*<ReferenceArrayField label="Položky" reference="items" source="itemIds" perPage={5} pagination={<Pagination/>}>*/}
+        {/*  <SingleFieldList>*/}
+        {/*    <ChipField source="title"/>*/}
+        {/*  </SingleFieldList>*/}
+        {/*</ReferenceArrayField>*/}
       </Datagrid>
     </List>
   )
