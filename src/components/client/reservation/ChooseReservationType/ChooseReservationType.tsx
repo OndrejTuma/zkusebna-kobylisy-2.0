@@ -22,7 +22,7 @@ const ChooseReservationType = () => {
       {isLoading && <Loader/>}
       {isError && <Error>{error}</Error>}
       {isSuccess && (
-        <Form.Select label="Typ rezervace" name="reservationType"
+        <Form.Select label="Účel rezervace" name="reservationType"
                      items={data.data.map(({ title: label, id: value }) => ({
                        label,
                        value,

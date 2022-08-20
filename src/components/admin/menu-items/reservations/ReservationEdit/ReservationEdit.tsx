@@ -37,7 +37,7 @@ const ReservationEdit = (props: {}) => {
         <DateTimeInput label="Začátek" source="dateStart" validate={required()}/>
         <DateTimeInput label="Konec" source="dateEnd" validate={required()}/>
         <ReferenceInput reference="reservation-types" source="reservationType">
-          <SelectInput label="Typ rezervace" optionText="title"/>
+          <SelectInput label="Účel rezervace" optionText="title"/>
         </ReferenceInput>
         <ReferenceArrayInput reference="items" perPage={250} source="itemIds"
                              sort={{ field: 'title', order: 'ASC' }}>
