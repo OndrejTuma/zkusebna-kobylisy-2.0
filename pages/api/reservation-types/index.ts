@@ -19,7 +19,11 @@ export default async function handler(
 
   switch (req.method) {
     case 'GET':
-      const { sort, range, parsedRange: [from, to], filter } = transformRAParameters(req.query.filter, req.query.range, req.query.sort)
+      const { sort, range, parsedRange: [from, to], filter } = transformRAParameters(
+        req.query.filter,
+        req.query.range,
+        req.query.sort || '["title", "ASC"]'
+      )
 
       const reservationTypes = await ReservationType.find(filter).skip(from).limit(to - from + 1).sort(sort)
       const reservationTypesCount = await ReservationType.count()
