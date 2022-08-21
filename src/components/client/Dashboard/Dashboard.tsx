@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box'
 import Calendar, { onSelectEventType, onSelectSlotType } from 'Components/generic/Calendar'
 import useModal from 'Components/generic/Modal/useModal'
 import format from 'date-fns/format'
@@ -40,7 +41,7 @@ const Dashboard = ({ reservations }: DashboardProps) => {
   }
 
   return (
-    <>
+    <Box sx={{ position: 'relative' }}>
       <Calendar
         events={reservations || []}
         onSelectEvent={handleSelectEvent}
@@ -48,7 +49,7 @@ const Dashboard = ({ reservations }: DashboardProps) => {
       />
       <ReservationModal open={isOpenReservation} onClose={hideReservation} slotInfo={slotInfo}/>
       <EventModal open={isOpenEvent} onClose={hideEvent} event={event}/>
-    </>
+    </Box>
   )
 }
 
