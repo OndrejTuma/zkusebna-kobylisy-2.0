@@ -2,14 +2,14 @@ import EmptyList from 'Components/admin/EmptyList'
 import React from 'react'
 import {
   BooleanField,
-  ChipField,
+  // ChipField,
   Datagrid,
   DateField,
   List, NumberField,
-  Pagination,
-  ReferenceArrayField,
+  // Pagination,
+  // ReferenceArrayField,
   ReferenceField,
-  SingleFieldList,
+  // SingleFieldList,
   TextField, TextInput,
 } from 'react-admin'
 
@@ -25,7 +25,7 @@ const ReservationList = (props: {}) => {
         <TextField label="Jméno" source="name"/>
         <TextField label="E-mail" source="email"/>
         <TextField label="Telefon" source="phone"/>
-        <NumberField label="Cena" source="price"/>
+        <NumberField label="Cena" source="price" locales="cs-CZ" options={{ style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }}/>
         <BooleanField label="Archivovaná" source="archived"/>
         <DateField label="Začátek" source="dateStart"/>
         <ReferenceField label="Účel rezervace" reference="reservation-types" source="reservationType">
