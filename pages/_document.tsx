@@ -1,4 +1,5 @@
 import createEmotionServer from '@emotion/server/create-instance'
+import Box from '@mui/material/Box'
 import Document, { Head, Html, Main, NextScript } from 'next/document'
 
 import createEmotionCache from 'Styles/createEmotionCache'
@@ -19,7 +20,9 @@ export default class MyDocument extends Document {
           {(this.props as any).emotionStyleTags}
         </Head>
         <body>
-        <Main/>
+        <Box sx={{ position: 'relative' }}>
+          <Main/>
+        </Box>
         <NextScript/>
         </body>
       </Html>

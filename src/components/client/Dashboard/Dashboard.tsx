@@ -41,7 +41,7 @@ const Dashboard = ({ reservations }: DashboardProps) => {
   }
 
   return (
-    <Box sx={{ position: 'relative' }}>
+    <Box>
       <Calendar
         events={reservations || []}
         onSelectEvent={handleSelectEvent}
