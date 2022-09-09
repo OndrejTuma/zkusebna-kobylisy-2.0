@@ -17,8 +17,7 @@ import ReservationTypeEdit from '../menu-items/reservation-types/ReservationType
 import ReservationTypeList from '../menu-items/reservation-types/ReservationTypeList'
 import ReservationEdit from '../menu-items/reservations/ReservationEdit'
 import ReservationList from '../menu-items/reservations/ReservationList'
-import axios from 'axios'
-import { getFilePath, uploadImage } from 'Utils/api/fileUpload'
+import { unlinkImage, uploadImage } from 'Utils/api/fileUpload'
 
 const Dashboard = () => {
   const { isBusy, user } = useAuth()
@@ -47,20 +46,29 @@ const Dashboard = () => {
       ...provider,
       update: async (resource: any, params: any) => {
         const hasImage = params.data.image && params.data.image.rawFile instanceof File
+        const headers = {
+          authorization: await user?.getIdToken() || false,
+        }
+
+        // unlink previous image
+        if (params.previousData.image) {
+          const imageName = params.previousData.image.src.split('/').pop()
+          await unlinkImage(imageName, headers)
+        }
 
         if (resource !== 'items' || !hasImage) {
           return provider.update(resource, params)
         }
 
-        const image = await uploadImage(params.data.image.rawFile, {
-          authorization: await user?.getIdToken() || false,
-        })
+        const imageSrc = await uploadImage(params.data.image.rawFile, headers)
 
         const updatedParams = {
           ...params,
           data: {
             ...params.data,
-            image,
+            image: {
+              src: imageSrc,
+            },
           }
         }
 

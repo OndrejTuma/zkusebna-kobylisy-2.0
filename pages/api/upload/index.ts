@@ -1,0 +1,70 @@
+import formidable from 'formidable'
+import sharp from 'sharp'
+import type { NextApiRequest, NextApiResponse } from 'next'
+
+import { NetworkFailedState } from 'LocalTypes'
+import authorizeRequest from 'Utils/api/authorizeRequest'
+import { getFilePath, getLocalFilePath } from 'Utils/api/fileUpload'
+
+const uploadFile = async (file: formidable.File): Promise<string> => {
+  const fileName = `${file.newFilename}.webp`
+  const filePath = getFilePath(fileName)
+  const localFilePath = getLocalFilePath(fileName)
+
+  sharp(file.filepath).resize(500, 500).toFile(localFilePath, (err: Error) => {
+    if (err) {
+      throw err
+    }
+  })
+
+  return filePath
+}
+
+type Response = {
+  imageName: string,
+}
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Response | NetworkFailedState>,
+) {
+  console.log('UPLOAD IMAGES', req.method)
+
+  try {
+    authorizeRequest(req)
+
+    switch (req.method) {
+      case 'POST': {
+        const form = formidable({ multiples: true })
+
+        const imageName = await new Promise<string>(resolve => {
+          form.parse(req, async (err: Error, fields: formidable.Fields, files: formidable.Files) => {
+            if (err) {
+              throw err
+            }
+            const image = Array.isArray(files.image) ? files.image[0] : files.image
+      
+            const imageName = await uploadFile(image)
+      
+            resolve(imageName)
+          })
+        })
+
+        res.status(200).json({ imageName })
+
+        break
+      }
+      default: {
+        res.status(405).json({ error: 'Method not allowed' })
+      }
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
