@@ -39,3 +39,6 @@ yarn-error.log*
 
 # security files
 src/keys/*
+
+# uploaded files
+public/uploads/*

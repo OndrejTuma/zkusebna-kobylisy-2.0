@@ -9,7 +9,7 @@ const ItemCreate = (props: {}) => {
         <TextInput label={'Kód'} source={'code'} />
         <NumberInput label={'Cena'} source={'price'} validate={required()} />
         <BooleanInput label={'Aktivní'} source={'active'} defaultValue={true} />
-        <ImageInput label={'Obrázek'} source={'image'} accept={'image/*'}>
+        <ImageInput labelSingle="Klikni nebo sem přetáhni obrázek" label={'Obrázek'} source={'image'} accept={'image/*'}>
           <ImageField source={'src'} title={'name'} />
         </ImageInput>
         <ReferenceInput reference={'categories'} source={'category_id'}>

@@ -33,7 +33,7 @@ const ItemList = (props: {}) => {
           <TextField source={'title'} />
         </ReferenceField>
         <BooleanField label={'Aktivní'} source={'active'} />
-        <ImageField label={'Obrázek'} source={'image'} />
+        <ImageField label={'Obrázek'} source={'image.src'} />
       </Datagrid>
     </List>
   )
