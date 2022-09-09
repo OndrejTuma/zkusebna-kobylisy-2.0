@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import fs from 'fs'
 import authorizeRequest from 'Utils/api/authorizeRequest'
 import { getLocalFilePath } from 'Utils/api/fileUpload'
+import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,9 +13,10 @@ export default async function handler(
   console.log('UPLOAD IMAGE', req.method)
 
   try {
+    authorizeRequest(req)
+    
     switch (req.method) {
       case 'DELETE': {
-        authorizeRequest(req)
 
         fs.unlinkSync(getLocalFilePath(id as string))
   
@@ -23,11 +25,11 @@ export default async function handler(
         break
       }
       default:
-        res.status(405).json({ error: 'Method not allowed' })
+        methodNotAllowed(res)
     }
   } catch (error) { 
     console.error(error.message)
     
-    res.status(400).json({ error: error.message })
+    badRequestCatch(res, error)
   }
 }

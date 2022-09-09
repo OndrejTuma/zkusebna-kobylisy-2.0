@@ -7,22 +7,18 @@ export const uploadImage = async (image: File, headers?: AxiosRequestHeaders): P
   const formData = new FormData()
   formData.append('image', image)
 
-  try {
-    const {
-      data: {
-        imageName
-      },
-    } = await axios.post('/api/upload', formData, {
-      headers: {
-        ...headers,
-        'Content-Type': 'multipart/form-data',
-      }
-    })
+  const {
+    data: {
+      imageName
+    },
+  } = await axios.post('/api/upload', formData, {
+    headers: {
+      ...headers,
+      'Content-Type': 'multipart/form-data',
+    }
+  })
 
-    return imageName
-  } catch (e) {
-    throw new Error(e.message)
-  }
+  return imageName
 }
 
 export const unlinkImage = (imageName: string, headers?: AxiosRequestHeaders): Promise<void> => axios.delete(`/api/upload/${imageName}`, {
