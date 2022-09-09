@@ -31,7 +31,7 @@ export default async function handler(
         
         const { title, parent_id } = req.body
   
-        const category = await Category.findByIdAndUpdate(id, { $set: { title, parent_id } })
+        const category = await Category.findByIdAndUpdate(id, { $set: { title, parent_id: parent_id || null } })
   
         res.status(200).json(category)
   
