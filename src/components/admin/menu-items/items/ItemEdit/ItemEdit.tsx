@@ -9,7 +9,7 @@ const ItemEdit = (props: {}) => {
         <TextInput label="Název" source="title" validate={required()} />
         <TextInput label="Kód" source="code" />
         <NumberInput label="Cena" source="price" />
-        <BooleanInput label="Aktivní" source="active"/>
+        <BooleanInput label="Aktivní" source="active" />
         <ImageInput labelSingle="Klikni nebo sem přetáhni obrázek" label="Obrázek" source="image" accept="image/*">
           <ImageField source="src" title="name" />
         </ImageInput>
