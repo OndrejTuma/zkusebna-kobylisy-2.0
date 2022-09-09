@@ -2,23 +2,19 @@ import { google } from 'googleapis'
 import dbConnect from 'Lib/dbConnect'
 import Item from 'Models/Item'
 import ReservationTypeModel from 'Models/ReservationType'
-import Token from 'Models/Token'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type {
   NetworkFailedState,
-  ResponseCalendarEvents,
   Reservation,
   ResponseCalendarEvent,
-  CalendarEvent, ReservationItem, ReservationType
 } from 'LocalTypes'
 import getTokenData from 'Utils/api/getTokenData'
 import oAuth2Client, { setOAuthCredentials } from 'Utils/api/oAuth'
 import calculatePriceForReservation from 'Utils/calculatePriceForReservation'
 import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReservation'
 import convertReservationToCalendarEvent from 'Utils/convertReservationToCalendarEvent'
-import getDiscountPrice from 'Utils/getDiscountPrice'
 import transformRAParameters from 'Utils/transformRAParameters'
-import { joinItemIdsFromChunks, splitItemIdsInChunks } from 'Utils/itemsChunks'
+import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 
 export type Data = ResponseCalendarEvent | Reservation[] | undefined
 
@@ -64,8 +60,8 @@ export default async function handler(
         const reservationsWithPrice = reservations.map(reservation => ({
           ...reservation,
           price: reservation.archived
-                 ? reservation.price
-                 : calculatePriceForReservation(reservation, items, reservationTypes),
+            ? reservation.price
+            : calculatePriceForReservation(reservation, items, reservationTypes),
         }))
 
         const sortKey = Object.keys(sort)[0] as keyof Reservation
@@ -91,11 +87,9 @@ export default async function handler(
 
         break
       default:
-        res.status(400).end()
+        methodNotAllowed(res)
     }
-  } catch (err) {
-    console.log('Request to /api/reservations failed')
-    console.error(err)
-    res.status(400).json({ error: err.message })
+  } catch (error) {
+    badRequestCatch(res, error)
   }
 }

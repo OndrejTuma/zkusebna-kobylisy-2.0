@@ -17,7 +17,7 @@ const ItemSchema = new mongoose.Schema({
     type: Boolean,
   },
   image: {
-    type: String,
+    type: mongoose.Schema.Types.Mixed,
   },
   category_id: {
     type: mongoose.Schema.Types.ObjectId,

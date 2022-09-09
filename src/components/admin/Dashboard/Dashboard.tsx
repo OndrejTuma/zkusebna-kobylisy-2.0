@@ -1,11 +1,10 @@
-import Layout from 'Components/admin/Layout'
-import simpleRestProvider from 'ra-data-simple-rest'
-import React, { useCallback } from 'react'
-import { Admin, fetchUtils, Resource } from 'react-admin'
+import React from 'react'
+import { Admin, Resource } from 'react-admin'
 import CategoryIcon from '@mui/icons-material/Category'
 import EventSeatIcon from '@mui/icons-material/EventSeat'
 import PercentIcon from '@mui/icons-material/Percent'
-import { useAuth } from '../Auth'
+
+import Layout from '../Layout'
 import CategoryCreate from '../menu-items/categories/CategoryCreate'
 import CategoryEdit from '../menu-items/categories/CategoryEdit'
 import CategoryList from '../menu-items/categories/CategoryList'
@@ -17,30 +16,14 @@ import ReservationTypeEdit from '../menu-items/reservation-types/ReservationType
 import ReservationTypeList from '../menu-items/reservation-types/ReservationTypeList'
 import ReservationEdit from '../menu-items/reservations/ReservationEdit'
 import ReservationList from '../menu-items/reservations/ReservationList'
+import useDataProvider from './hooks/useDataProvider'
 
 const Dashboard = () => {
-  const { isBusy, user } = useAuth()
-
-  const httpClient = useCallback(async (url: any, options?: fetchUtils.Options) => {
-    if (!options) {
-      options = {}
-
-      if (!options.headers) {
-        options.headers = new Headers({ Accept: 'application/json' })
-      }
-    }
-
-    options.user = {
-      authenticated: true,
-      token: await user?.getIdToken(),
-    }
-
-    return fetchUtils.fetchJson(url, options)
-  }, [isBusy])
+  const dataProvider = useDataProvider()
 
   return (
     <div>
-      <Admin dataProvider={simpleRestProvider('/api', httpClient)} layout={Layout}>
+      <Admin dataProvider={dataProvider} layout={Layout}>
         <Resource options={{ label: 'Položky' }} name={'items'} list={ItemList} edit={ItemEdit} create={ItemCreate}/>
         <Resource options={{ label: 'Kategorie' }} icon={CategoryIcon} name={'categories'} list={CategoryList} edit={CategoryEdit}
                   create={CategoryCreate}/>

@@ -1,12 +1,11 @@
 import { NetworkFailedState, ReservationItem } from 'LocalTypes'
 import { NextApiRequest, NextApiResponse } from 'next'
 import getBusyItems from 'Utils/api/getBusyItems'
-import getTokenData from 'Utils/api/getTokenData'
-import oAuth2Client, { setOAuthCredentials } from 'Utils/api/oAuth'
 import dbConnect from 'Lib/dbConnect'
 import Item from 'Models/Item'
 import transformRAParameters from 'Utils/transformRAParameters'
-import { google } from 'googleapis'
+import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
+import authorizeRequest from 'Utils/api/authorizeRequest'
 
 type Data = ReservationItem | ReservationItem[]
 
@@ -23,8 +22,9 @@ export default async function handler(
       case 'GET':
         const { sort, range, parsedRange: [from, to], filter } = transformRAParameters(req.query.filter, req.query.range, req.query.sort)
 
-        // TODO: validate authorization token in firebase
-        if (!req.headers.authorization) {
+        try {
+          authorizeRequest(req)
+        } catch (error) {
           Object.assign(filter, {
             active: true
           })
@@ -49,6 +49,8 @@ export default async function handler(
 
         break
       case 'POST':
+        authorizeRequest(req)
+        
         const { title, category_id, code, price, image, active } = req.body
 
         const item: unknown = await Item.create({
@@ -64,9 +66,9 @@ export default async function handler(
 
         break
       default:
-        res.status(400).end()
+        methodNotAllowed(res)
     }
-  } catch (e) {
-    res.status(401).json({ error: e.message })
+  } catch (error) {
+    badRequestCatch(res, error)
   }
 }
