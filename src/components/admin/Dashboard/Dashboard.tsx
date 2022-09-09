@@ -1,9 +1,10 @@
-import Layout from 'Components/admin/Layout'
 import React from 'react'
 import { Admin, Resource } from 'react-admin'
 import CategoryIcon from '@mui/icons-material/Category'
 import EventSeatIcon from '@mui/icons-material/EventSeat'
 import PercentIcon from '@mui/icons-material/Percent'
+
+import Layout from '../Layout'
 import CategoryCreate from '../menu-items/categories/CategoryCreate'
 import CategoryEdit from '../menu-items/categories/CategoryEdit'
 import CategoryList from '../menu-items/categories/CategoryList'

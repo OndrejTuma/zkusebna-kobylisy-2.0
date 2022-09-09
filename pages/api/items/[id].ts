@@ -29,13 +29,13 @@ export default async function handler(
   
         const { title, category_id, code, price, image, active } = req.body
   
-        await Item.findByIdAndUpdate(id, {
+        const item = await Item.findByIdAndUpdate(id, {
           $set: {
             title, category_id, code, price, image, active,
           },
         })
   
-        res.status(200).end()
+        res.status(200).json(item)
   
         break
       }

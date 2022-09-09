@@ -29,9 +29,9 @@ export default async function handler(
         
         const { title, discount } = req.body
   
-        await ReservationType.findByIdAndUpdate(id, { $set: { title, discount } })
+        const reservationType = await ReservationType.findByIdAndUpdate(id, { $set: { title, discount } })
   
-        res.status(200).end()
+        res.status(200).json(reservationType)
   
         break
       }

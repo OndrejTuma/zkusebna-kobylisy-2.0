@@ -50,13 +50,15 @@ export default async function handler(
         break
       }
       case 'PUT': {
-        await calendar.events.update({
+        const { data: calendarEvent } = await calendar.events.update({
           calendarId,
           eventId: id as string,
           requestBody: convertReservationToCalendarEvent(req.body),
         }, {})
 
-        res.status(200).end()
+        const reservation = convertCalendarEventToReservation(calendarEvent)
+
+        res.status(200).json(reservation)
 
         break
       }
