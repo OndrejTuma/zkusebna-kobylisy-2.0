@@ -25,12 +25,6 @@ export const uploadImage = async (image: File, headers?: AxiosRequestHeaders): P
   }
 }
 
-export const unlinkImage = async (imageName: string, headers?: AxiosRequestHeaders): Promise<void> => {
-  try {
-    await axios.delete(`/api/upload/${imageName}`, {
-      headers,
-    })
-  } catch (e) {
-    throw new Error(e.message)
-  }
-}
+export const unlinkImage = (imageName: string, headers?: AxiosRequestHeaders): Promise<void> => axios.delete(`/api/upload/${imageName}`, {
+  headers,
+})
