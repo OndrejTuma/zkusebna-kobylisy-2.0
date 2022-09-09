@@ -1,6 +1,6 @@
 import Layout from 'Components/admin/Layout'
 import simpleRestProvider from 'ra-data-simple-rest'
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Admin, fetchUtils, Resource } from 'react-admin'
 import CategoryIcon from '@mui/icons-material/Category'
 import EventSeatIcon from '@mui/icons-material/EventSeat'
@@ -17,6 +17,8 @@ import ReservationTypeEdit from '../menu-items/reservation-types/ReservationType
 import ReservationTypeList from '../menu-items/reservation-types/ReservationTypeList'
 import ReservationEdit from '../menu-items/reservations/ReservationEdit'
 import ReservationList from '../menu-items/reservations/ReservationList'
+import axios from 'axios'
+import { getFilePath, uploadImage } from 'Utils/api/fileUpload'
 
 const Dashboard = () => {
   const { isBusy, user } = useAuth()
@@ -38,9 +40,38 @@ const Dashboard = () => {
     return fetchUtils.fetchJson(url, options)
   }, [isBusy])
 
+  const dataProvider = useMemo(() => {
+    const provider = simpleRestProvider('/api', httpClient)
+
+    return {
+      ...provider,
+      update: async (resource: any, params: any) => {
+        const hasImage = params.data.image && params.data.image.rawFile instanceof File
+
+        if (resource !== 'items' || !hasImage) {
+          return provider.update(resource, params)
+        }
+
+        const image = await uploadImage(params.data.image.rawFile, {
+          authorization: await user?.getIdToken() || false,
+        })
+
+        const updatedParams = {
+          ...params,
+          data: {
+            ...params.data,
+            image,
+          }
+        }
+
+        return provider.update(resource, updatedParams)
+      }
+    }
+  }, [httpClient])
+
   return (
     <div>
-      <Admin dataProvider={simpleRestProvider('/api', httpClient)} layout={Layout}>
+      <Admin dataProvider={dataProvider} layout={Layout}>
         <Resource options={{ label: 'Položky' }} name={'items'} list={ItemList} edit={ItemEdit} create={ItemCreate}/>
         <Resource options={{ label: 'Kategorie' }} icon={CategoryIcon} name={'categories'} list={CategoryList} edit={CategoryEdit}
                   create={CategoryCreate}/>

@@ -1,21 +1,12 @@
-import { NetworkFailedState, ReservationItem } from 'LocalTypes'
+import { ReservationItem } from 'LocalTypes'
 import { NextApiRequest, NextApiResponse } from 'next'
-// import formidable from 'formidable'
-// import fs from 'fs'
 import dbConnect from 'Lib/dbConnect'
 import Item from 'Models/Item'
-
-type Data = ReservationItem
-
-// const saveFile = async (file) => {
-//   const data = fs.readFileSync(file.path)
-//   fs.writeFileSync(`./public/uploads/${file.name}`, data)
-//   await fs.unlinkSync(file.path)
-// }
+import authorizeRequest from 'Utils/api/authorizeRequest'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>,
+  res: NextApiResponse<ReservationItem>,
 ) {
   const { id } = req.query
 
@@ -32,6 +23,8 @@ export default async function handler(
       break
     }
     case 'PUT': {
+      authorizeRequest(req)
+
       const { title, category_id, code, price, image, active } = req.body
 
       await Item.findByIdAndUpdate(id, {

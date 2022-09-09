@@ -28,6 +28,7 @@
     "formik": "^2.2.9",
     "global": "^4.4.0",
     "googleapis": "^92.0.0",
+    "imagemin": "^8.0.1",
     "js-cookie": "^3.0.1",
     "mongoose": "6.4.3",
     "next": "12.2.0",
@@ -38,6 +39,7 @@
     "react-dom": "18.2.0",
     "react-query": "^3.39.1",
     "react-spring": "^9.5.0",
+    "uuid": "^9.0.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {
