@@ -8,6 +8,8 @@ const CategorySchema = new mongoose.Schema({
   parent_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category',
+    // if category does not have a parent, we return empty string, but keep null in database
+    transform: (v: any) => v == null ? '' : v
   }
 })
 
