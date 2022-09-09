@@ -4,42 +4,50 @@ import dbConnect from 'Lib/dbConnect'
 import ReservationType from 'Models/ReservationType'
 
 import { ReservationTypeType } from './'
-
-type Data = ReservationTypeType
+import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
+import authorizeRequest from 'Utils/api/authorizeRequest'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>,
+  res: NextApiResponse<ReservationTypeType>,
 ) {
   const { id } = req.query
 
   await dbConnect()
 
-  switch (req.method) {
-    case 'GET': {
-      const reservationType = await ReservationType.findById(id)
+  try {
+    switch (req.method) {
+      case 'GET': {
+        const reservationType = await ReservationType.findById(id)
+  
+        res.status(200).json(reservationType)
+  
+        break
+      }
+      case 'PUT': {
+        authorizeRequest(req)
+        
+        const { title, discount } = req.body
+  
+        await ReservationType.findByIdAndUpdate(id, { $set: { title, discount } })
+  
+        res.status(200).end()
+  
+        break
+      }
+      case 'DELETE': {
+        authorizeRequest(req)
 
-      res.status(200).json(reservationType)
-
-      break
+        await ReservationType.findByIdAndDelete(id)
+  
+        res.status(200).end()
+  
+        break
+      }
+      default:
+        methodNotAllowed(res)
     }
-    case 'PUT': {
-      const { title, discount } = req.body
-
-      await ReservationType.findByIdAndUpdate(id, { $set: { title, discount } })
-
-      res.status(200).end()
-
-      break
-    }
-    case 'DELETE': {
-      await ReservationType.findByIdAndDelete(id)
-
-      res.status(200).end()
-
-      break
-    }
-    default:
-      res.status(400).end()
+  } catch (error) {
+    badRequestCatch(res, error)
   }
 }

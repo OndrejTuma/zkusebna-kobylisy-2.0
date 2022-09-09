@@ -5,17 +5,20 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { NetworkFailedState } from 'LocalTypes'
 import authorizeRequest from 'Utils/api/authorizeRequest'
 import { getFilePath, getLocalFilePath } from 'Utils/api/fileUpload'
+import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 
 const uploadFile = async (file: formidable.File): Promise<string> => {
   const fileName = `${file.newFilename}.webp`
   const filePath = getFilePath(fileName)
   const localFilePath = getLocalFilePath(fileName)
 
-  sharp(file.filepath).resize(500, 500).toFile(localFilePath, (err: Error) => {
+  await new Promise<void>(resolve => sharp(file.filepath).resize(500, 500).toFile(localFilePath, (err: Error) => {
     if (err) {
       throw err
     }
-  })
+    
+    resolve()
+  }))
 
   return filePath
 }
@@ -61,10 +64,10 @@ export default async function handler(
         break
       }
       default: {
-        res.status(405).json({ error: 'Method not allowed' })
+        methodNotAllowed(res)
       }
     }
   } catch (error) {
-    res.status(400).json({ error: error.message })
+    badRequestCatch(res, error)
   }
 }

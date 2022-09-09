@@ -4,6 +4,7 @@ import Item from 'Models/Item'
 import ReservationTypeModel from 'Models/ReservationType'
 import { NextApiRequest, NextApiResponse } from 'next'
 import getTokenData from 'Utils/api/getTokenData'
+import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 import oAuth2Client, { setOAuthCredentials } from 'Utils/api/oAuth'
 import calculatePriceForReservation from 'Utils/calculatePriceForReservation'
 import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReservation'
@@ -70,9 +71,9 @@ export default async function handler(
         break
       }
       default:
-        res.status(400).end()
+        methodNotAllowed(res)
     }
-  } catch (err) {
-    res.status(400).json({ error: err.message })
+  } catch (error) {
+    badRequestCatch(res, error)
   }
 }
