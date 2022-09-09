@@ -71,7 +71,7 @@ const useDataProvider = () => {
         const isImageUpload = params.data.image && params.data.image.rawFile instanceof File
 
         if (resource !== 'items' || !isImageUpload) {
-          return provider.update(resource, params)
+          return provider.create(resource, params)
         }
 
         const updatedParams = await insertImage(params, user)
