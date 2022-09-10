@@ -1,7 +1,7 @@
 import axios, { AxiosRequestHeaders } from 'axios'
 
-export const getFilePath = (fileName: string): string => `/uploads/${fileName}`
-export const getLocalFilePath = (fileName: string): string => `./public${getFilePath(fileName)}`
+export const getFilePath = (fileName: string): string => `/api/images/${fileName}`
+export const getLocalFilePath = (fileName: string): string => `./public/uploads/${fileName}`
 
 export const uploadImage = async (image: File, headers?: AxiosRequestHeaders): Promise<string> => {
   const formData = new FormData()
