@@ -37,7 +37,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Response | NetworkFailedState>,
 ) {
-  console.log('UPLOAD IMAGES', req.method)
+  console.log('IMAGES METHOD', req.method)
 
   try {
     authorizeRequest(req)

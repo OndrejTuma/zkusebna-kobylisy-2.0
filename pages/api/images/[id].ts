@@ -3,6 +3,7 @@ import fs from 'fs'
 
 import { getLocalFilePath } from 'Utils/api/fileUpload'
 import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
+import authorizeRequest from 'Utils/api/authorizeRequest'
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,7 +11,7 @@ export default async function handler(
 ) {
   const { id } = req.query
 
-  console.log('SERVE IMAGE', req.method)
+  console.log('IMAGE METHOD', req.method)
 
   try {
     switch (req.method) {
@@ -26,10 +27,21 @@ export default async function handler(
   
         break
       }
+      case 'DELETE': {
+        authorizeRequest(req)
+        
+        fs.unlinkSync(getLocalFilePath(id as string))
+  
+        res.status(200).end()
+  
+        break
+      }
       default:
         methodNotAllowed(res)
     }
   } catch (error) { 
+    console.error(error.message)
+
     badRequestCatch(res, error)
   }
 }

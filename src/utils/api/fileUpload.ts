@@ -11,7 +11,7 @@ export const uploadImage = async (image: File, headers?: AxiosRequestHeaders): P
     data: {
       imageName
     },
-  } = await axios.post('/api/upload', formData, {
+  } = await axios.post('/api/images', formData, {
     headers: {
       ...headers,
       'Content-Type': 'multipart/form-data',
@@ -21,6 +21,6 @@ export const uploadImage = async (image: File, headers?: AxiosRequestHeaders): P
   return imageName
 }
 
-export const unlinkImage = (imageName: string, headers?: AxiosRequestHeaders): Promise<void> => axios.delete(`/api/upload/${imageName}`, {
+export const unlinkImage = (imageName: string, headers?: AxiosRequestHeaders): Promise<void> => axios.delete(`/api/images/${imageName}`, {
   headers,
 })
