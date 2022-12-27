@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# usage: bash backup/export-db.sh
+
 targetContainer="zkusebna-kobylisy-mongo"
 targetDb="zk"
 collections=( categories items reservationtypes )
@@ -21,3 +23,7 @@ docker cp $targetContainer:$exportFileName ./
 
 # cleanup in container
 docker exec $targetContainer rm -rf $exportDir $exportFileName
+
+echo "Exported database to:"
+
+echo $exportFileName
