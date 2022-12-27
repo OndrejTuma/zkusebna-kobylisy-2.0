@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# usage: bash backup/import-db.sh <tarballFileName> <exportDir>
+
 tarballFileName=$1
 
 targetContainer="zkusebna-kobylisy-mongo"
