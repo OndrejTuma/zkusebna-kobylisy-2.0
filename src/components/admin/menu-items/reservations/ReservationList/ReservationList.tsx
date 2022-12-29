@@ -2,6 +2,7 @@ import EmptyList from 'Components/admin/EmptyList'
 import React from 'react'
 import {
   BooleanField,
+  BooleanInput,
   // ChipField,
   Datagrid,
   DateField,
@@ -14,7 +15,8 @@ import {
 } from 'react-admin'
 
 const filters = [
-  <TextInput key="title" source="title" label="Název" alwaysOn/>
+  <TextInput key="title" source="title" label="Název" alwaysOn/>,
+  <BooleanInput key="current" source="current" label="Skrýt proběhlé" alwaysOn/>,
 ]
 
 const ReservationList = (props: {}) => {
