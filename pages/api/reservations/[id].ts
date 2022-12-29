@@ -19,7 +19,7 @@ export default async function handler(
   console.log('RESERVATION METHOD', req.method)
 
   try {
-    const { calendarId, token } = await getTokenData(res)
+    const { calendarId, token } = await getTokenData()
 
     setOAuthCredentials(token)
 

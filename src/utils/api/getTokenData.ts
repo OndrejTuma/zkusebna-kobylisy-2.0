@@ -1,7 +1,6 @@
 import Token from 'Models/Token'
-import { NextApiResponse } from 'next'
 
-const getTokenData = async (res: NextApiResponse) => {
+const getTokenData = async () => {
   const tokens = await Token.findOne()
 
   if (!tokens) {
@@ -15,6 +14,7 @@ const getTokenData = async (res: NextApiResponse) => {
   return {
     accessToken: tokens?.access_token,
     token: tokens?.refresh_token,
+    user: tokens?.user_email,
     calendarId: tokens?.calendar_id,
   }
 }
