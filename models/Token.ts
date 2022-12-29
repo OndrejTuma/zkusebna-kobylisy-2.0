@@ -9,6 +9,10 @@ const TokenSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide an access token'],
   },
+  user_email: {
+    type: String,
+    required: [true, 'Please provide an email address'],
+  },
   calendar_id: {
     type: String,
   }

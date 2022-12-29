@@ -15,6 +15,7 @@ import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReser
 import convertReservationToCalendarEvent from 'Utils/convertReservationToCalendarEvent'
 import transformRAParameters from 'Utils/transformRAParameters'
 import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
+import { sendNewReservationMail } from 'Lib/mailer'
 
 export type Data = ResponseCalendarEvent | Reservation[] | undefined
 
@@ -27,11 +28,14 @@ export default async function handler(
   console.log('RESERVATIONS METHOD', req.method)
 
   try {
-    const { calendarId, token } = await getTokenData(res)
+    const { calendarId, token } = await getTokenData()
 
     setOAuthCredentials(token)
 
     const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
+
+    const items = await Item.find()
+    const reservationTypes = await ReservationTypeModel.find()
 
     switch (req.method) {
       case 'GET':
@@ -53,9 +57,6 @@ export default async function handler(
         }
 
         const reservations: Reservation[] = events.map(convertCalendarEventToReservation)
-
-        const items = await Item.find()
-        const reservationTypes = await ReservationTypeModel.find()
 
         const reservationsWithPrice = reservations.map(reservation => ({
           ...reservation,
@@ -81,6 +82,11 @@ export default async function handler(
         const event = await calendar.events.insert({
           calendarId,
           requestBody: convertReservationToCalendarEvent(req.body),
+        })
+
+        await sendNewReservationMail({
+          ...req.body,
+          price: calculatePriceForReservation(req.body, items, reservationTypes)
         })
 
         res.status(201).json(event)

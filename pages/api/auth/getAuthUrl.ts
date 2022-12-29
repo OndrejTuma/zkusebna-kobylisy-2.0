@@ -13,6 +13,10 @@ export default async function handler(
       scope: [
         'https://www.googleapis.com/auth/calendar',
         'https://www.googleapis.com/auth/calendar.events',
+        // nodemailer requires full access to the account to work properly
+        'https://mail.google.com/',
+        // 'https://www.googleapis.com/auth/gmail.send',
+        // 'https://www.googleapis.com/auth/gmail.metadata',
       ],
     })
 
