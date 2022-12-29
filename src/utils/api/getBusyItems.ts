@@ -9,7 +9,7 @@ const getBusyItems = async (req: NextApiRequest, res: NextApiResponse) => {
     return []
   }
 
-  const { calendarId, token } = await getTokenData(res)
+  const { calendarId, token } = await getTokenData()
 
   setOAuthCredentials(token)
 
