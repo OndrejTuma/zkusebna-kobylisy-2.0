@@ -14,6 +14,7 @@ const convertCalendarEventToReservation = (event: CalendarEvent): Reservation =>
     name: extendedProperties?.shared?.name,
     phone: extendedProperties?.shared?.phone,
     price: extendedProperties?.shared?.price ? parseInt(extendedProperties?.shared?.price) : 0,
+    paid: Boolean(extendedProperties?.shared?.paid),
     reservationName: summary,
     reservationType: extendedProperties?.shared?.reservationType,
   }
