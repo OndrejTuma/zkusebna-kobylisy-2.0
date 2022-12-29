@@ -43,6 +43,7 @@ const ReservationEdit = (props: {}) => {
                              sort={{ field: 'title', order: 'ASC' }}>
           <SelectArrayInput label="Položky" optionText="title"/>
         </ReferenceArrayInput>
+        <BooleanInput label="Zaplacená" source="paid" />
         <ArchiveReservation/>
       </SimpleForm>
     </Edit>

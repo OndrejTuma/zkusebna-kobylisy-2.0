@@ -27,6 +27,7 @@ const ReservationList = (props: {}) => {
         <TextField label="Telefon" source="phone"/>
         <NumberField label="Cena" source="price" locales="cs-CZ" options={{ style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }}/>
         <BooleanField label="Archivovaná" source="archived"/>
+        <BooleanField label="Zaplacená" source="paid"/>
         <DateField label="Začátek" source="dateStart"/>
         <ReferenceField label="Účel rezervace" reference="reservation-types" source="reservationType">
           <TextField source="title"/>
