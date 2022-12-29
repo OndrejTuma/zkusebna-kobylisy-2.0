@@ -46,6 +46,7 @@ export default async function handler(
         const eventsData = await calendar.events.list({
           calendarId,
           q: parsedFilter.title,
+          timeMin: parsedFilter.current ? new Date().toISOString() : undefined,
         })
         const events = eventsData?.data?.items
 
