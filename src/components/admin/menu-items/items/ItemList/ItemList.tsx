@@ -14,7 +14,8 @@ import {
 } from 'react-admin'
 
 const filters = [
-  <TextInput key="title" source="title" label="Název" alwaysOn/>
+  <TextInput key="title" source="title" label="Název" alwaysOn/>,
+  <TextInput key="category_name" source="category_name" label="Kategorie" alwaysOn/>,
 ]
 
 const ListActions = () => (
