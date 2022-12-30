@@ -28,7 +28,7 @@ export default async function handler(
         )
   
         const reservationTypes = await ReservationType.find(filter).skip(from).limit(to - from + 1).sort(sort)
-        const reservationTypesCount = await ReservationType.count()
+        const reservationTypesCount = await ReservationType.find(filter).count()
   
         res.setHeader('Content-Range', `reservation-types ${range}/${reservationTypesCount}`)
         res.status(200).json(reservationTypes)

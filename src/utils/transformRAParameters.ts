@@ -1,6 +1,6 @@
 import { SortOrder, Types } from 'mongoose'
 
-const getParsedFilter = (filter?: string | string[]): {} => {
+const getParsedFilter = (filter?: string | string[]): {[key: string]: {}} => {
   if (!filter) {
     return {}
   }

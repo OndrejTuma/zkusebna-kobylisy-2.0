@@ -27,7 +27,7 @@ export default async function handler(
         const { sort, range, parsedRange: [from, to], filter } = transformRAParameters(req.query.filter, req.query.range, req.query.sort)
   
         const categories = await Category.find(filter).skip(from).limit(to - from + 1).sort(sort)
-        const categoriesCount = await Category.count()
+        const categoriesCount = await Category.find(filter).count()
   
         res.setHeader('Content-Range', `categories ${range}/${categoriesCount}`)
         res.status(200).json(categories)
