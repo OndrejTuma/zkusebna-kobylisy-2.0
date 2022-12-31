@@ -1,4 +1,5 @@
 import { google } from 'googleapis'
+import { sendMessage, sendReservationDeleteMail, sendReservationUpdateMail } from 'Lib/mailer'
 import { NetworkFailedState, Reservation } from 'LocalTypes'
 import Item from 'Models/Item'
 import ReservationTypeModel from 'Models/ReservationType'
@@ -14,7 +15,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Reservation | NetworkFailedState>,
 ) {
-  const { id } = req.query
+  const eventId = req.query.id as string
 
   console.log('RESERVATION METHOD', req.method)
 
@@ -30,7 +31,7 @@ export default async function handler(
 
         const { data: calendarEvent } = await calendar.events.get({
           calendarId,
-          eventId: id as string,
+          eventId,
         }, {})
 
         const reservation: Reservation = convertCalendarEventToReservation(calendarEvent)
@@ -52,21 +53,32 @@ export default async function handler(
       case 'PUT': {
         const { data: calendarEvent } = await calendar.events.update({
           calendarId,
-          eventId: id as string,
+          eventId,
           requestBody: convertReservationToCalendarEvent(req.body),
         }, {})
 
         const reservation = convertCalendarEventToReservation(calendarEvent)
+
+        await sendReservationUpdateMail(req.body)
 
         res.status(200).json(reservation)
 
         break
       }
       case 'DELETE': {
+        const { data: calendarEvent } = await calendar.events.get({
+          calendarId,
+          eventId,
+        }, {})
+
         await calendar.events.delete({
           calendarId,
-          eventId: id as string,
+          eventId,
         }, {})
+
+        const reservation = convertCalendarEventToReservation(calendarEvent)
+
+        await sendReservationDeleteMail(reservation)
 
         res.status(200).end()
 
