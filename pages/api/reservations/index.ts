@@ -1,5 +1,7 @@
 import { google } from 'googleapis'
 import dbConnect from 'Lib/dbConnect'
+import startOfMonth from 'date-fns/startOfMonth'
+import endOfMonth from 'date-fns/endOfMonth'
 import Item from 'Models/Item'
 import ReservationTypeModel from 'Models/ReservationType'
 import type { NextApiRequest, NextApiResponse } from 'next'
@@ -41,14 +43,27 @@ export default async function handler(
       case 'GET':
         const { sort, range, parsedRange: [from, to] } = transformRAParameters(req.query.filter, req.query.range, req.query.sort)
 
-        const parsedFilter = req.query.filter ? JSON.parse(req.query.filter as string) : {}
+        const customFilter = req.query.filter ? JSON.parse(req.query.filter as string) : {}
 
-        const eventsData = await calendar.events.list({
+        const filter = {
           calendarId,
-          q: parsedFilter.title,
-          timeMin: parsedFilter.current ? new Date().toISOString() : undefined,
-        })
-        const events = eventsData?.data?.items
+          q: customFilter.title,
+        }
+
+        if (customFilter.current) {
+          Object.assign(filter, { timeMin: new Date().toISOString() })
+        }
+        // get reservations for a specific month
+        if (req.query.month) {
+          const month = new Date(req.query.month as string)
+
+          Object.assign(filter, { 
+            timeMin: startOfMonth(month).toISOString(),
+            timeMax: endOfMonth(month).toISOString(),
+          })
+        }
+
+        const { data: { items: events } } = await calendar.events.list(filter)
 
         if (!events) {
           res.setHeader('Content-Range', `reservations ${range}/0`)
