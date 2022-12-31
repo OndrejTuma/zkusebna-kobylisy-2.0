@@ -1,11 +1,10 @@
 import { google } from 'googleapis'
-import { NextApiRequest, NextApiResponse } from 'next'
 import getTokenData from 'Utils/api/getTokenData'
 import oAuth2Client, { setOAuthCredentials } from 'Utils/api/oAuth'
 import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReservation'
 
-const getBusyItems = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (!req.query.timeMin || !req.query.timeMax) {
+const getBusyItems = async (timeMin?: string, timeMax?: string) => {
+  if (!timeMin || !timeMax) {
     return []
   }
 
@@ -17,8 +16,8 @@ const getBusyItems = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const { data: { items: events } } = await calendar.events.list({
     calendarId,
-    timeMin: req.query.timeMin as string,
-    timeMax: req.query.timeMax as string,
+    timeMin,
+    timeMax,
   })
 
   if (!events || events.length === 0) {
