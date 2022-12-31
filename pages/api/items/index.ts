@@ -22,7 +22,9 @@ export default async function handler(
   try {
     switch (req.method) {
       case 'GET':
-        const { sort, range, parsedRange: [from, to], filter: rawFilter } = transformRAParameters(req.query.filter, req.query.range, req.query.sort)
+        const raFilter = JSON.parse(req.query.filter?.toString() || '{}')
+        const { timeMin, timeMax, ignoreBusyItems, ...restRaFilter } = raFilter
+        const { sort, range, parsedRange: [from, to], filter: rawFilter } = transformRAParameters(JSON.stringify(restRaFilter), req.query.range, req.query.sort)
 
         const { category_name: byCategoryFilter, ...filter } = rawFilter
 
@@ -50,7 +52,8 @@ export default async function handler(
         const items = await Item.find(filter).skip(from).limit(to - from + 1).sort(sort)
         const itemsCount = await Item.find(filter).count()
 
-        const busyItems = await getBusyItems(req, res)
+        const busyItems = await getBusyItems(timeMin, timeMax)
+        const filteredBusyItems = busyItems.filter((id) => !ignoreBusyItems?.includes(id))
 
         res.setHeader('Content-Range', `categories ${range}/${itemsCount}`)
         res.status(200).json(items.map(({ id, category_id, title, code, price, image, active }) => ({
@@ -61,7 +64,7 @@ export default async function handler(
           price,
           image,
           active,
-          busy: busyItems.includes(id),
+          busy: filteredBusyItems.includes(id),
         })))
 
         break
