@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import axios, { AxiosResponse } from 'axios'
+import { getCacheKey } from 'Components/client/Dashboard'
 import ContinueButton from 'Components/client/reservation/ContinueButton'
 import Button from 'Components/generic/Button'
 import Error from 'Components/generic/Error'
@@ -79,9 +80,10 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
     error,
   } = useMutation<AxiosResponse, string, Reservation>('createReservation', createReservation, {
     onSuccess: ({ data: { data } }) => {
-      const reservations = queryClient.getQueryData<AxiosResponse<Reservation[]>>('getAllReservations')
+      const cacheKey = getCacheKey(start)
+      const reservations = queryClient.getQueryData<AxiosResponse<Reservation[]>>(['getMonthReservations', cacheKey])
 
-      reservations && queryClient.setQueryData('getAllReservations', {
+      reservations && queryClient.setQueryData(['getMonthReservations', cacheKey], {
         ...reservations,
         data: [
           ...reservations.data,
