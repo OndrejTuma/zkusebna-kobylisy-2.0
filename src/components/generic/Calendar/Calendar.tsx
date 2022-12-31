@@ -5,7 +5,13 @@ import parse from 'date-fns/parse'
 import startOfWeek from 'date-fns/startOfWeek'
 import type { Reservation } from 'LocalTypes'
 import React, { useMemo } from 'react'
-import { Calendar as ReactCalendar, CalendarProps as ReactCalendarProps, dateFnsLocalizer, Event, SlotInfo } from 'react-big-calendar'
+import {
+  Calendar as ReactCalendar,
+  CalendarProps as ReactCalendarProps,
+  dateFnsLocalizer,
+  Event,
+  SlotInfo,
+} from 'react-big-calendar'
 
 const localizer = dateFnsLocalizer({
   format,
@@ -32,47 +38,53 @@ const messages = {
   showMore: (total: number) => `+ Zobrazit další (${total})`,
 }
 
-const parseGoogleCalendarEventsToReactCalendarEvents = (events: Reservation[]) => events.map(({
-  dateStart,
-  dateEnd,
-  itemIds,
-  reservationName,
-}) => ({
-  title: reservationName,
-  start: dateStart ? new Date(dateStart) : undefined,
-  end: dateEnd ? new Date(dateEnd) : undefined,
-  resource: {
-    itemIds
-  },
-}))
+const parseGoogleCalendarEventsToReactCalendarEvents = (
+  events: Reservation[]
+) =>
+  events.map(({ dateStart, dateEnd, itemIds, reservationName }) => ({
+    title: reservationName,
+    start: dateStart ? new Date(dateStart) : undefined,
+    end: dateEnd ? new Date(dateEnd) : undefined,
+    resource: {
+      itemIds,
+    },
+  }))
 
+export type onNavigateType = (date: Date) => void
 export type onSelectEventType = (event: Event) => void
 export type onSelectSlotType = (slotInfo: SlotInfo) => void
 
-const ReactBigCalendar = ReactCalendar as React.ComponentType<ReactCalendarProps<Event>>
+const ReactBigCalendar = ReactCalendar as React.ComponentType<
+  ReactCalendarProps<Event>
+>
 
 type CalendarProps = {
-  events: Reservation[],
-  onSelectEvent: onSelectEventType,
-  onSelectSlot?: onSelectSlotType,
+  reservations?: Reservation[]
+  onNavigate?: onNavigateType
+  onSelectEvent?: onSelectEventType
+  onSelectSlot?: onSelectSlotType
 }
 
-const Calendar = ({ events, onSelectEvent, onSelectSlot }: CalendarProps) => {
-  const reservations: Event[] = useMemo(() => parseGoogleCalendarEventsToReactCalendarEvents(events), [ events ])
+const Calendar = ({ reservations, onNavigate, onSelectEvent, onSelectSlot }: CalendarProps) => {
+  const events: Event[] = useMemo(
+    () => parseGoogleCalendarEventsToReactCalendarEvents(reservations || []),
+    [reservations]
+  )
 
   return (
     <ReactBigCalendar
       culture={'cs'}
       localizer={localizer}
-      events={reservations}
-      startAccessor="start"
-      endAccessor="end"
+      events={events}
+      startAccessor='start'
+      endAccessor='end'
+      onNavigate={onNavigate}
       onSelectEvent={onSelectEvent}
-      views={[ 'month' ]}
+      views={['month']}
       style={{ height: 700 }}
       messages={messages}
       popup
-      popupOffset={{x: 30, y: 20}}
+      popupOffset={{ x: 30, y: 20 }}
       selectable
       onSelectSlot={onSelectSlot}
     />
