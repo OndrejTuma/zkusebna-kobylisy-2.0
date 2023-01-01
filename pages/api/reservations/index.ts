@@ -15,15 +15,15 @@ import oAuth2Client, { setOAuthCredentials } from 'Utils/api/oAuth'
 import calculatePriceForReservation from 'Utils/calculatePriceForReservation'
 import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReservation'
 import convertReservationToCalendarEvent from 'Utils/convertReservationToCalendarEvent'
-import transformRAParameters from 'Utils/transformRAParameters'
 import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 import { sendNewReservationMail } from 'Lib/mailer'
+import { Filter, parseRAFilters } from 'Lib/filters'
 
 export type Data = ResponseCalendarEvent | Reservation[] | undefined
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data | NetworkFailedState>,
+  res: NextApiResponse<Data | NetworkFailedState>
 ) {
   await dbConnect()
 
@@ -41,57 +41,66 @@ export default async function handler(
 
     switch (req.method) {
       case 'GET':
-        const { sort, range, parsedRange: [from, to] } = transformRAParameters(req.query.filter, req.query.range, req.query.sort)
+        const {
+          filter: {
+            allFilters: { current, month, title },
+          },
+          range,
+          sort,
+        } = parseRAFilters(req.query)
 
-        const customFilter = req.query.filter ? JSON.parse(req.query.filter as string) : {}
-
-        const filter = {
+        const calendarFilter = new Filter({
           calendarId,
-          q: customFilter.title,
-        }
+          q: title,
+        })
 
-        if (customFilter.current) {
-          Object.assign(filter, { timeMin: new Date().toISOString() })
+        // filter expired reservations
+        if (current) {
+          calendarFilter.add('timeMin', new Date().toISOString())
         }
         // get reservations for a specific month
-        if (req.query.month) {
-          const month = new Date(req.query.month as string)
+        if (month) {
+          const monthDate = new Date(month)
 
-          Object.assign(filter, { 
-            timeMin: startOfMonth(month).toISOString(),
-            timeMax: endOfMonth(month).toISOString(),
-          })
+          calendarFilter.add('timeMin', startOfMonth(monthDate).toISOString())
+          calendarFilter.add('timeMax', endOfMonth(monthDate).toISOString())
         }
 
-        const { data: { items: events } } = await calendar.events.list(filter)
+        const {
+          data: { items: events },
+        } = await calendar.events.list(calendarFilter.allFilters)
 
         if (!events) {
-          res.setHeader('Content-Range', `reservations ${range}/0`)
+          res.setHeader('Content-Range', `reservations ${range.print()}/0`)
           res.status(200).json([])
 
           return
         }
 
-        const reservations: Reservation[] = events.map(convertCalendarEventToReservation)
+        const reservations: Reservation[] = events.map(
+          convertCalendarEventToReservation
+        )
 
-        const reservationsWithPrice = reservations.map(reservation => ({
+        const reservationsWithPrice = reservations.map((reservation) => ({
           ...reservation,
           price: reservation.archived
             ? reservation.price
-            : calculatePriceForReservation(reservation, items, reservationTypes),
+            : calculatePriceForReservation(
+                reservation,
+                items,
+                reservationTypes
+              ),
         }))
 
-        const sortKey = Object.keys(sort)[0] as keyof Reservation
-        const sortValue = Object.values(sort)[0] as number
+        reservationsWithPrice.sort(sort.sortFn)
 
-        reservationsWithPrice.sort((a, b) => {
-          // TODO: fix
-          // @ts-ignore
-          return (a[sortKey] > b[sortKey] ? 1 : -1) * sortValue
-        })
-
-        res.setHeader('Content-Range', `reservations ${range}/${reservationsWithPrice.length}`)
-        res.status(200).json(reservationsWithPrice.slice(from, to + 1))
+        res.setHeader(
+          'Content-Range',
+          `reservations ${range.print()}/${reservationsWithPrice.length}`
+        )
+        res
+          .status(200)
+          .json(reservationsWithPrice.slice(range.from, range.to + 1))
 
         break
       case 'POST':
@@ -102,7 +111,11 @@ export default async function handler(
 
         await sendNewReservationMail({
           ...req.body,
-          price: calculatePriceForReservation(req.body, items, reservationTypes)
+          price: calculatePriceForReservation(
+            req.body,
+            items,
+            reservationTypes
+          ),
         })
 
         res.status(201).json(event)
