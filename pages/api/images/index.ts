@@ -40,7 +40,7 @@ export default async function handler(
   console.log('IMAGES METHOD', req.method)
 
   try {
-    authorizeRequest(req)
+    await authorizeRequest(req)
 
     switch (req.method) {
       case 'POST': {

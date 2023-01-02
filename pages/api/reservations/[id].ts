@@ -4,6 +4,7 @@ import { NetworkFailedState, Reservation } from 'LocalTypes'
 import Item from 'Models/Item'
 import ReservationTypeModel from 'Models/ReservationType'
 import { NextApiRequest, NextApiResponse } from 'next'
+import authorizeRequest from 'Utils/api/authorizeRequest'
 import getTokenData from 'Utils/api/getTokenData'
 import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 import oAuth2Client, { setOAuthCredentials } from 'Utils/api/oAuth'
@@ -51,6 +52,8 @@ export default async function handler(
         break
       }
       case 'PUT': {
+        await authorizeRequest(req)
+        
         const { data: calendarEvent } = await calendar.events.update({
           calendarId,
           eventId,
@@ -66,6 +69,8 @@ export default async function handler(
         break
       }
       case 'DELETE': {
+        await authorizeRequest(req)
+        
         const { data: calendarEvent } = await calendar.events.get({
           calendarId,
           eventId,
