@@ -4,7 +4,7 @@ import { ReservationItem, ResponseReservationTypes } from 'LocalTypes'
 import React, { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import calculatePriceForReservation from 'Utils/calculatePriceForReservation'
-import getAllReservationTypes from 'Utils/fetch/getAllReservationTypes'
+import { getAllReservationTypes } from 'Lib/queries'
 import formatNumberToCZK from 'Utils/formatNumberToCZK'
 
 const Price = () => {

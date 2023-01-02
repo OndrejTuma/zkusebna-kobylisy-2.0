@@ -4,9 +4,10 @@ import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import axios, { AxiosResponse } from 'axios'
+import { AxiosResponse } from 'axios'
 import Error from 'Components/generic/Error'
 import Success from 'Components/generic/Success'
+import { setCalendarId } from 'Lib/queries'
 import { CalendarEntry, RequestSetCalendarId } from 'LocalTypes'
 import React from 'react'
 import { useMutation } from 'react-query'
@@ -15,8 +16,6 @@ type Props = {
   calendars?: CalendarEntry[],
   tokenId: string,
 }
-
-const setCalendarId = (requestData: RequestSetCalendarId) => axios.post('/api/auth/setCalendarId', requestData)
 
 const GoogleCalendarList = ({ calendars, tokenId }: Props) => {
   const {
