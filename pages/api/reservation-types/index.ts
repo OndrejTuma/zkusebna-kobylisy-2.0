@@ -2,14 +2,14 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 import dbConnect from 'Lib/dbConnect'
 import ReservationType from 'Models/ReservationType'
-import transformRAParameters from 'Utils/transformRAParameters'
 import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 import authorizeRequest from 'Utils/api/authorizeRequest'
+import { parseRAFilters } from 'Lib/filters'
 
 export type ReservationTypeType = {
-  id: string | number,
-  title: string,
-  discount: number,
+  id: string | number
+  title: string
+  discount: number
 }
 
 export default async function handler(
@@ -21,31 +21,35 @@ export default async function handler(
   try {
     switch (req.method) {
       case 'GET':
-        const { sort, range, parsedRange: [from, to], filter } = transformRAParameters(
-          req.query.filter,
-          req.query.range,
-          req.query.sort || '["title", "ASC"]'
+        const { filter, range, sort } = parseRAFilters(req.query)
+
+        const reservationTypes = await ReservationType.find(filter.mongoFormat())
+          .skip(range.from)
+          .limit(range.itemsCount())
+          .sort(sort.mongoFormat())
+        const reservationTypesCount = await ReservationType.find(
+          filter.mongoFormat()
+        ).count()
+
+        res.setHeader(
+          'Content-Range',
+          `reservation-types ${range.print()}/${reservationTypesCount}`
         )
-  
-        const reservationTypes = await ReservationType.find(filter).skip(from).limit(to - from + 1).sort(sort)
-        const reservationTypesCount = await ReservationType.find(filter).count()
-  
-        res.setHeader('Content-Range', `reservation-types ${range}/${reservationTypesCount}`)
         res.status(200).json(reservationTypes)
-  
+
         break
       case 'POST':
         authorizeRequest(req)
-        
+
         const { title, discount } = req.body
-  
+
         const reservationType = await ReservationType.create({
           title,
           discount,
         })
-  
+
         res.status(201).json(reservationType)
-  
+
         break
       default:
         methodNotAllowed(res)

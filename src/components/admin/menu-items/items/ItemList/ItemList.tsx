@@ -15,7 +15,7 @@ import {
 
 const filters = [
   <TextInput key="title" source="title" label="Název" alwaysOn/>,
-  <TextInput key="category_name" source="category_name" label="Kategorie" alwaysOn/>,
+  <TextInput key="categoryName" source="categoryName" label="Kategorie" alwaysOn/>,
 ]
 
 const ListActions = () => (
