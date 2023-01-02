@@ -1,14 +1,13 @@
 import Grid from '@mui/material/Grid'
-import axios, { AxiosError, AxiosResponse } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import Button from 'Components/generic/Button'
 import ErrorAxios from 'Components/generic/ErrorAxios'
+import { getAuthUrl } from 'Lib/queries'
 import { ResponseAuthUrl } from 'LocalTypes'
-import React, { ReactNode, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 
 import { AuthContext } from '../Auth'
-
-const getAuthUrl = () => axios.get('/api/auth/getAuthUrl')
 
 const GenerateToken = () => {
   const [ startFetching, setStartFetching ] = useState(false)

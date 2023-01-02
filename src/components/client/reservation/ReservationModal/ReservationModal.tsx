@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
-import axios, { AxiosResponse } from 'axios'
+import { AxiosResponse } from 'axios'
 import { getCacheKey } from 'Components/client/Dashboard'
 import ContinueButton from 'Components/client/reservation/ContinueButton'
 import Button from 'Components/generic/Button'
@@ -9,6 +9,7 @@ import Form, { FormValues, useFormInitials } from 'Components/generic/Form'
 import Modal from 'Components/generic/Modal'
 import Stepper, { useStepper } from 'Components/generic/Stepper'
 import { FormikHelpers } from 'formik'
+import { createReservation } from 'Lib/queries'
 import { Reservation } from 'LocalTypes'
 import React, { useEffect } from 'react'
 import { SlotInfo } from 'react-big-calendar'
@@ -32,8 +33,6 @@ const steps = [
   'Vyplň své údaje',
   'Vyber položky',
 ]
-
-const createReservation = (values: Reservation) => axios.post('/api/reservations', values)
 
 const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
   const [ start, end ] = getStartEndDatetimeFromBigCalendarSlotInfo(slotInfo)
