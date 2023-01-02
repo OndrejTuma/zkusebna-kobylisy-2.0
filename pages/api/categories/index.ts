@@ -42,7 +42,7 @@ export default async function handler(
 
         break
       case 'POST':
-        authorizeRequest(req)
+        await authorizeRequest(req)
 
         const { title, parent_id } = req.body
 

@@ -39,7 +39,7 @@ export default async function handler(
 
         break
       case 'POST':
-        authorizeRequest(req)
+        await authorizeRequest(req)
 
         const { title, discount } = req.body
 

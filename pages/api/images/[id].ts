@@ -28,7 +28,7 @@ export default async function handler(
         break
       }
       case 'DELETE': {
-        authorizeRequest(req)
+        await authorizeRequest(req)
         
         fs.unlinkSync(getLocalFilePath(id as string))
   

@@ -25,7 +25,7 @@ export default async function handler(
         break
       }
       case 'PUT': {
-        authorizeRequest(req)
+        await authorizeRequest(req)
   
         const { title, category_id, code, price, image, active } = req.body
   
@@ -40,7 +40,7 @@ export default async function handler(
         break
       }
       case 'DELETE': {
-        authorizeRequest(req)
+        await authorizeRequest(req)
   
         await Item.findByIdAndDelete(id)
   
