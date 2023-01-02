@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { google } from 'googleapis'
 
 import dbConnect from 'Lib/dbConnect'
 import Token from 'Models/Token'

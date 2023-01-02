@@ -1,11 +1,12 @@
 import { useCallback, useMemo } from 'react'
 import simpleRestProvider from 'ra-data-simple-rest'
 import { fetchUtils } from 'react-admin'
+import type { User } from '@firebase/auth'
 
 import { useAuth } from 'Components/admin/Auth'
 import { unlinkImage, uploadImage } from 'Utils/api/fileUpload'
 
-const deleteImage = async (params: any, user: any) => {
+const deleteImage = async (params: any, user: User | null) => {
   const imageName = params.previousData.image.src.split('/').pop()
 
   try {
@@ -16,7 +17,7 @@ const deleteImage = async (params: any, user: any) => {
     console.error(error.message)
   }
 }
-const insertImage = async (params: any, user: any) => {
+const insertImage = async (params: any, user: User | null) => {
   const headers = await getAuthorizationHeaders(user)
 
   const imageSrc = await uploadImage(params.data.image.rawFile, headers)
@@ -31,7 +32,7 @@ const insertImage = async (params: any, user: any) => {
     }
   }
 }
-const getAuthorizationHeaders = async (user: any) => ({
+const getAuthorizationHeaders = async (user: User | null) => ({
   authorization: await user?.getIdToken() || false,
 })
 
