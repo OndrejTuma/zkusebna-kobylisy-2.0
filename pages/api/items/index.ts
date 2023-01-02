@@ -3,11 +3,10 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import getBusyItems from 'Utils/api/getBusyItems'
 import dbConnect from 'Lib/dbConnect'
 import Item from 'Models/Item'
-import transformRAParameters from 'Utils/transformRAParameters'
 import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 import authorizeRequest from 'Utils/api/authorizeRequest'
 import Category from 'Models/Category'
-import { Types } from 'mongoose'
+import { Filter, parseRAFilters, MongoFilter } from 'Lib/filters'
 
 type Data = ReservationItem | ReservationItem[]
 
@@ -22,40 +21,41 @@ export default async function handler(
   try {
     switch (req.method) {
       case 'GET':
-        const raFilter = JSON.parse(req.query.filter?.toString() || '{}')
-        const { timeMin, timeMax, ignoreBusyItems, ...restRaFilter } = raFilter
-        const { sort, range, parsedRange: [from, to], filter: rawFilter } = transformRAParameters(JSON.stringify(restRaFilter), req.query.range, req.query.sort)
+        const { filter, range, sort } = parseRAFilters(req.query)
 
-        const { category_name: byCategoryFilter, ...filter } = rawFilter
+        const [categoryName, timeMin, timeMax, ignoreBusyItems] = filter.popMany([
+          'categoryName',
+          'timeMin',
+          'timeMax',
+          'ignoreBusyItems',
+        ])
+        
 
+        // return only active items for unauthenticated users (clients)
         try {
           authorizeRequest(req)
         } catch (error) {
-          Object.assign(filter, {
-            active: true
-          })
+          filter.add('active', true)
         }
         
         // Filter items by category
-        if (byCategoryFilter) {
-          const categories = await Category.find({ title: byCategoryFilter })
+        if (categoryName) {
+          const byCategoryFilter = new Filter({ title: categoryName })
 
-          const categoryIds = categories.map(({ id }) => new Types.ObjectId(id))
+          const categories = await Category.find(byCategoryFilter.mongoFormat())
 
-          Object.assign(filter, {
-            category_id: {
-              $in: categoryIds,
-            },
-          })
+          const categoryIds = categories.map(MongoFilter.getId)
+
+          filter.add('category_id', categoryIds)
         }
 
-        const items = await Item.find(filter).skip(from).limit(to - from + 1).sort(sort)
-        const itemsCount = await Item.find(filter).count()
+        const items = await Item.find(filter.mongoFormat()).skip(range.from).limit(range.itemsCount()).sort(sort.mongoFormat())
+        const itemsCount = await Item.find(filter.mongoFormat()).count()
 
         const busyItems = await getBusyItems(timeMin, timeMax)
         const filteredBusyItems = busyItems.filter((id) => !ignoreBusyItems?.includes(id))
 
-        res.setHeader('Content-Range', `categories ${range}/${itemsCount}`)
+        res.setHeader('Content-Range', `categories ${range.print()}/${itemsCount}`)
         res.status(200).json(items.map(({ id, category_id, title, code, price, image, active }) => ({
           id,
           category_id,
