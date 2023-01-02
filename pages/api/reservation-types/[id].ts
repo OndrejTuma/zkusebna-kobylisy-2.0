@@ -25,7 +25,7 @@ export default async function handler(
         break
       }
       case 'PUT': {
-        authorizeRequest(req)
+        await authorizeRequest(req)
         
         const { title, discount } = req.body
   
@@ -36,7 +36,7 @@ export default async function handler(
         break
       }
       case 'DELETE': {
-        authorizeRequest(req)
+        await authorizeRequest(req)
 
         await ReservationType.findByIdAndDelete(id)
   

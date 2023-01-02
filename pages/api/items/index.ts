@@ -33,7 +33,7 @@ export default async function handler(
 
         // return only active items for unauthenticated users (clients)
         try {
-          authorizeRequest(req)
+          await authorizeRequest(req)
         } catch (error) {
           filter.add('active', true)
         }
@@ -69,7 +69,7 @@ export default async function handler(
 
         break
       case 'POST':
-        authorizeRequest(req)
+        await authorizeRequest(req)
         
         const { title, category_id, code, price, image, active } = req.body
 
