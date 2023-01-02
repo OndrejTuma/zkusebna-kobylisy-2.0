@@ -6,27 +6,27 @@ import Loader from 'Components/generic/Loader'
 import { ResponseReservationTypes } from 'LocalTypes'
 import React from 'react'
 import { useQuery } from 'react-query'
-import getAllReservationTypes from 'Utils/fetch/getAllReservationTypes'
+import { getAllReservationTypes } from 'Lib/queries'
 
 const ChooseReservationType = () => {
-  const {
-    error,
-    isError,
-    isSuccess,
-    isLoading,
-    data,
-  } = useQuery<AxiosResponse<ResponseReservationTypes>, string>('getAllReservationTypes', getAllReservationTypes)
+  const { error, isError, isSuccess, isLoading, data } = useQuery<
+    AxiosResponse<ResponseReservationTypes>,
+    string
+  >('getAllReservationTypes', getAllReservationTypes)
 
   return (
-    <Stack direction="row" justifyContent="space-between" spacing={2}>
-      {isLoading && <Loader/>}
+    <Stack direction='row' justifyContent='space-between' spacing={2}>
+      {isLoading && <Loader />}
       {isError && <Error>{error}</Error>}
       {isSuccess && (
-        <Form.Select label="Účel rezervace" name="reservationType"
-                     items={data.data.map(({ title: label, id: value }) => ({
-                       label,
-                       value,
-                     }))}/>
+        <Form.Select
+          label='Účel rezervace'
+          name='reservationType'
+          items={data.data.map(({ title: label, id: value }) => ({
+            label,
+            value,
+          }))}
+        />
       )}
     </Stack>
   )

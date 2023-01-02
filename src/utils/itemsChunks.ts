@@ -1,3 +1,9 @@
+// google calendar event `extendedProperties.shared` value 
+// has a limit of 1024 characters
+// and one mongo id has 24 characters
+// so we need to split itemIds into chunks
+// https://developers.google.com/calendar/api/guides/extended-properties#limits
+
 export const splitItemIdsInChunks = (itemIds: string[], chunkSize = 40) => {
   const chunks = {}
 
