@@ -109,14 +109,16 @@ export default async function handler(
           requestBody: convertReservationToCalendarEvent(req.body),
         })
 
+        const reservationPrice = calculatePriceForReservation(
+          req.body,
+          items,
+          reservationTypes
+        )
+
         await sendNewReservationMail({
           ...req.body,
-          price: calculatePriceForReservation(
-            req.body,
-            items,
-            reservationTypes
-          ),
-        })
+          price: reservationPrice,
+        }, items, reservationTypes)
 
         res.status(201).json(event)
 
