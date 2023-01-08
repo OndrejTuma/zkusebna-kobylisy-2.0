@@ -13,6 +13,7 @@ services:
       - ../../:/usr/src/app/
       - ./run.sh:/run.sh
       - app-node-modules:/usr/src/app/node_modules/
+      
   mongo:
     container_name: zkusebna-kobylisy-mongo
     image: mongo
