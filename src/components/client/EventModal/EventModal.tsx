@@ -4,13 +4,11 @@ import Button from 'Components/generic/Button'
 import Error from 'Components/generic/Error'
 import Modal from 'Components/generic/Modal'
 
-import { dateTimeFormat, timeFormat } from 'Consts/dateTimeFormats'
-import format from 'date-fns/format'
-import isSameDay from 'date-fns/isSameDay'
 import { ReservationItem } from 'LocalTypes'
 import React from 'react'
 import { Event } from 'react-big-calendar'
 import { useQuery } from 'react-query'
+import formatDateRange from 'Utils/formatDateRange'
 
 type EventProps = {
   open: boolean
@@ -28,7 +26,7 @@ const EventModal = ({ event, open, onClose }: EventProps) => {
   const startDate = new Date(start!)
   const endDate = new Date(end!)
 
-  const isOneDayEvent = isSameDay(startDate, endDate)
+  const dateRange = formatDateRange(startDate, endDate)
 
   const items = itemIds?.map((itemId: string) => data?.data?.find(({ id }) => id === itemId)).filter(Boolean) as ReservationItem[]
 
@@ -38,11 +36,7 @@ const EventModal = ({ event, open, onClose }: EventProps) => {
         {title as string}
       </Modal.Title>
       <Modal.Content>
-        {isOneDayEvent ? (
-          <Typography>{format(startDate, dateTimeFormat)} - {format(endDate, timeFormat)}</Typography>
-        ) : (
-           <Typography>{format(startDate, dateTimeFormat)} - {format(endDate, dateTimeFormat)}</Typography>
-         )}
+         <Typography>{dateRange}</Typography>
 
         {items.length === 0 ? <Error>Tato rezervace neobsahuje žádné položky</Error> : (
           <ul>
