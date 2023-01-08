@@ -23,7 +23,7 @@ const Price = () => {
       reservationType: reservationTypeId,
       itemIds,
     }, itemsData.data, reservationTypesData.data))
-  }, [itemsLoaded, reservationTypesLoaded, reservationTypeId, itemIds])
+  }, [itemsLoaded, reservationTypesLoaded, reservationTypeId, itemIds, itemsData?.data, reservationTypesData?.data])
 
   return <>{formatNumberToCZK(price)}</>
 }

@@ -103,11 +103,11 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
     if (isSuccess) {
       onClose()
     }
-  }, [ isSuccess ])
+  }, [ isSuccess, onClose ])
 
   useEffect(() => {
     setStep(0)
-  }, [ slotInfo ])
+  }, [ slotInfo, setStep ])
 
   return (
     <Modal onClose={onClose} open={open}>

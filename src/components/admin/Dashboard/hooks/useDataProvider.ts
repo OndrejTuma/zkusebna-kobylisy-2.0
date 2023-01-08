@@ -54,7 +54,7 @@ const useDataProvider = () => {
     }
 
     return fetchUtils.fetchJson(url, options)
-  }, [isBusy])
+  }, [user])
 
   const dataProvider = useMemo(() => {
     const provider = simpleRestProvider('/api', httpClient)
@@ -100,7 +100,7 @@ const useDataProvider = () => {
         return provider.update(resource, updatedParams)
       }
     }
-  }, [httpClient])
+  }, [httpClient, user])
 
   return dataProvider
 }
