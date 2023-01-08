@@ -12,6 +12,8 @@ services:
       - ../../:/usr/src/app/
       - ./run.sh:/run.sh
       - app-node-modules:/usr/src/app/node_modules/
+      - /etc/letsencrypt/live/rezervace.zkusebna-kobylisy.cz/cert.pem:/usr/src/app/credentials/cert.pem
+      - /etc/letsencrypt/live/rezervace.zkusebna-kobylisy.cz/privkey.pem:/usr/src/app/credentials/privkey.pem
 
   mongo:
     container_name: zkusebna-kobylisy-mongo
