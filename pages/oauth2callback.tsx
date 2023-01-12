@@ -43,6 +43,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     }
   } catch (e) {
+    console.error('FAILED: createAuthToken', e)
     return {
       props: {
         success: false,
