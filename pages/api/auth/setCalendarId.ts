@@ -4,6 +4,7 @@ import dbConnect from 'Lib/dbConnect'
 import Token from 'Models/Token'
 
 import { NetworkFailedState } from 'LocalTypes'
+import { badRequestCatch } from 'Utils/api/misc'
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,7 +22,7 @@ export default async function handler(
     })
 
     res.status(200).end()
-  } catch (err) {
-    res.status(400).json({ error: err.message })
+  } catch (error) {
+    badRequestCatch(res, error)
   }
 }

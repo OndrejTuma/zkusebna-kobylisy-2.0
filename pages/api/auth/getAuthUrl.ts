@@ -1,5 +1,6 @@
 import { NetworkFailedState, ResponseAuthUrl } from 'LocalTypes'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { badRequestCatch } from 'Utils/api/misc'
 import oAuth2Client from 'Utils/api/oAuth'
 
 export default async function handler(
@@ -21,7 +22,7 @@ export default async function handler(
     })
 
     res.status(200).json({ url })
-  } catch (e) {
-    res.status(400).json({ error: e.message })
+  } catch (error) {
+    badRequestCatch(res, error)
   }
 }

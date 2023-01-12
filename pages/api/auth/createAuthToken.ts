@@ -16,20 +16,24 @@ export default async function handler(
     const { tokens } = await oAuth2Client.getToken(code)
 
     if (!tokens.refresh_token) {
-      throw new Error('Google Refresh Token nebyl vygenerován. Zkuste odhlásit aplikaci Zkušebna Kobylisy zde: https://myaccount.google.com/u/0/permissions')
+      throw new Error(
+        'Google Refresh Token nebyl vygenerován. Zkuste odhlásit aplikaci Zkušebna Kobylisy zde: https://myaccount.google.com/u/0/permissions'
+      )
     }
 
     await dbConnect()
 
-    // remove all previous tokens - we want to keep only current one
-    await Token.remove({})
-
     setOAuthCredentials(tokens.refresh_token)
 
     // get user address
-    const gmail = google.gmail({ version: "v1", auth: oAuth2Client })
-    const { data: { emailAddress } } = await gmail.users.getProfile({ userId: 'me' })
-    
+    const gmail = google.gmail({ version: 'v1', auth: oAuth2Client })
+    const {
+      data: { emailAddress },
+    } = await gmail.users.getProfile({ userId: 'me' })
+
+    // remove all previous tokens - we want to keep only current one
+    await Token.remove({})
+
     // save token to database
     const { id: tokenId } = await Token.create({
       access_token: tokens.access_token,
@@ -43,7 +47,7 @@ export default async function handler(
 
     res.status(200).json({
       calendars,
-      tokenId
+      tokenId,
     })
   } catch (error) {
     badRequestCatch(res, error)
