@@ -33,3 +33,4 @@ export const getReservationType = (id: string) =>
 // MISC
 export const getAuthUrl = () => axios.get('/api/auth/getAuthUrl')
 export const setCalendarId = (requestData: RequestSetCalendarId) => axios.post('/api/auth/setCalendarId', requestData)
+export const createAuthToken = (code: string) => axios.post('api/auth/createAuthToken', { code })

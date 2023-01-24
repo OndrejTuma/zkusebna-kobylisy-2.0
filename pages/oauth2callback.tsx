@@ -1,56 +1,44 @@
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import axios from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import GoogleCalendarList from 'Components/client/GoogleCalendarList'
-import Error from 'Components/generic/Error'
-import type { NetworkState, ResponseAuthToken } from 'LocalTypes'
-import { GetServerSidePropsContext, NextPage } from 'next'
+import ErrorAxios from 'Components/generic/ErrorAxios'
+import Loader from 'Components/generic/Loader'
+import { createAuthToken } from 'Lib/queries'
+import type { ResponseAuthToken } from 'LocalTypes'
+import { NextPage } from 'next'
+import { useRouter } from 'next/router'
 import React from 'react'
+import { useQuery } from 'react-query'
 
-const Oauth2callback: NextPage<NetworkState<ResponseAuthToken>> = (props) => {
-  if (!props.success) {
-    return <Error>{props.error}</Error>
+const Oauth2callback: NextPage = () => {
+  const { query: { code } } = useRouter()
+  const { data, error, isError, isLoading, isSuccess } = useQuery<
+    AxiosResponse<ResponseAuthToken>,
+    AxiosError
+  >('createAuthToken', () => createAuthToken(code as string), {
+    enabled: !!code,
+  })
+
+  if (isError) {
+    return <ErrorAxios error={error} />
   }
 
-  const { calendars, tokenId } = props
+  if (isLoading) {
+    return <Loader />
+  }
 
   return (
     <Container sx={{ marginTop: 2 }}>
-      <Typography variant="h4">Vyberte kalendář pro rezervace</Typography>
-      <GoogleCalendarList calendars={calendars.data.items} tokenId={tokenId}/>
+      <Typography variant='h4'>Vyberte kalendář pro rezervace</Typography>
+      {isSuccess && (
+        <GoogleCalendarList
+          calendars={data.data.calendars.data.items}
+          tokenId={data.data.tokenId}
+        />
+      )}
     </Container>
   )
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { code } = context.query
-
-  try {
-    const {
-      data: {
-        calendars,
-        tokenId,
-      },
-    } = await axios.post<ResponseAuthToken>('http://localhost:3000/api/auth/createAuthToken', {
-      code,
-    })
-
-    return {
-      props: {
-        success: true,
-        calendars,
-        tokenId,
-      },
-    }
-  } catch (e) {
-    console.error('FAILED: createAuthToken', e)
-    return {
-      props: {
-        success: false,
-        error: e.response?.data?.error || e.message,
-      },
-    }
-  }
 }
 
 export default Oauth2callback
