@@ -25,8 +25,9 @@ const GenerateToken = () => {
       return
     }
 
-    window.open(url, 'access', 'width=800,height=600')
     setStartFetching(false)
+    
+    window.location.href = url
   }, [ data ])
 
   return (
