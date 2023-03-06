@@ -7,6 +7,7 @@ import Handlebars from 'handlebars'
 import Payment from 'Lib/payment'
 import formatDateRange from 'Utils/formatDateRange'
 import getDiscountPrice from 'Utils/getDiscountPrice'
+import getCETDate from 'Utils/getCETDate'
 
 Handlebars.registerHelper('if_even', function (conditional, options) {
   if (conditional % 2 === 0) {
@@ -42,6 +43,7 @@ export const getTransport = async (): Promise<Transporter> => {
 
     transport = nodemailer.createTransport({
       // TODO: figure out how to make this work with types
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore next line
       service: 'gmail',
       auth,
@@ -93,7 +95,7 @@ export const populateEmailTemplate = (
 
   const { dateStart, dateEnd, price, reservationName } = reservation
 
-  const date = formatDateRange(new Date(dateStart!), new Date(dateEnd!))
+  const date = formatDateRange(getCETDate(dateStart!), getCETDate(dateEnd!))
   const discount =
     reservationTypes.find(({ id }) => id === reservation.reservationType)
       ?.discount ?? 1

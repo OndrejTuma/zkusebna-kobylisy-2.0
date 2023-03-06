@@ -19,7 +19,7 @@ const filters = [
   <BooleanInput key="current" source="current" label="Skrýt proběhlé" alwaysOn/>,
 ]
 
-const ReservationList = (props: {}) => {
+const ReservationList = (props: object) => {
   return (
     <List {...props} empty={<EmptyList/>} filters={filters}>
       <Datagrid rowClick="edit">

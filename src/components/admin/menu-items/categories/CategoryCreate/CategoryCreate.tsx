@@ -1,7 +1,7 @@
 import React from 'react'
 import { Create, ReferenceInput, required, SelectInput, SimpleForm, TextInput } from 'react-admin'
 
-const CategoryCreate = (props: {}) => {
+const CategoryCreate = (props: object) => {
   return (
     <Create {...props}>
       <SimpleForm>

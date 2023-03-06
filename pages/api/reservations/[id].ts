@@ -1,5 +1,5 @@
 import { google } from 'googleapis'
-import { sendMessage, sendReservationDeleteMail, sendReservationUpdateMail } from 'Lib/mailer'
+import { sendReservationDeleteMail, sendReservationUpdateMail } from 'Lib/mailer'
 import { NetworkFailedState, Reservation } from 'LocalTypes'
 import Item from 'Models/Item'
 import ReservationTypeModel from 'Models/ReservationType'

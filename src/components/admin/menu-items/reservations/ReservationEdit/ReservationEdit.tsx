@@ -47,7 +47,7 @@ const ReservedItems = () => {
   )
 }
 
-const ReservationEdit = (props: {}) => {
+const ReservationEdit = (props: object) => {
 
   return (
     <Edit {...props}>
