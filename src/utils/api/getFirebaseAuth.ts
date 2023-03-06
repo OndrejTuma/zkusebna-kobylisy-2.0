@@ -1,4 +1,4 @@
-import { initializeApp, getApp, refreshToken } from 'firebase-admin/app'
+import { initializeApp, getApp } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
 
 const getFirebaseAuth = () => {
