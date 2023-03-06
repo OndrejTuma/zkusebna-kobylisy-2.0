@@ -1,1 +1,3 @@
-export default 'cs-CZ'
+const locale = 'cs-CZ'
+
+export default locale
