@@ -1,7 +1,7 @@
 import React from 'react'
 import { Edit, NumberInput, required, SimpleForm, TextInput } from 'react-admin'
 
-const ReservationTypeEdit = (props: {}) => {
+const ReservationTypeEdit = (props: object) => {
   return (
     <Edit {...props}>
       <SimpleForm>

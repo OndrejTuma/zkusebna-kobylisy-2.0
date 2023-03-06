@@ -12,7 +12,7 @@ const ListActions = () => (
   </TopToolbar>
 )
 
-const CategoryList = (props: {}) => {
+const CategoryList = (props: object) => {
   return (
     <List {...props} actions={<ListActions/>} empty={<EmptyList/>} filters={filters}>
       <Datagrid rowClick={'edit'}>

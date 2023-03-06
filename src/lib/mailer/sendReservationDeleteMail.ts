@@ -1,6 +1,5 @@
 import { Reservation } from 'LocalTypes'
 import { sendMessage } from './mailer'
-import format from 'date-fns/format'
 
 const subject = 'Rezervace byla smazána'
 

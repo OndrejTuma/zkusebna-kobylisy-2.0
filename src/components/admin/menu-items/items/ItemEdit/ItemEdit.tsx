@@ -1,7 +1,7 @@
 import React from 'react'
 import { BooleanInput, Edit, ImageField, ImageInput, NumberInput, required, SimpleForm, TextInput, ReferenceInput, SelectInput } from 'react-admin'
 
-const ItemEdit = (props: {}) => {
+const ItemEdit = (props: object) => {
   return (
     <Edit {...props}>
       <SimpleForm>

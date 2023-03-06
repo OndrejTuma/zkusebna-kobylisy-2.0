@@ -24,7 +24,7 @@ const ListActions = () => (
   </TopToolbar>
 )
 
-const ItemList = (props: {}) => {
+const ItemList = (props: object) => {
   return (
     <List {...props} actions={<ListActions/>} empty={<EmptyList/>} filters={filters}>
       <Datagrid rowClick={'edit'}>

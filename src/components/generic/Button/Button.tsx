@@ -2,9 +2,7 @@ import React from 'react'
 import MUIButton from '@mui/material/Button'
 import type { ButtonProps } from '@mui/material'
 
-type Props = ButtonProps & {
-
-}
+type Props = ButtonProps
 
 const Button = ({ children, variant = 'contained', ...rest }: Props) => {
   return (

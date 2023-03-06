@@ -12,7 +12,7 @@ const areFieldsValid = async (fieldNames: string[], setFieldTouched: (field: str
 
   for (const name of fieldNames) {
     const errors: unknown = await setFieldTouched(name, true, true)
-    if ((errors as {}).hasOwnProperty(name)) {
+    if ((errors as object).hasOwnProperty(name)) {
       isValid = false
     }
   }

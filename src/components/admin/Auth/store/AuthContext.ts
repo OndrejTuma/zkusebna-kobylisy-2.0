@@ -14,8 +14,8 @@ const AuthContext = React.createContext<AuthContextInterface>({
   isBusy: false,
   isLogged: false,
   user: null,
-  logIn: () => {},
-  logOut: () => {},
+  logIn: () => undefined,
+  logOut: () => undefined,
   error: false,
 })
 

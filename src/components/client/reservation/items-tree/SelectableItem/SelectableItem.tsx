@@ -7,9 +7,6 @@ import React from 'react'
 const SelectableItem = React.forwardRef(function SelectableItem({
   classes,
   className,
-  icon,
-  expansionIcon,
-  displayIcon,
   label,
   nodeId,
 }: TreeItemContentProps, ref) {

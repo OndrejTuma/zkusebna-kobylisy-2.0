@@ -1,6 +1,7 @@
 import mongoose, { Mongoose } from 'mongoose'
 
 declare global {
+  // eslint-disable-next-line no-var
   var mongoose: { conn: null | Mongoose, promise: null | Promise<Mongoose> }
 }
 
