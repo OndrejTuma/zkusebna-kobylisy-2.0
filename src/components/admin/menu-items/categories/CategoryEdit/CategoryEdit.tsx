@@ -1,7 +1,7 @@
 import React from 'react'
 import { Edit, ReferenceInput, required, SelectInput, SimpleForm, TextInput } from 'react-admin'
 
-const CategoryEdit = (props: {}) => {
+const CategoryEdit = (props: object) => {
   return (
     <Edit {...props}>
       <SimpleForm>

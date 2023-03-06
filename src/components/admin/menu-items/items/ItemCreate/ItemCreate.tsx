@@ -1,7 +1,7 @@
 import React from 'react'
 import { BooleanInput, Create, ImageField, ImageInput, NumberInput, required, SimpleForm, TextInput, ReferenceInput, SelectInput } from 'react-admin'
 
-const ItemCreate = (props: {}) => {
+const ItemCreate = (props: object) => {
   return (
     <Create {...props}>
       <SimpleForm>
