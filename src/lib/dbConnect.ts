@@ -2,7 +2,7 @@ import mongoose, { Mongoose } from 'mongoose'
 
 declare global {
   // eslint-disable-next-line no-var
-  var mongoose: { conn: null | Mongoose, promise: null | Promise<Mongoose> }
+  var mongooseInstance: { conn: null | Mongoose, promise: null | Promise<Mongoose> }
 }
 
 mongoose.set('toJSON', {
@@ -22,10 +22,10 @@ if (!MONGODB_URI) {
  * in development. This prevents connections growing exponentially
  * during API Route usage.
  */
-let cached = global.mongoose
+let cached = global.mongooseInstance
 
 if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null }
+  cached = global.mongooseInstance = { conn: null, promise: null }
 }
 
 async function dbConnect() {

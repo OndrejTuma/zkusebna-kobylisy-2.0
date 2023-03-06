@@ -19,7 +19,7 @@ type Validation = {
   [name: Name]: (value: Value, name: Name, values: KeyValuePair, validationOpts: ValidationOptions) => boolean
 }
 
-type ValidationOptions = undefined | {}
+type ValidationOptions = undefined | object
 
 type OutputProps = {
   values: KeyValuePair,
