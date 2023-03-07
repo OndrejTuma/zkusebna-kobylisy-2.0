@@ -1,10 +1,6 @@
 /** @type {import('next').NextConfig} */
-const withTM = require('next-transpile-modules')([])
 
-module.exports = withTM({
+module.exports = {
   reactStrictMode: true,
   experimental: { esmExternals: true },
-  typescript: {
-    ignoreBuildErrors: true,
-  }
-})
+}
