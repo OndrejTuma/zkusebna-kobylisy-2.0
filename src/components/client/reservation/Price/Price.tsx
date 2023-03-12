@@ -1,31 +1,47 @@
-import { AxiosResponse } from 'axios'
 import { useField } from 'formik'
-import { ReservationItem, ResponseReservationTypes } from 'LocalTypes'
-import React, { useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
+import React, { useMemo } from 'react'
 import calculatePriceForReservation from 'Utils/calculatePriceForReservation'
-import { getAllReservationTypes } from 'Lib/queries'
 import formatNumberToCZK from 'Utils/formatNumberToCZK'
+import { useGetAllItems, useGetAllReservationTypes } from 'Hooks/queries'
+import { MultiDataLoader } from 'Components/generic/DataLoader/DataLoader'
+import { ReservationItem, ReservationType } from 'LocalTypes'
 
 const Price = () => {
-  const [price, setPrice] = useState(0)
-  const { isSuccess: itemsLoaded, data: itemsData } = useQuery<AxiosResponse<ReservationItem[]>>('getAllItems')
-  const { isSuccess: reservationTypesLoaded, data: reservationTypesData } = useQuery<AxiosResponse<ResponseReservationTypes>>('getAllReservationTypes', getAllReservationTypes)
-  const [ { value: reservationTypeId } ] = useField('reservationType')
-  const [ { value: itemIds } ] = useField('itemIds')
+  const itemsQuery = useGetAllItems()
+  const reservationTypesQuery = useGetAllReservationTypes()
 
-  useEffect(() => {
-    if (!itemsLoaded || !reservationTypesLoaded || !reservationTypeId) {
-      return
-    }
+  return (
+    <MultiDataLoader queries={[itemsQuery, reservationTypesQuery]}>
+      {([items, reservationTypes]) => (
+        <PriceDisplay items={items} reservationTypes={reservationTypes} />
+      )}
+    </MultiDataLoader>
+  )
+}
 
-    setPrice(calculatePriceForReservation({
-      reservationType: reservationTypeId,
-      itemIds,
-    }, itemsData.data, reservationTypesData.data))
-  }, [itemsLoaded, reservationTypesLoaded, reservationTypeId, itemIds])
+type PriceDisplayProps = {
+  items: ReservationItem[]
+  reservationTypes: ReservationType[]
+}
 
-  return <>{formatNumberToCZK(price)}</>
+const PriceDisplay = ({ items, reservationTypes }: PriceDisplayProps) => {
+  const [{ value: reservationTypeId }] = useField('reservationType')
+  const [{ value: itemIds }] = useField('itemIds')
+
+  const price = useMemo(
+    () =>
+      calculatePriceForReservation(
+        {
+          reservationType: reservationTypeId,
+          itemIds,
+        },
+        items,
+        reservationTypes
+      ),
+    [reservationTypeId, items, reservationTypes, itemIds]
+  )
+
+  return reservationTypeId ? <>{formatNumberToCZK(price)}</> : null
 }
 
 export default Price

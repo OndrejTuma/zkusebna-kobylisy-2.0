@@ -22,7 +22,10 @@ jobs:
         uses: toptal/davinci-github-actions/yarn-install@v5.0.0
 
       - name: Run lint
-        run: yarn lint
+        run: yarn test:lint
 
-      - name: Run tests
-        run: yarn test
+      - name: Run unit tests
+        run: yarn test:unit
+
+      - name: Run type test
+        run: yarn test:types

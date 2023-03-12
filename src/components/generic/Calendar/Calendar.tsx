@@ -12,7 +12,11 @@ import messages from './consts/messages'
 import localizer from './utils/localizer'
 import parseGoogleCalendarEventsToReactCalendarEvents from './utils/parseGoogleCalendarEventsToReactCalendarEvents'
 import { onSelectEventType, onSelectSlotType, onNavigateType } from './types'
+import EventComponent from './EventComponent'
 
+const components = {
+  event: EventComponent,
+}
 
 const ReactBigCalendar = styled(ReactCalendar as React.ComponentType<
   ReactCalendarProps<Event>
@@ -34,6 +38,8 @@ const Calendar = ({ reservations, onNavigate, onSelectEvent, onSelectSlot }: Cal
   return (
     <Container maxWidth={'lg'}>
       <ReactBigCalendar
+        className={classes.root}
+        components={components}
         culture={'cs'}
         localizer={localizer}
         events={events}
@@ -42,13 +48,11 @@ const Calendar = ({ reservations, onNavigate, onSelectEvent, onSelectSlot }: Cal
         onNavigate={onNavigate}
         onSelectEvent={onSelectEvent}
         views={['month']}
-        style={{ height: 700 }}
         messages={messages}
         popup
         popupOffset={{ x: 30, y: 20 }}
         selectable
         onSelectSlot={onSelectSlot}
-        className={classes.root}
       />
     </Container>
   )

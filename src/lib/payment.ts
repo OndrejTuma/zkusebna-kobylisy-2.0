@@ -11,7 +11,7 @@ class Payment {
   }
 
   public static getPaymentMessage(reservationName: string) {
-    return `Platba za rezervaci ${reservationName}`
+    return `Rezervace: ${reservationName}`
   }
 
   public static getQRPayment(amount: number, reservationName: string) {

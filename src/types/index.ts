@@ -5,3 +5,4 @@ export type { NetworkState, NetworkFailedState } from './Network'
 export type {
   ReservationType, ResponseReservationTypes, ReservationItem, ReservationItemCategory, Reservation,
 } from './Reservation'
+export type { CategoryItem } from './Category'
