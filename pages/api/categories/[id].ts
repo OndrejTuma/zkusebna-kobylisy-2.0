@@ -5,11 +5,11 @@ import Category from 'Models/Category'
 
 import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 import authorizeRequest from 'Utils/api/authorizeRequest'
-import { CategoryItem } from 'LocalTypes'
+import { CategoryItem, NetworkState } from 'LocalTypes'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<CategoryItem | null>,
+  res: NextApiResponse<NetworkState<CategoryItem | null>>,
 ) {
   const { id } = req.query
 

@@ -1,4 +1,4 @@
-import { NetworkFailedState, ReservationItem } from 'LocalTypes'
+import { NetworkState, ReservationItem } from 'LocalTypes'
 import { NextApiRequest, NextApiResponse } from 'next'
 import getBusyItems from 'Utils/api/getBusyItems'
 import dbConnect from 'Lib/dbConnect'
@@ -8,11 +8,9 @@ import authorizeRequest from 'Utils/api/authorizeRequest'
 import Category from 'Models/Category'
 import { Filter, parseRAFilters, MongoFilter } from 'Lib/filters'
 
-type Data = ReservationItem | ReservationItem[]
-
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data | NetworkFailedState>
+  res: NextApiResponse<NetworkState<ReservationItem | ReservationItem[]>>
 ) {
   await dbConnect()
 
@@ -73,7 +71,7 @@ export default async function handler(
         
         const { title, category_id, code, price, image, active } = req.body
 
-        const item: unknown = await Item.create({
+        const item = await Item.create({
           title,
           category_id,
           code,
@@ -82,7 +80,7 @@ export default async function handler(
           active,
         })
 
-        res.status(201).json(item as ReservationItem)
+        res.status(201).json(item)
 
         break
       default:

@@ -1,6 +1,7 @@
-import mongoose from 'mongoose'
+import { ReservationItem } from 'LocalTypes'
+import { Schema, model, models, Model } from 'mongoose'
 
-const ItemSchema = new mongoose.Schema({
+const ItemSchema = new Schema<ReservationItem>({
   title: {
     type: String,
     required: [true, 'Vyplňte název položky']
@@ -17,10 +18,10 @@ const ItemSchema = new mongoose.Schema({
     type: Boolean,
   },
   image: {
-    type: mongoose.Schema.Types.Mixed,
+    type: Schema.Types.Mixed,
   },
   category_id: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Category',
     required: [true, 'Položka musí patřit do kategorie'],
   },
@@ -30,4 +31,4 @@ ItemSchema.virtual('id').get(function(){
   return this._id.toHexString()
 })
 
-export default mongoose.models.Item || mongoose.model('Item', ItemSchema)
+export default (models.Item as Model<ReservationItem>) || model<ReservationItem>('Item', ItemSchema)

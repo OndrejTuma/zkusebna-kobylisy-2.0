@@ -4,10 +4,11 @@ import fs from 'fs'
 import { getLocalFilePath } from 'Utils/api/fileUpload'
 import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 import authorizeRequest from 'Utils/api/authorizeRequest'
+import { NetworkState } from 'LocalTypes'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse<NetworkState<null>>,
 ) {
   const { id } = req.query
 

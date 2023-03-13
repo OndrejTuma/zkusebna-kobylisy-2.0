@@ -6,10 +6,11 @@ import ReservationType from 'Models/ReservationType'
 import { ReservationTypeType } from './'
 import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 import authorizeRequest from 'Utils/api/authorizeRequest'
+import { NetworkState } from 'LocalTypes'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ReservationTypeType>,
+  res: NextApiResponse<NetworkState<ReservationTypeType | null>>,
 ) {
   const { id } = req.query
 

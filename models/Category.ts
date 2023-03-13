@@ -10,7 +10,7 @@ const CategorySchema = new Schema<CategoryItem>({
     type: Schema.Types.ObjectId,
     ref: 'Category',
     // if category does not have a parent, we return empty string, but keep null in database
-    transform: (v: CategoryItem) => v == null ? '' : v
+    transform: (v: Pick<CategoryItem, 'parent_id'>) => v == null ? '' : v
   }
 })
 

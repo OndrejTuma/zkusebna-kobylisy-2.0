@@ -6,7 +6,7 @@ import Item from 'Models/Item'
 import ReservationTypeModel from 'Models/ReservationType'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type {
-  NetworkFailedState,
+  NetworkState,
   Reservation,
   ResponseCalendarEvent,
 } from 'LocalTypes'
@@ -19,11 +19,9 @@ import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 import { sendNewReservationMail } from 'Lib/mailer'
 import { Filter, parseRAFilters } from 'Lib/filters'
 
-export type Data = ResponseCalendarEvent | Reservation[] | undefined
-
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data | NetworkFailedState>
+  res: NextApiResponse<NetworkState<ResponseCalendarEvent | Reservation[]>>
 ) {
   await dbConnect()
 

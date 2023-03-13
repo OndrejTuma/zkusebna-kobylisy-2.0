@@ -1,4 +1,4 @@
-import { CategoryItem, NetworkFailedState } from 'LocalTypes'
+import { CategoryItem, NetworkState } from 'LocalTypes'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import dbConnect from 'Lib/dbConnect'
@@ -9,7 +9,7 @@ import { parseRAFilters } from 'Lib/filters'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<CategoryItem | CategoryItem[] | NetworkFailedState>
+  res: NextApiResponse<NetworkState<CategoryItem | CategoryItem[]>>
 ) {
   await dbConnect()
 
