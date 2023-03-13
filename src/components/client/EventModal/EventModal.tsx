@@ -1,13 +1,12 @@
 import Typography from '@mui/material/Typography'
 import Button from 'Components/generic/Button'
-import Error from 'Components/generic/Error'
 import Modal from 'Components/generic/Modal'
-
 import React from 'react'
 import { Event } from 'react-big-calendar'
 import formatDateRange from 'Utils/formatDateRange'
 import { useGetAllItems } from 'Hooks/queries'
-import isDefined from 'Utils/isDefined'
+import DataLoader from 'Components/generic/DataLoader'
+import EventModalData from './EventModalData'
 
 type EventProps = {
   open: boolean
@@ -16,12 +15,13 @@ type EventProps = {
 }
 
 const EventModal = ({ event, open, onClose }: EventProps) => {
-  const { data } = useGetAllItems()
+  const itemsQuery = useGetAllItems()
 
   if (
     event === undefined ||
     event.start === undefined ||
-    event.end === undefined
+    event.end === undefined ||
+    !Array.isArray(event.resource.itemIds)
   ) {
     return null
   }
@@ -37,10 +37,6 @@ const EventModal = ({ event, open, onClose }: EventProps) => {
 
   const dateRange = formatDateRange(startDate, endDate)
 
-  const items = (itemIds as string[])
-    ?.map(itemId => data?.data?.find(({ id }) => id === itemId))
-    .filter(isDefined)
-
   return (
     <Modal onClose={onClose} open={open}>
       <Modal.Title>
@@ -49,15 +45,12 @@ const EventModal = ({ event, open, onClose }: EventProps) => {
       <Modal.Content>
         <Typography>{dateRange}</Typography>
 
-        {items.length === 0 ? (
-          <Error>Tato rezervace neobsahuje žádné položky</Error>
-        ) : (
-          <ul>
-            {items?.map(({ id, title }) => (
-              <li key={id}>{title}</li>
-            ))}
-          </ul>
-        )}
+        <DataLoader query={itemsQuery}>
+          {(items) => (
+            <EventModalData items={items} itemIds={itemIds} />
+          )}
+        </DataLoader>
+        
       </Modal.Content>
       <Modal.Actions>
         <Button onClick={onClose}>Zavřít</Button>

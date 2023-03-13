@@ -1,12 +1,13 @@
 import { ReactNode } from 'react'
 import { UseQueryResult } from 'react-query'
-import Error from 'Components/generic/Error'
+import ErrorAxios from 'Components/generic/ErrorAxios'
 import Loader from 'Components/generic/Loader'
 import { AxiosError, AxiosResponse } from 'axios'
+import { NetworkFailedState } from 'LocalTypes'
 
 type DataLoaderProps<T> = {
   children: (data: T) => ReactNode
-  query: UseQueryResult<AxiosResponse<T, AxiosError>, string>
+  query: UseQueryResult<AxiosResponse<T>, AxiosError<NetworkFailedState>>
   loader?: ReactNode
   error?: ReactNode
 }
@@ -17,12 +18,12 @@ const DataLoader = <T = unknown>({
   loader = <Loader />,
   error,
 }: DataLoaderProps<T>) => {
-  const { data, isLoading, isError, error: errorMessage, isSuccess } = query
+  const { data, isLoading, isError, error: axiosError, isSuccess } = query
 
   return (
     <>
       {isLoading && loader}
-      {isError && (error || <Error>{errorMessage}</Error>)}
+      {isError && (error || <ErrorAxios error={axiosError} />)}
       {isSuccess && children(data.data)}
     </>
   )
@@ -32,7 +33,7 @@ type MultiDataLoaderProps<T extends unknown[]> = {
   children: (data: T) => ReactNode
   queries: [
     ...{
-      [K in keyof T]: UseQueryResult<AxiosResponse<T[K], AxiosError>, string>
+      [K in keyof T]: UseQueryResult<AxiosResponse<T[K]>, AxiosError<NetworkFailedState>>
     }
   ]
   loader?: ReactNode
@@ -52,7 +53,7 @@ export const MultiDataLoader = <T extends unknown[]>({
   return (
     <>
       {isLoading && loader}
-      {queryError && (error || <Error>{queryError.error}</Error>)}
+      {queryError && (error || <ErrorAxios error={queryError.error!}/>)}
       {isSuccess && children(queries.map((query) => query.data!.data) as T)}
     </>
   )

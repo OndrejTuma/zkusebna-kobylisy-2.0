@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import {
   CategoryItem,
+  NetworkFailedState,
   RequestSetCalendarId,
   Reservation,
   ReservationItem,
@@ -15,7 +16,7 @@ import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReser
 // QUERIES
 
 export const useGetAllItems = () => {
-  const query = useQuery<AxiosResponse<ReservationItem[], AxiosError>, string>(
+  const query = useQuery<AxiosResponse<ReservationItem[]>, AxiosError<NetworkFailedState>>(
     ['getAllItems'],
     () => axios.get('/api/items?range=[0,999]')
   )
@@ -23,7 +24,7 @@ export const useGetAllItems = () => {
   return query
 }
 export const useGetAvailableItems = (timeMin: Date, timeMax: Date) => {
-  const query = useQuery<AxiosResponse<ReservationItem[], AxiosError>, string>(
+  const query = useQuery<AxiosResponse<ReservationItem[]>, AxiosError<NetworkFailedState>>(
     ['getAvailableItems'],
     () =>
       axios.get(
@@ -38,7 +39,7 @@ export const useGetAvailableItems = (timeMin: Date, timeMax: Date) => {
 }
 
 export const useGetAllCategories = () => {
-  const query = useQuery<AxiosResponse<CategoryItem[], AxiosError>, string>(
+  const query = useQuery<AxiosResponse<CategoryItem[]>, AxiosError<NetworkFailedState>>(
     ['getAllCategories'],
     () => axios.get('/api/categories?range=[0,99]')
   )
@@ -47,7 +48,7 @@ export const useGetAllCategories = () => {
 }
 
 export const useGetAllReservationTypes = () => {
-  const query = useQuery<AxiosResponse<ReservationType[], AxiosError>, string>(
+  const query = useQuery<AxiosResponse<ReservationType[]>, AxiosError<NetworkFailedState>>(
     ['getAllReservationTypes'],
     () => axios.get('/api/reservation-types?range=[0,99]')
   )
@@ -55,7 +56,7 @@ export const useGetAllReservationTypes = () => {
   return query
 }
 export const useGetReservationType = (id: string) => {
-  const query = useQuery<AxiosResponse<ReservationType, AxiosError>, string>(
+  const query = useQuery<AxiosResponse<ReservationType>, AxiosError<NetworkFailedState>>(
     ['getReservationType', id],
     () => axios.get(`/api/reservation-types/${id}`)
   )
@@ -64,7 +65,7 @@ export const useGetReservationType = (id: string) => {
 }
 
 export const useGetMonthReservation = (currentDate: Date) => {
-  const query = useQuery<AxiosResponse<Reservation[], AxiosError>, string>(
+  const query = useQuery<AxiosResponse<Reservation[]>, AxiosError<NetworkFailedState>>(
     ['getMonthReservations', getCacheKey(currentDate)],
     () =>
       axios.get(
@@ -79,7 +80,7 @@ export const useGetMonthReservation = (currentDate: Date) => {
 }
 
 export const useGetAuthUrl = (enabled = false) => {
-  const query = useQuery<AxiosResponse<ResponseAuthUrl, AxiosError>, string>(
+  const query = useQuery<AxiosResponse<ResponseAuthUrl>, AxiosError<NetworkFailedState>>(
     ['getAuthUrl'],
     () => axios.get('/api/auth/getAuthUrl'),
     {
@@ -91,7 +92,7 @@ export const useGetAuthUrl = (enabled = false) => {
 }
 
 export const useCreateAuthToken = (code: string) => {
-  const query = useQuery<AxiosResponse<ResponseAuthToken, AxiosError>, string>(
+  const query = useQuery<AxiosResponse<ResponseAuthToken>, AxiosError<NetworkFailedState>>(
     ['createAuthToken'],
     () => axios.post('api/auth/createAuthToken', { code }),
     {
@@ -105,7 +106,7 @@ export const useCreateAuthToken = (code: string) => {
 // MUTATIONS
 
 export const useSetCalendarId = () => {
-  const mutation = useMutation<AxiosResponse, string, RequestSetCalendarId>(
+  const mutation = useMutation<AxiosResponse, AxiosError<NetworkFailedState>, RequestSetCalendarId>(
     ['setCalendarId'],
     (requestData) => axios.post('/api/auth/setCalendarId', requestData)
   )
@@ -116,7 +117,7 @@ export const useSetCalendarId = () => {
 export const useCreateReservation = (date: Date) => {
   const queryClient = useQueryClient()
 
-  const mutation = useMutation<AxiosResponse, string, Reservation>(
+  const mutation = useMutation<AxiosResponse, AxiosError<NetworkFailedState>, Reservation>(
     ['createReservation'],
     (values) => axios.post('/api/reservations', values),
     {

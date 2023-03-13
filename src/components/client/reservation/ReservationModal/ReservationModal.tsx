@@ -2,7 +2,6 @@ import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import ContinueButton from 'Components/client/reservation/ContinueButton'
 import Button from 'Components/generic/Button'
-import Error from 'Components/generic/Error'
 import Form, { FormValues, useFormInitials } from 'Components/generic/Form'
 import Modal from 'Components/generic/Modal'
 import Stepper, { useStepper } from 'Components/generic/Stepper'
@@ -17,6 +16,7 @@ import Step1 from '../Step1'
 import Step2 from '../Step2'
 import Step3 from '../Step3'
 import { useCreateReservation } from 'Hooks/queries'
+import ErrorAxios from 'Components/generic/ErrorAxios'
 
 type ReservationProps = {
   open: boolean
@@ -109,7 +109,7 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
           <Box mb={4}>
             <Stepper activeStep={activeStep} steps={steps} />
           </Box>
-          {isError && <Error sx={{ marginBottom: 2 }}>{error}</Error>}
+          {isError && <ErrorAxios error={error} sx={{ marginBottom: 2 }}/>}
           {activeStep === 0 ? (
             <Step1 />
           ) : activeStep === 1 ? (

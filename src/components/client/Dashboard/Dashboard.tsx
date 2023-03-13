@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box'
 import Calendar, { onSelectEventType, onSelectSlotType } from 'Components/generic/Calendar'
-import Error from 'Components/generic/Error'
 import Loader from 'Components/generic/Loader'
 import useModal from 'Components/generic/Modal/useModal'
 import format from 'date-fns/format'
@@ -11,6 +10,7 @@ import { Event, SlotInfo } from 'react-big-calendar'
 import EventModal from '../EventModal'
 import ReservationModal from '../reservation/ReservationModal'
 import { useGetMonthReservation } from 'Hooks/queries'
+import ErrorAxios from 'Components/generic/ErrorAxios'
 
 const Dashboard = () => {
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -59,7 +59,7 @@ const Dashboard = () => {
           }}
         />
       )}
-      {isError && <Error sx={{ marginBottom: 2 }} error={error} />}
+      {isError && <ErrorAxios sx={{ marginBottom: 2 }} error={error} />}
       <Calendar
         onSelectEvent={handleSelectEvent}
         onSelectSlot={handleSelectSlot}

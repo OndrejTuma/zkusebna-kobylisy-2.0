@@ -1,10 +1,10 @@
 import Grid from '@mui/material/Grid'
 import Button from 'Components/generic/Button'
-import Error from 'Components/generic/Error'
 import React, { useContext, useEffect, useState } from 'react'
 
 import { AuthContext } from '../Auth'
 import { useGetAuthUrl } from 'Hooks/queries'
+import ErrorAxios from 'Components/generic/ErrorAxios'
 
 const GenerateToken = () => {
   const [ startFetching, setStartFetching ] = useState(false)
@@ -29,7 +29,7 @@ const GenerateToken = () => {
     <Grid container direction="column" spacing={2} textAlign="center" mt={4}>
       {isError && (
         <Grid item>
-          <Error error={error} />
+          <ErrorAxios error={error} />
         </Grid>
       )}
       <Grid item>

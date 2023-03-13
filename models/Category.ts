@@ -1,5 +1,5 @@
 import { CategoryItem } from 'LocalTypes'
-import { Schema, model } from 'mongoose'
+import { Schema, model, models, Model } from 'mongoose'
 
 const CategorySchema = new Schema<CategoryItem>({
   title: {
@@ -18,6 +18,4 @@ CategorySchema.virtual('id').get(function(){
   return this._id.toHexString()
 })
 
-const Category = model<CategoryItem>('Category', CategorySchema);
-
-export default Category
+export default (models.Category as Model<CategoryItem>) || model<CategoryItem>('Category', CategorySchema)
