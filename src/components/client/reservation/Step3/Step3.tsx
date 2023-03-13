@@ -1,52 +1,34 @@
-import { AxiosError } from 'axios'
-import ErrorAxios from 'Components/generic/ErrorAxios'
-import Loader from 'Components/generic/Loader'
 import { useField } from 'formik'
-import { getAllCategories, getAvailableItems, getReservationType } from 'Lib/queries'
 import React from 'react'
-import { useQueries } from 'react-query'
 import ItemsTree from '../items-tree'
+import {
+  useGetAllCategories,
+  useGetAvailableItems,
+  useGetReservationType,
+} from 'Hooks/queries'
+import { MultiDataLoader } from 'Components/generic/DataLoader/DataLoader'
 
 const Step3 = () => {
-  const [ { value: reservationTypeId } ] = useField('reservationType')
-  const [ { value: dateStart } ] = useField('dateStart')
-  const [ { value: dateEnd } ] = useField('dateEnd')
-  const [ {
-    error: itemsError,
-    isError: itemsIsError,
-    isSuccess: itemsIsSuccess,
-    data: itemsData,
-  }, {
-    error: categoriesError,
-    isError: categoriesIsError,
-    isSuccess: categoriesIsSuccess,
-    data: categoriesData,
-  }, {
-    error: reservationTypeError,
-    isError: reservationTypeIsError,
-    isSuccess: reservationTypeIsSuccess,
-    data: reservationTypeData,
-  } ] = useQueries([ {
-    queryKey: 'getAvailableItems',
-    queryFn: () => getAvailableItems(dateStart, dateEnd),
-  }, {
-    queryKey: 'getAllCategories',
-    queryFn: getAllCategories,
-  }, {
-    queryKey: 'getDiscount',
-    queryFn: () => getReservationType(reservationTypeId),
-  } ])
+  const [{ value: reservationTypeId }] = useField('reservationType')
+  const [{ value: dateStart }] = useField('dateStart')
+  const [{ value: dateEnd }] = useField('dateEnd')
+  const itemsQuery = useGetAvailableItems(dateStart, dateEnd)
+  const categoriesQuery = useGetAllCategories()
+  const reservationTypeQuery = useGetReservationType(reservationTypeId)
 
-  if (itemsIsError || categoriesIsError || reservationTypeIsError) {
-    return <ErrorAxios error={(itemsError || categoriesError || reservationTypeError) as AxiosError}/>
-  }
-
-  if (itemsIsSuccess && categoriesIsSuccess && reservationTypeIsSuccess) {
-    return <ItemsTree items={itemsData!.data} categories={categoriesData!.data}
-                      reservationType={reservationTypeData!.data}/>
-  }
-
-  return <Loader/>
+  return (
+    <MultiDataLoader
+      queries={[itemsQuery, reservationTypeQuery, categoriesQuery]}
+    >
+      {([items, reservationType, categories]) => (
+        <ItemsTree
+          items={items}
+          categories={categories}
+          reservationType={reservationType}
+        />
+      )}
+    </MultiDataLoader>
+  )
 }
 
 export default Step3

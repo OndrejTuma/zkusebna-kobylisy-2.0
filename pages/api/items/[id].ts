@@ -1,4 +1,4 @@
-import { NetworkFailedState, ReservationItem } from 'LocalTypes'
+import { NetworkState, ReservationItem } from 'LocalTypes'
 import { NextApiRequest, NextApiResponse } from 'next'
 import dbConnect from 'Lib/dbConnect'
 import Item from 'Models/Item'
@@ -7,7 +7,7 @@ import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ReservationItem | NetworkFailedState>,
+  res: NextApiResponse<NetworkState<ReservationItem | null>>,
 ) {
   const { id } = req.query
 

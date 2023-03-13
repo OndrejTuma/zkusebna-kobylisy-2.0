@@ -1,33 +1,26 @@
 import Stack from '@mui/material/Stack'
-import { AxiosResponse } from 'axios'
-import Error from 'Components/generic/Error'
 import Form from 'Components/generic/Form'
-import Loader from 'Components/generic/Loader'
-import { ResponseReservationTypes } from 'LocalTypes'
 import React from 'react'
-import { useQuery } from 'react-query'
-import { getAllReservationTypes } from 'Lib/queries'
+import { useGetAllReservationTypes } from 'Hooks/queries'
+import DataLoader from 'Components/generic/DataLoader'
 
 const ChooseReservationType = () => {
-  const { error, isError, isSuccess, isLoading, data } = useQuery<
-    AxiosResponse<ResponseReservationTypes>,
-    string
-  >('getAllReservationTypes', getAllReservationTypes)
+  const query = useGetAllReservationTypes()
 
   return (
     <Stack direction='row' justifyContent='space-between' spacing={2}>
-      {isLoading && <Loader />}
-      {isError && <Error>{error}</Error>}
-      {isSuccess && (
-        <Form.Select
-          label='Účel rezervace'
-          name='reservationType'
-          items={data.data.map(({ title: label, id: value }) => ({
-            label,
-            value,
-          }))}
-        />
-      )}
+      <DataLoader query={query}>
+        {(data) => (
+          <Form.Select
+            label='Účel rezervace'
+            name='reservationType'
+            items={data.map(({ title: label, id: value }) => ({
+              label,
+              value,
+            }))}
+          />
+        )}
+      </DataLoader>
     </Stack>
   )
 }

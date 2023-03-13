@@ -2,7 +2,7 @@ import formidable from 'formidable'
 import sharp from 'sharp'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import { NetworkFailedState } from 'LocalTypes'
+import { NetworkState } from 'LocalTypes'
 import authorizeRequest from 'Utils/api/authorizeRequest'
 import { getFilePath, getLocalFilePath } from 'Utils/api/fileUpload'
 import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
@@ -23,10 +23,6 @@ const uploadFile = async (file: formidable.File): Promise<string> => {
   return filePath
 }
 
-type Response = {
-  imageName: string,
-}
-
 export const config = {
   api: {
     bodyParser: false,
@@ -35,7 +31,9 @@ export const config = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Response | NetworkFailedState>,
+  res: NextApiResponse<NetworkState<{
+    imageName: string,
+  }>>,
 ) {
   console.log('IMAGES METHOD', req.method)
 

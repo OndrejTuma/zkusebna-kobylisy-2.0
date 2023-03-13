@@ -1,6 +1,6 @@
 import { google } from 'googleapis'
 import { sendReservationDeleteMail, sendReservationUpdateMail } from 'Lib/mailer'
-import { NetworkFailedState, Reservation } from 'LocalTypes'
+import { NetworkState, Reservation } from 'LocalTypes'
 import Item from 'Models/Item'
 import ReservationTypeModel from 'Models/ReservationType'
 import { NextApiRequest, NextApiResponse } from 'next'
@@ -14,7 +14,7 @@ import convertReservationToCalendarEvent from 'Utils/convertReservationToCalenda
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Reservation | NetworkFailedState>,
+  res: NextApiResponse<NetworkState<Reservation>>,
 ) {
   const eventId = req.query.id as string
 

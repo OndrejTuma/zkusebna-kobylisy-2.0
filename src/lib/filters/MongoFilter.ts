@@ -1,6 +1,7 @@
 import { Types } from 'mongoose'
+import { IMongoFilter } from './types'
 
-class MongoFilter {
+class MongoFilter implements IMongoFilter {
   constructor(private readonly key: string, private readonly value: any) {}
 
   public getFilter() {
@@ -15,7 +16,7 @@ class MongoFilter {
     return { [key]: this.getValue(value) }
   }
 
-  public static getId(value: string) {
+  public static getId(value: any) {
     return new Types.ObjectId(value)
   }
 

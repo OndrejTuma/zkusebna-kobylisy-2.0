@@ -1,7 +1,7 @@
 import { MongoFilter } from '.'
-import { FilterType } from './types'
+import { FilterType, IFilter } from './types'
 
-class Filters {
+class Filter implements IFilter {
   public allFilters: FilterType
 
   constructor(filters?: FilterType) {
@@ -40,4 +40,4 @@ class Filters {
   }
 }
 
-export default Filters
+export default Filter

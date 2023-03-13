@@ -4,13 +4,11 @@ import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import { AxiosResponse } from 'axios'
-import Error from 'Components/generic/Error'
 import Success from 'Components/generic/Success'
-import { setCalendarId } from 'Lib/queries'
-import { CalendarEntry, RequestSetCalendarId } from 'LocalTypes'
+import { CalendarEntry } from 'LocalTypes'
 import React from 'react'
-import { useMutation } from 'react-query'
+import { useSetCalendarId } from 'Hooks/queries'
+import ErrorAxios from 'Components/generic/ErrorAxios'
 
 type Props = {
   calendars?: CalendarEntry[],
@@ -23,13 +21,13 @@ const GoogleCalendarList = ({ calendars, tokenId }: Props) => {
     error,
     mutate,
     isSuccess,
-  } = useMutation<AxiosResponse, string, RequestSetCalendarId>('setCalendarId', setCalendarId)
+  } = useSetCalendarId()
 
   const handleCalendarSelect = async (calendarId: string) => mutate({ calendarId, tokenId })
 
   return (
     <Container>
-      {isError && <Error>{error}</Error>}
+      {isError && <ErrorAxios error={error}/>}
       {isSuccess ? <Success>Je to připravené!</Success> : (
         <List>
           {calendars?.map(({ id, summary }) => (

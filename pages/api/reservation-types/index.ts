@@ -5,6 +5,7 @@ import ReservationType from 'Models/ReservationType'
 import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 import authorizeRequest from 'Utils/api/authorizeRequest'
 import { parseRAFilters } from 'Lib/filters'
+import { NetworkState } from 'LocalTypes'
 
 export type ReservationTypeType = {
   id: string | number
@@ -14,7 +15,7 @@ export type ReservationTypeType = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ReservationTypeType | ReservationTypeType[]>
+  res: NextApiResponse<NetworkState<ReservationTypeType | ReservationTypeType[]>>
 ) {
   await dbConnect()
 

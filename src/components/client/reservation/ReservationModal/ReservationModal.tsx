@@ -1,26 +1,22 @@
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
-import { AxiosResponse } from 'axios'
-import { getCacheKey } from 'Components/client/Dashboard'
 import ContinueButton from 'Components/client/reservation/ContinueButton'
 import Button from 'Components/generic/Button'
-import Error from 'Components/generic/Error'
 import Form, { FormValues, useFormInitials } from 'Components/generic/Form'
 import Modal from 'Components/generic/Modal'
 import Stepper, { useStepper } from 'Components/generic/Stepper'
 import { FormikHelpers } from 'formik'
-import { createReservation } from 'Lib/queries'
 import { Reservation } from 'LocalTypes'
 import React, { useEffect } from 'react'
 import { SlotInfo } from 'react-big-calendar'
-import { useMutation, useQueryClient } from 'react-query'
-import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReservation'
 import getStartEndDatetimeFromBigCalendarSlotInfo from 'Utils/getStartEndDatetimeFromBigCalendarSlotInfo'
 import * as Yup from 'yup'
 import Price from '../Price'
 import Step1 from '../Step1'
 import Step2 from '../Step2'
 import Step3 from '../Step3'
+import { useCreateReservation } from 'Hooks/queries'
+import ErrorAxios from 'Components/generic/ErrorAxios'
 
 type ReservationProps = {
   open: boolean
@@ -28,14 +24,10 @@ type ReservationProps = {
   slotInfo?: SlotInfo
 }
 
-const steps = [
-  'Vyber datum a typ',
-  'Vyplň své údaje',
-  'Vyber položky',
-]
+const steps = ['Vyber datum a typ', 'Vyplň své údaje', 'Vyber položky']
 
 const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
-  const [ start, end ] = getStartEndDatetimeFromBigCalendarSlotInfo(slotInfo)
+  const [start, end] = getStartEndDatetimeFromBigCalendarSlotInfo(slotInfo)
   const { initialValues, validationSchema } = useFormInitials({
     dateStart: {
       initialValue: start,
@@ -53,46 +45,42 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
     },
     name: {
       initialValue: '',
-      validationSchema: Yup.string().required('Vyplňte své jméno').min(5, 'To se zdá být příliš krátké'),
+      validationSchema: Yup.string()
+        .required('Vyplňte své jméno')
+        .min(5, 'To se zdá být příliš krátké'),
     },
     phone: {
       initialValue: '',
-      validationSchema: Yup.string().required('Vyplňte svůj telefon').matches(/^((\+420|1) ?)?([0-9]{3} ?){3}$/, 'Telefonní číslo není ve správném formátu'),
+      validationSchema: Yup.string()
+        .required('Vyplňte svůj telefon')
+        .matches(
+          /^((\+420|1) ?)?([0-9]{3} ?){3}$/,
+          'Telefonní číslo není ve správném formátu'
+        ),
     },
     email: {
       initialValue: '',
-      validationSchema: Yup.string().required('Vyplňte svůj email').email('Email není ve správném formátu'),
+      validationSchema: Yup.string()
+        .required('Vyplňte svůj email')
+        .email('Email není ve správném formátu'),
     },
     itemIds: {
       initialValue: [],
-      validationSchema: Yup.array().min(1, 'Musíte vybrat alespoň jednu položku'),
+      validationSchema: Yup.array().min(
+        1,
+        'Musíte vybrat alespoň jednu položku'
+      ),
     },
   })
-  const queryClient = useQueryClient()
   const { activeStep, handleNext, handleBack, setStep } = useStepper()
 
-  const {
-    mutate,
-    isError,
-    isLoading,
-    isSuccess,
-    error,
-  } = useMutation<AxiosResponse, string, Reservation>('createReservation', createReservation, {
-    onSuccess: ({ data: { data } }) => {
-      const cacheKey = getCacheKey(start)
-      const reservations = queryClient.getQueryData<AxiosResponse<Reservation[]>>(['getMonthReservations', cacheKey])
+  const { mutate, isError, isLoading, isSuccess, error } =
+    useCreateReservation(start)
 
-      reservations && queryClient.setQueryData(['getMonthReservations', cacheKey], {
-        ...reservations,
-        data: [
-          ...reservations.data,
-          { ...convertCalendarEventToReservation(data) },
-        ],
-      })
-    },
-  })
-
-  const handleSubmit = async (values: FormValues, { setFieldTouched }: FormikHelpers<FormValues>) => {
+  const handleSubmit = async (
+    values: FormValues,
+    { setFieldTouched }: FormikHelpers<FormValues>
+  ) => {
     // validate items
     await setFieldTouched('itemIds', true, true)
     // TODO: make Form accept generic Values
@@ -103,37 +91,49 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
     if (isSuccess) {
       onClose()
     }
-  }, [ isSuccess, onClose ])
+  }, [isSuccess])
 
   useEffect(() => {
     setStep(0)
-  }, [ slotInfo, setStep ])
+  }, [slotInfo, setStep])
 
   return (
     <Modal onClose={onClose} open={open}>
-      <Form onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema}>
+      <Form
+        onSubmit={handleSubmit}
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+      >
         <Modal.Title>Nová rezervace</Modal.Title>
         <Modal.Content>
           <Box mb={4}>
-            <Stepper activeStep={activeStep} steps={steps}/>
+            <Stepper activeStep={activeStep} steps={steps} />
           </Box>
-          {isError && <Error sx={{ marginBottom: 2 }}>{error}</Error>}
+          {isError && <ErrorAxios error={error} sx={{ marginBottom: 2 }}/>}
           {activeStep === 0 ? (
-            <Step1/>
+            <Step1 />
           ) : activeStep === 1 ? (
-            <Step2/>
+            <Step2 />
           ) : (
-                <Step3/>
-              )}
+            <Step3 />
+          )}
         </Modal.Content>
         <Modal.Actions>
-          <Stack justifyContent="space-between" direction="row">
-            <Button disabled={activeStep === 0} variant="outlined" onClick={handleBack}>Zpět</Button>
+          <Stack justifyContent='space-between' direction='row'>
+            <Button
+              disabled={activeStep === 0}
+              variant='outlined'
+              onClick={handleBack}
+            >
+              Zpět
+            </Button>
             {activeStep + 1 === steps.length ? (
-              <Form.SubmitButton disabled={isLoading}>Vytvořit rezervaci (<Price/>)</Form.SubmitButton>
+              <Form.SubmitButton disabled={isLoading}>
+                Vytvořit rezervaci (<Price />)
+              </Form.SubmitButton>
             ) : (
-               <ContinueButton activeStep={activeStep} handleNext={handleNext}/>
-             )}
+              <ContinueButton activeStep={activeStep} handleNext={handleNext} />
+            )}
           </Stack>
         </Modal.Actions>
       </Form>

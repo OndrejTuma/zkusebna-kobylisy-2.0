@@ -1,4 +1,4 @@
-import { NetworkFailedState } from 'LocalTypes'
+import { CategoryItem, NetworkState } from 'LocalTypes'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import dbConnect from 'Lib/dbConnect'
@@ -7,15 +7,9 @@ import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 import authorizeRequest from 'Utils/api/authorizeRequest'
 import { parseRAFilters } from 'Lib/filters'
 
-export type CategoryType = {
-  id: string | number
-  parent_id?: string
-  title: string
-}
-
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<CategoryType | CategoryType[] | NetworkFailedState>
+  res: NextApiResponse<NetworkState<CategoryItem | CategoryItem[]>>
 ) {
   await dbConnect()
 
@@ -46,12 +40,12 @@ export default async function handler(
 
         const { title, parent_id } = req.body
 
-        const category: unknown = await Category.create({
+        const category = await Category.create({
           title,
           parent_id: parent_id || undefined,
         })
 
-        res.status(201).json(category as CategoryType)
+        res.status(201).json(category)
 
         break
       default:

@@ -1,11 +1,11 @@
-import { NetworkFailedState, ResponseAuthUrl } from 'LocalTypes'
+import { NetworkState, ResponseAuthUrl } from 'LocalTypes'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { badRequestCatch } from 'Utils/api/misc'
 import oAuth2Client from 'Utils/api/oAuth'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseAuthUrl | NetworkFailedState>,
+  res: NextApiResponse<NetworkState<ResponseAuthUrl>>,
 ) {
   try {
     // Generate the url that will be used for the consent dialog.

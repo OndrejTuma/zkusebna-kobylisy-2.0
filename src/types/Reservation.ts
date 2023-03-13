@@ -26,7 +26,7 @@ export type ReservationItem = {
   price: number,
   active: boolean,
   image?: string,
-  category_id: string,
+  category_id?: string,
   busy?: boolean,
 }
 

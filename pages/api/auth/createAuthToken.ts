@@ -2,13 +2,13 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { google } from 'googleapis'
 import dbConnect from 'Lib/dbConnect'
 import Token from 'Models/Token'
-import type { ResponseAuthToken, NetworkFailedState } from 'LocalTypes'
+import type { ResponseAuthToken, NetworkState } from 'LocalTypes'
 import oAuth2Client, { setOAuthCredentials } from 'Utils/api/oAuth'
 import { badRequestCatch } from 'Utils/api/misc'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseAuthToken | NetworkFailedState>
+  res: NextApiResponse<NetworkState<ResponseAuthToken>>
 ) {
   const { code } = req.body
 

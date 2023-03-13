@@ -1,9 +1,5 @@
 export type NetworkFailedState = {
-  error: string,
+  message: string,
 }
 
-export type NetworkState<T> = (T & {
-  success: true,
-}) | (NetworkFailedState & {
-  success: false,
-})
+export type NetworkState<T> = T | NetworkFailedState

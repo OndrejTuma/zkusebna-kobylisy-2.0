@@ -3,13 +3,13 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import dbConnect from 'Lib/dbConnect'
 import Category from 'Models/Category'
 
-import type { CategoryType } from '.'
 import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 import authorizeRequest from 'Utils/api/authorizeRequest'
+import { CategoryItem, NetworkState } from 'LocalTypes'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<CategoryType>,
+  res: NextApiResponse<NetworkState<CategoryItem | null>>,
 ) {
   const { id } = req.query
 

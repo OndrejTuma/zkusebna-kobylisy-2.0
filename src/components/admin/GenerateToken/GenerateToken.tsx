@@ -1,19 +1,14 @@
 import Grid from '@mui/material/Grid'
-import { AxiosError, AxiosResponse } from 'axios'
 import Button from 'Components/generic/Button'
-import ErrorAxios from 'Components/generic/ErrorAxios'
-import { getAuthUrl } from 'Lib/queries'
-import { ResponseAuthUrl } from 'LocalTypes'
 import React, { useContext, useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
 
 import { AuthContext } from '../Auth'
+import { useGetAuthUrl } from 'Hooks/queries'
+import ErrorAxios from 'Components/generic/ErrorAxios'
 
 const GenerateToken = () => {
   const [ startFetching, setStartFetching ] = useState(false)
-  const { isLoading, error, isError, data } = useQuery<AxiosResponse<ResponseAuthUrl>, AxiosError>('getAuthUrl', getAuthUrl, {
-    enabled: startFetching,
-  })
+  const { isLoading, error, isError, data } = useGetAuthUrl(startFetching)
   const { logOut } = useContext(AuthContext)
 
   const handleGetLoginUrl = () => setStartFetching(true)

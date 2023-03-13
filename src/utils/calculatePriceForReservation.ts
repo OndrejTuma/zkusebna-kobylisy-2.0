@@ -5,7 +5,7 @@ const calculatePriceForReservation = (reservation: Reservation, items: Reservati
   const reservationType = reservationTypes.find(({id}) => id === reservation.reservationType)
 
   if (!reservationType) {
-    throw Error(`Reservation type (${reservation.reservationType}) not found for reservation ${reservation.id}`)
+    throw Error(`Reservation type "${reservation.reservationType}" not found for reservation ${reservation.id}`)
   }
 
   const price = items

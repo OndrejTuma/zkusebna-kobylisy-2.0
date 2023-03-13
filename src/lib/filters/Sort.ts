@@ -1,6 +1,6 @@
-import { FilterType, SortFilter, SortType } from './types'
+import { FilterType, ISortFilter, SortType } from './types'
 
-class Sort implements SortFilter {
+class Sort implements ISortFilter {
   key: string
   value: 1 | -1
 
