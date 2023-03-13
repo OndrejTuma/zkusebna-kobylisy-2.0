@@ -28,18 +28,20 @@ const PriceDisplay = ({ items, reservationTypes }: PriceDisplayProps) => {
   const [{ value: reservationTypeId }] = useField('reservationType')
   const [{ value: itemIds }] = useField('itemIds')
 
-  const price = useMemo(
-    () =>
-      calculatePriceForReservation(
-        {
-          reservationType: reservationTypeId,
-          itemIds,
-        },
-        items,
-        reservationTypes
-      ),
-    [reservationTypeId, items, reservationTypes, itemIds]
-  )
+  const price = useMemo(() => {
+    if (!reservationTypeId) {
+      return 0
+    }
+
+    return calculatePriceForReservation(
+      {
+        reservationType: reservationTypeId,
+        itemIds,
+      },
+      items,
+      reservationTypes
+    )
+  }, [reservationTypeId, items, reservationTypes, itemIds])
 
   return reservationTypeId ? <>{formatNumberToCZK(price)}</> : null
 }

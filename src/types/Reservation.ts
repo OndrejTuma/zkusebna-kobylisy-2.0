@@ -1,5 +1,3 @@
-import { Types } from 'mongoose'
-
 export type Reservation = {
   id?: string | null,
   dateStart?: string | null,
