@@ -1,6 +1,7 @@
 import { Types } from 'mongoose'
+import { IMongoFilter } from './types'
 
-class MongoFilter {
+class MongoFilter implements IMongoFilter {
   constructor(private readonly key: string, private readonly value: any) {}
 
   public getFilter() {

@@ -40,12 +40,12 @@ export default async function handler(
 
         const { title, parent_id } = req.body
 
-        const category: unknown = await Category.create({
+        const category: CategoryItem = await Category.create({
           title,
           parent_id: parent_id || undefined,
         })
 
-        res.status(201).json(category as CategoryItem)
+        res.status(201).json(category)
 
         break
       default:

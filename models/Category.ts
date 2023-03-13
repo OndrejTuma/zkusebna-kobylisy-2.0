@@ -1,15 +1,16 @@
-import mongoose from 'mongoose'
+import { CategoryItem } from 'LocalTypes'
+import { Schema, model, models } from 'mongoose'
 
-const CategorySchema = new mongoose.Schema({
+const CategorySchema = new Schema<CategoryItem>({
   title: {
     type: String,
     required: [true, 'Vyplňte název kategorie']
   },
   parent_id: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Category',
     // if category does not have a parent, we return empty string, but keep null in database
-    transform: (v: any) => v == null ? '' : v
+    transform: (v: CategoryItem) => v == null ? '' : v
   }
 })
 
@@ -17,4 +18,4 @@ CategorySchema.virtual('id').get(function(){
   return this._id.toHexString()
 })
 
-export default mongoose.models.Category || mongoose.model('Category', CategorySchema)
+export default models.Category || model<CategoryItem>('Category', CategorySchema)

@@ -1,6 +1,6 @@
-import { RangeFilter, RangeType } from './types'
+import { IRangeFilter, RangeType } from './types'
 
-class Range implements RangeFilter {
+class Range implements IRangeFilter {
   from: number
   to: number
 
