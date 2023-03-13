@@ -22,10 +22,10 @@ export interface ISortFilter {
 }
 export interface IFilter {
   allFilters: FilterType
-  add(key: string, value: string): void
-  pop(key: string): string
-  popMany(keys: string[]): string[]
-  get(key: string): string
+  add(key: string, value: FilterValueType): void
+  pop(key: string): FilterValueType
+  popMany(keys: string[]): FilterValueType[]
+  get(key: string): FilterValueType
   mongoFormat(): FilterType
 }
 
@@ -35,7 +35,8 @@ export interface IMongoFilter {
 
 export type SortType = [key: string, value: 'ASC' | 'DESC']
 
-export type FilterType = { [key: string]: any }
+export type FilterType = { [key: string]: FilterValueType }
+export type FilterValueType = any
 
 export type FilterOptionsType = {
   filter: IFilter

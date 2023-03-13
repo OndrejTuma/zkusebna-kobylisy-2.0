@@ -16,7 +16,7 @@ class MongoFilter implements IMongoFilter {
     return { [key]: this.getValue(value) }
   }
 
-  public static getId(value: string) {
+  public static getId(value: any) {
     return new Types.ObjectId(value)
   }
 

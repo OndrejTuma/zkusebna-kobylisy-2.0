@@ -40,7 +40,7 @@ export default async function handler(
 
         const { title, parent_id } = req.body
 
-        const category: CategoryItem = await Category.create({
+        const category = await Category.create({
           title,
           parent_id: parent_id || undefined,
         })
