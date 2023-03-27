@@ -1,4 +1,4 @@
-import { google } from 'googleapis'
+import { calendar } from '@googleapis/calendar'
 import dbConnect from 'Lib/dbConnect'
 import startOfMonth from 'date-fns/startOfMonth'
 import endOfMonth from 'date-fns/endOfMonth'
@@ -32,7 +32,7 @@ export default async function handler(
 
     setOAuthCredentials(token)
 
-    const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
+    const { events } = calendar({ version: 'v3', auth: oAuth2Client })
 
     const items = await Item.find()
     const reservationTypes = await ReservationTypeModel.find()
@@ -65,17 +65,17 @@ export default async function handler(
         }
 
         const {
-          data: { items: events },
-        } = await calendar.events.list(calendarFilter.allFilters)
+          data: { items: reservationEvents },
+        } = await events.list(calendarFilter.allFilters)
 
-        if (!events) {
+        if (!reservationEvents) {
           res.setHeader('Content-Range', `reservations ${range.print()}/0`)
           res.status(200).json([])
 
           return
         }
 
-        const reservations: Reservation[] = events.map(
+        const reservations: Reservation[] = reservationEvents.map(
           convertCalendarEventToReservation
         )
 
@@ -102,7 +102,7 @@ export default async function handler(
 
         break
       case 'POST':
-        const event = await calendar.events.insert({
+        const event = await events.insert({
           calendarId,
           requestBody: convertReservationToCalendarEvent(req.body),
         })
@@ -113,10 +113,14 @@ export default async function handler(
           reservationTypes
         )
 
-        await sendNewReservationMail({
-          ...req.body,
-          price: reservationPrice,
-        }, items, reservationTypes)
+        await sendNewReservationMail(
+          {
+            ...req.body,
+            price: reservationPrice,
+          },
+          items,
+          reservationTypes
+        )
 
         res.status(201).json(event)
 

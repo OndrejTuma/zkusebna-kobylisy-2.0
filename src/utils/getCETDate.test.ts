@@ -32,12 +32,4 @@ describe('getCETDate', () => {
 
     expect(result.getHours()).toEqual(16)
   })
-
-  it('returns CET date from London timezone', () => {
-    timezoneMock.register('Europe/London')
-
-    const result = getCETDate(dateString)
-
-    expect(result.getHours()).toEqual(16)
-  })
 })

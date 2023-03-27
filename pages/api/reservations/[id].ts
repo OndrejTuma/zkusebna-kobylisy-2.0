@@ -1,5 +1,8 @@
-import { google } from 'googleapis'
-import { sendReservationDeleteMail, sendReservationUpdateMail } from 'Lib/mailer'
+import { calendar } from '@googleapis/calendar'
+import {
+  sendReservationDeleteMail,
+  sendReservationUpdateMail,
+} from 'Lib/mailer'
 import { NetworkState, Reservation } from 'LocalTypes'
 import Item from 'Models/Item'
 import ReservationTypeModel from 'Models/ReservationType'
@@ -14,7 +17,7 @@ import convertReservationToCalendarEvent from 'Utils/convertReservationToCalenda
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<NetworkState<Reservation>>,
+  res: NextApiResponse<NetworkState<Reservation>>
 ) {
   const eventId = req.query.id as string
 
@@ -25,17 +28,20 @@ export default async function handler(
 
     setOAuthCredentials(token)
 
-    const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
+    const { events } = calendar({ version: 'v3', auth: oAuth2Client })
 
     switch (req.method) {
       case 'GET': {
+        const { data: calendarEvent } = await events.get(
+          {
+            calendarId,
+            eventId,
+          },
+          {}
+        )
 
-        const { data: calendarEvent } = await calendar.events.get({
-          calendarId,
-          eventId,
-        }, {})
-
-        const reservation: Reservation = convertCalendarEventToReservation(calendarEvent)
+        const reservation: Reservation =
+          convertCalendarEventToReservation(calendarEvent)
 
         const items = await Item.find()
         const reservationTypes = await ReservationTypeModel.find()
@@ -43,8 +49,12 @@ export default async function handler(
         const reservationWithPrice = {
           ...reservation,
           price: reservation.archived
-                 ? reservation.price
-                 : calculatePriceForReservation(reservation, items, reservationTypes),
+            ? reservation.price
+            : calculatePriceForReservation(
+                reservation,
+                items,
+                reservationTypes
+              ),
         }
 
         res.status(200).json(reservationWithPrice)
@@ -53,12 +63,15 @@ export default async function handler(
       }
       case 'PUT': {
         await authorizeRequest(req)
-        
-        const { data: calendarEvent } = await calendar.events.update({
-          calendarId,
-          eventId,
-          requestBody: convertReservationToCalendarEvent(req.body),
-        }, {})
+
+        const { data: calendarEvent } = await events.update(
+          {
+            calendarId,
+            eventId,
+            requestBody: convertReservationToCalendarEvent(req.body),
+          },
+          {}
+        )
 
         const reservation = convertCalendarEventToReservation(calendarEvent)
 
@@ -70,16 +83,22 @@ export default async function handler(
       }
       case 'DELETE': {
         await authorizeRequest(req)
-        
-        const { data: calendarEvent } = await calendar.events.get({
-          calendarId,
-          eventId,
-        }, {})
 
-        await calendar.events.delete({
-          calendarId,
-          eventId,
-        }, {})
+        const { data: calendarEvent } = await events.get(
+          {
+            calendarId,
+            eventId,
+          },
+          {}
+        )
+
+        await events.delete(
+          {
+            calendarId,
+            eventId,
+          },
+          {}
+        )
 
         const reservation = convertCalendarEventToReservation(calendarEvent)
 
