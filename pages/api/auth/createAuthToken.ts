@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { google } from 'googleapis'
+import { gmail } from '@googleapis/gmail'
+import { calendar } from '@googleapis/calendar'
 import dbConnect from 'Lib/dbConnect'
 import Token from 'Models/Token'
 import type { ResponseAuthToken, NetworkState } from 'LocalTypes'
@@ -26,10 +27,10 @@ export default async function handler(
     setOAuthCredentials(tokens.refresh_token)
 
     // get user address
-    const gmail = google.gmail({ version: 'v1', auth: oAuth2Client })
+    const { users } = gmail({ version: 'v1', auth: oAuth2Client })
     const {
       data: { emailAddress },
-    } = await gmail.users.getProfile({ userId: 'me' })
+    } = await users.getProfile({ userId: 'me' })
 
     // remove all previous tokens - we want to keep only current one
     await Token.remove({})
@@ -42,8 +43,8 @@ export default async function handler(
     })
 
     // get user calendars
-    const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
-    const calendars = await calendar.calendarList.list()
+    const { calendarList } = calendar({ version: 'v3', auth: oAuth2Client })
+    const calendars = await calendarList.list()
 
     res.status(200).json({
       calendars,
