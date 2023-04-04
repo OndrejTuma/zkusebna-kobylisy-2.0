@@ -1,28 +1,31 @@
-import { Reservation } from 'LocalTypes'
-import { sendMessage } from './mailer'
-import format from 'date-fns/format'
+import { Reservation, ReservationItem, ReservationType } from 'LocalTypes'
+import getReservationChanges, { convertChangesToString } from 'Utils/getReservationChanges'
+import { populateEmailTemplate, sendMessage } from './mailer'
 
 const subject = 'Rezervace byla upravena'
 
-const sendReservationUpdateMail = (reservation: Reservation) => {
-  const { dateStart, dateEnd, email, price, reservationName } = reservation
-  
-  if (!email) {
+const sendReservationUpdateMail = (previousReservation: Reservation, reservation: Reservation, items: ReservationItem[], reservationTypes: ReservationType[]) => {
+  if (!reservation.email) {
     throw new Error('New reservation error: No email provided')
   }
-  if (!reservationName) {
+  if (!reservation.reservationName) {
     throw new Error('New reservation error: No reservation name provided')
   }
-  if (!dateStart || !dateEnd) {
+  if (!reservation.dateStart || !reservation.dateEnd) {
     throw new Error('New reservation error: No reservation date provided')
   }
 
-  const message = [`<p>Rezervace <strong>${reservationName}</strong> byla právě upravena správcem zkušebny.</p>`]
+  const reservationChanges = getReservationChanges(previousReservation, reservation)
 
-  message.push(`<p>Cena rezervace: <strong>${price} Kč</strong></p>`)
-  message.push(`<p>Termín rezervace: <strong>${format(new Date(dateStart), 'dd.MM. H:mm')} - ${format(new Date(dateEnd), 'dd.MM. H:mm')}</strong></p>`)
+  if (Object.keys(reservationChanges).length === 0) {
+    return
+  }
 
-  return sendMessage(email, subject, message.join(''))
+  const updateText = `Byly provedeny následující změny: <br/>${convertChangesToString(reservationChanges, items, reservationTypes)}`
+
+  const html = populateEmailTemplate(['Změna', 'Rezervace'], reservation, items, reservationTypes, updateText)
+
+  return sendMessage(reservation.email, subject, html)
 }
 
 export default sendReservationUpdateMail

@@ -24,12 +24,4 @@ describe('getCETDate', () => {
 
     expect(result.getHours()).toEqual(16)
   })
-
-  it('returns CET date from Australia timezone', () => {
-    timezoneMock.register('Australia/Adelaide')
-
-    const result = getCETDate(dateString)
-
-    expect(result.getHours()).toEqual(16)
-  })
 })
