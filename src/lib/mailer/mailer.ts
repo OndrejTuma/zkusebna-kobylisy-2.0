@@ -8,6 +8,7 @@ import Payment from 'Lib/payment'
 import formatDateRange from 'Utils/formatDateRange'
 import getDiscountPrice from 'Utils/getDiscountPrice'
 import getCETDate from 'Utils/getCETDate'
+import formatNumberToCZK from 'Utils/formatNumberToCZK'
 
 Handlebars.registerHelper('if_even', function (conditional, options) {
   if (conditional % 2 === 0) {
@@ -77,7 +78,8 @@ export const populateEmailTemplate = (
   title: string[],
   reservation: Reservation,
   items: ReservationItem[],
-  reservationTypes: ReservationType[]
+  reservationTypes: ReservationType[],
+  updateText?: string,
 ) => {
   const source = fs.readFileSync(
     path.join(
@@ -104,7 +106,7 @@ export const populateEmailTemplate = (
     .map(({ image, price, title }) => ({
       image,
       title,
-      price: getDiscountPrice(price, discount),
+      price: formatNumberToCZK(getDiscountPrice(price, discount)),
     }))
 
   const qrCode =
@@ -116,8 +118,11 @@ export const populateEmailTemplate = (
     date,
     homepageUrl,
     qrCode,
+    price: formatNumberToCZK(price!),
+    accountNumber: Payment.getBankAccount(),
     reservation,
     title,
     items: reservationItems,
+    updateText,
   })
 }

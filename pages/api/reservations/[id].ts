@@ -64,6 +64,17 @@ export default async function handler(
       case 'PUT': {
         await authorizeRequest(req)
 
+        const { data: currentCalendarEvent } = await events.get(
+          {
+            calendarId,
+            eventId,
+          },
+          {}
+        )
+
+        const previousReservation: Reservation =
+          convertCalendarEventToReservation(currentCalendarEvent)
+
         const { data: calendarEvent } = await events.update(
           {
             calendarId,
@@ -73,11 +84,21 @@ export default async function handler(
           {}
         )
 
-        const reservation = convertCalendarEventToReservation(calendarEvent)
+        const items = await Item.find()
+        const reservationTypes = await ReservationTypeModel.find()
 
-        await sendReservationUpdateMail(req.body)
+        const reservationPrice = calculatePriceForReservation(
+          req.body,
+          items,
+          reservationTypes
+        )
 
-        res.status(200).json(reservation)
+        await sendReservationUpdateMail(previousReservation, {
+          ...req.body,
+          price: reservationPrice,
+        }, items, reservationTypes)
+
+        res.status(200).json(convertCalendarEventToReservation(calendarEvent))
 
         break
       }

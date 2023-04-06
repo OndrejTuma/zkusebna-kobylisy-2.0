@@ -8,7 +8,6 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import type {
   NetworkState,
   Reservation,
-  ResponseCalendarEvent,
 } from 'LocalTypes'
 import getTokenData from 'Utils/api/getTokenData'
 import oAuth2Client, { setOAuthCredentials } from 'Utils/api/oAuth'
@@ -21,7 +20,7 @@ import { Filter, parseRAFilters } from 'Lib/filters'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<NetworkState<ResponseCalendarEvent | Reservation[]>>
+  res: NextApiResponse<NetworkState<Reservation | Reservation[]>>
 ) {
   await dbConnect()
 
@@ -102,7 +101,7 @@ export default async function handler(
 
         break
       case 'POST':
-        const event = await events.insert({
+        const { data: event } = await events.insert({
           calendarId,
           requestBody: convertReservationToCalendarEvent(req.body),
         })
@@ -122,7 +121,7 @@ export default async function handler(
           reservationTypes
         )
 
-        res.status(201).json(event)
+        res.status(201).json(convertCalendarEventToReservation(event))
 
         break
       default:

@@ -11,7 +11,6 @@ import {
   ResponseAuthUrl,
 } from 'LocalTypes'
 import getCacheKey from 'Utils/getCalendarCacheKey'
-import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReservation'
 
 // QUERIES
 
@@ -121,7 +120,7 @@ export const useCreateReservation = (date: Date) => {
     ['createReservation'],
     (values) => axios.post('/api/reservations', values),
     {
-      onSuccess: ({ data: { data } }) => {
+      onSuccess: ({ data: reservation }) => {
         const cacheKey = getCacheKey(date)
         const reservations = queryClient.getQueryData<
           AxiosResponse<Reservation[]>
@@ -132,7 +131,7 @@ export const useCreateReservation = (date: Date) => {
             ...reservations,
             data: [
               ...reservations.data,
-              { ...convertCalendarEventToReservation(data) },
+              reservation,
             ],
           })
       },
