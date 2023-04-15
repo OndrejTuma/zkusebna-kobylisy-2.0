@@ -26,6 +26,16 @@ type ReservationProps = {
 
 const steps = ['Vyber datum a typ', 'Vyplň své údaje', 'Vyber položky']
 
+const formStyle: React.CSSProperties = {
+  overflow: 'auto',
+  display: 'flex',
+  flexDirection: 'column',
+}
+const formGridStyle: React.CSSProperties = {
+  overflow: 'auto',
+  flexWrap: 'nowrap',
+}
+
 const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
   const [start, end] = getStartEndDatetimeFromBigCalendarSlotInfo(slotInfo)
   const { initialValues, validationSchema } = useFormInitials({
@@ -103,6 +113,8 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
         onSubmit={handleSubmit}
         initialValues={initialValues}
         validationSchema={validationSchema}
+        style={formStyle}
+        gridStyle={formGridStyle}
       >
         <Modal.Title>Nová rezervace</Modal.Title>
         <Modal.Content>

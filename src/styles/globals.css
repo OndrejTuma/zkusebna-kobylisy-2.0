@@ -26,3 +26,10 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.rbc-overlay .rbc-event,
+.rbc-overlay .rbc-event:focus,
+.rbc-overlay .rbc-event.rbc-selected {
+  background-color: transparent;
+  outline: none;
+}

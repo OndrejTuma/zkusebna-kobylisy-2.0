@@ -12,6 +12,9 @@ const styles = ({ theme }: { theme: Theme }) => ({
     '.rbc-header': {
       padding: '0.5rem 0',
     },
+    '.rbc-show-more': {
+      color: theme.palette.primary.main,
+    },
     '.rbc-today': {
       backgroundColor: theme.palette.secondary.light,
     },
@@ -27,7 +30,7 @@ const styles = ({ theme }: { theme: Theme }) => ({
         outline: 'none',
       },
     }
-  }
+  },
 })
 
 export default styles
