@@ -2,7 +2,7 @@ import { TextField } from '@mui/material'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { DateTimePicker as MUIDateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
+import { MobileDateTimePicker as MUIDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import Error from 'Components/generic/Error'
 import csLocale from 'date-fns/locale/cs'
@@ -25,7 +25,7 @@ const DateTimePicker = ({ label, name, size = 'small', ...rest }: Props) => {
           label={label}
           as={MUIDateTimePicker}
           name={name}
-          displayStaticWrapperAs="desktop"
+          // displayStaticWrapperAs="desktop"
           renderInput={(props: any) => <TextField {...props} fullWidth size={size} />}
           ampm={false}
           disablePast
