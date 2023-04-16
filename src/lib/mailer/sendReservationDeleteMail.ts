@@ -1,7 +1,8 @@
 import { Reservation } from 'LocalTypes'
-import { sendMessage } from './mailer'
+import { populateEmailTemplate, sendMessage } from './mailer'
 
 const subject = 'Rezervace byla smazána'
+const title = ['Smazání', 'Rezervace']
 
 const sendReservationDeleteMail = (reservation: Reservation) => {
   const { email, reservationName } = reservation
@@ -13,11 +14,12 @@ const sendReservationDeleteMail = (reservation: Reservation) => {
     throw new Error('New reservation error: No reservation name provided')
   }
 
-  const message = [`<p>Rezervace <strong>${reservationName}</strong> byla právě odstraněna správcem zkušebny.</p>`]
+  const html = populateEmailTemplate({
+    title, 
+    reservation, 
+  })
 
-  message.push(`<p>Pokud potřebujete více informací, můžete odpovědět na tento email.</p>`)
-
-  return sendMessage(email, subject, message.join(''))
+  return sendMessage(email, subject, html)
 }
 
 export default sendReservationDeleteMail

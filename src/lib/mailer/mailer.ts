@@ -74,13 +74,21 @@ export const sendMessage = async (
   return result
 }
 
-export const populateEmailTemplate = (
+interface ReservationMailOptions {
   title: string[],
-  reservation: Reservation,
-  items: ReservationItem[],
-  reservationTypes: ReservationType[],
-  updateText?: string,
-) => {
+  reservation: Reservation
+  items?: ReservationItem[]
+  reservationTypes?: ReservationType[]
+  updateText?: string
+}
+
+export const populateEmailTemplate = ({
+  title,
+  reservation,
+  items = [],
+  reservationTypes = [],
+  updateText,
+}: ReservationMailOptions) => {
   const source = fs.readFileSync(
     path.join(
       process.cwd(),
@@ -101,8 +109,7 @@ export const populateEmailTemplate = (
   const discount =
     reservationTypes.find(({ id }) => id === reservation.reservationType)
       ?.discount ?? 1
-  const reservationItems = items
-    .filter(({ id }) => reservation.itemIds.includes(id))
+  const reservationItems = items.filter(({ id }) => reservation.itemIds.includes(id))
     .map(({ image, price, title }) => ({
       image,
       title,

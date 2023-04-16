@@ -3,6 +3,7 @@ import getReservationChanges, { convertChangesToString } from 'Utils/getReservat
 import { populateEmailTemplate, sendMessage } from './mailer'
 
 const subject = 'Rezervace byla upravena'
+const title = ['Změna', 'Rezervace']
 
 const sendReservationUpdateMail = (previousReservation: Reservation, reservation: Reservation, items: ReservationItem[], reservationTypes: ReservationType[]) => {
   if (!reservation.email) {
@@ -23,7 +24,13 @@ const sendReservationUpdateMail = (previousReservation: Reservation, reservation
 
   const updateText = `Byly provedeny následující změny: <br/>${convertChangesToString(reservationChanges, items, reservationTypes)}`
 
-  const html = populateEmailTemplate(['Změna', 'Rezervace'], reservation, items, reservationTypes, updateText)
+  const html = populateEmailTemplate({
+    title, 
+    reservation, 
+    items, 
+    reservationTypes, 
+    updateText
+  })
 
   return sendMessage(reservation.email, subject, html)
 }
