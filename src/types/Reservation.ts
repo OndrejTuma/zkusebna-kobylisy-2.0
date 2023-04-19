@@ -25,7 +25,9 @@ export type ReservationItem = {
   code?: string,
   price: number,
   active: boolean,
-  image?: string,
+  image?: {
+    src: string,
+  },
   category_id?: string,
   busy?: boolean,
 }
