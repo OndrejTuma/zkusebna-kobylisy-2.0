@@ -1,5 +1,7 @@
 import { ReservationItem, ReservationType } from 'LocalTypes'
-import getReservationChanges, { convertChangesToString } from './getReservationChanges'
+import getReservationChanges, {
+  convertChangesToString,
+} from './getReservationChanges'
 
 describe('getReservationChanges', () => {
   it('should return empty object if no changes', () => {
@@ -72,7 +74,11 @@ describe('getReservationChanges', () => {
       itemIds: ['1', '3'],
     }
     const result = getReservationChanges(res1, res2)
-    expect(result).toEqual({ reservationType: '2', removedItems: ['2'], addedItems: ['3'] })
+    expect(result).toEqual({
+      reservationType: '2',
+      removedItems: ['2'],
+      addedItems: ['3'],
+    })
   })
 })
 
@@ -88,14 +94,24 @@ describe('convertChangesToString', () => {
   it('should return reservationType if changed', () => {
     const changes = { reservationType: '1' }
     const items: ReservationItem[] = []
-    const reservationTypes: ReservationType[] = [{ id: '1', title: 'Test', discount: 1 }]
+    const reservationTypes: ReservationType[] = [
+      { id: '1', title: 'Test', discount: 1 },
+    ]
     const result = convertChangesToString(changes, items, reservationTypes)
     expect(result).toEqual('Typ rezervace: <strong>Test</strong>')
   })
 
   it('should return removedItems if changed', () => {
     const changes = { removedItems: ['1'] }
-    const items: ReservationItem[] = [{ id: '1', title: 'Test', price: 100, image: 'test', active: true }]
+    const items: ReservationItem[] = [
+      {
+        id: '1',
+        title: 'Test',
+        price: 100,
+        image: { src: 'test' },
+        active: true,
+      },
+    ]
     const reservationTypes: ReservationType[] = []
     const result = convertChangesToString(changes, items, reservationTypes)
     expect(result).toEqual('Odebrané položky: <strong>Test</strong>')
@@ -103,22 +119,48 @@ describe('convertChangesToString', () => {
 
   it('should return addedItems if changed', () => {
     const changes = { addedItems: ['1'] }
-    const items: ReservationItem[] = [{ id: '1', title: 'Test', price: 100, image: 'test', active: true }]
+    const items: ReservationItem[] = [
+      {
+        id: '1',
+        title: 'Test',
+        price: 100,
+        image: { src: 'test' },
+        active: true,
+      },
+    ]
     const reservationTypes: ReservationType[] = []
     const result = convertChangesToString(changes, items, reservationTypes)
     expect(result).toEqual('Přidané položky: <strong>Test</strong>')
   })
 
   it('should return all changes if changed', () => {
-    const changes = { reservationType: '1', removedItems: ['1'], addedItems: ['2'] }
+    const changes = {
+      reservationType: '1',
+      removedItems: ['1'],
+      addedItems: ['2'],
+    }
     const items: ReservationItem[] = [
-      { id: '1', title: 'Test1', price: 100, image: 'test', active: true },
-      { id: '2', title: 'Test2', price: 100, image: 'test', active: true },
+      {
+        id: '1',
+        title: 'Test1',
+        price: 100,
+        image: { src: 'test' },
+        active: true,
+      },
+      {
+        id: '2',
+        title: 'Test2',
+        price: 100,
+        image: { src: 'test' },
+        active: true,
+      },
     ]
-    const reservationTypes: ReservationType[] = [{ id: '1', title: 'Test', discount: 1 }]
+    const reservationTypes: ReservationType[] = [
+      { id: '1', title: 'Test', discount: 1 },
+    ]
     const result = convertChangesToString(changes, items, reservationTypes)
     expect(result).toEqual(
-      'Typ rezervace: <strong>Test</strong><br/>Odebrané položky: <strong>Test1</strong><br/>Přidané položky: <strong>Test2</strong>',
+      'Typ rezervace: <strong>Test</strong><br/>Odebrané položky: <strong>Test1</strong><br/>Přidané položky: <strong>Test2</strong>'
     )
   })
 })
