@@ -1,35 +1,16 @@
 #!make
 include ../../.env.local
 
-.PHONY: run build stop kill clean-all
+.PHONY: run pull stop kill clean-all remove-image
 .DEFAULT_GOAL := run
-
-UNAME := $(shell uname -a)
-IS_WIN := $(findstring Microsoft, $(UNAME))
-IS_OSX := $(findstring Darwin, $(UNAME))
-
-FILTER := grep inet | grep -E '172'
-REPLACE_TEMPLATE := sed _ARG_ 's/^([^0-9\.]*)([0-9\.]+)(.*)/\2/'
-
-# remove addrs: prefix on win-linux
-ifdef IS_WIN
-	FILTER +=  | sed --regexp-extended 's/addr://'
-endif
-
-# osx sed doesn't have long arg --regexp-extended but has -E
-ifdef IS_OSX
-	REPLACE = $(subst _ARG_, -E, $(REPLACE_TEMPLATE))
-else
-	REPLACE = $(subst _ARG_, --regexp-extended, $(REPLACE_TEMPLATE))
-endif
 
 COMPOSE_FILES := -f docker-compose.yml
 
 run:
 	docker-compose -p $(PROJECT_NAME) $(COMPOSE_FILES) up -d
 
-build:
-	docker-compose -p $(PROJECT_NAME) $(COMPOSE_FILES) build
+pull:
+	docker-compose -p $(PROJECT_NAME) pull app
 
 stop:
 	docker-compose -p $(PROJECT_NAME) $(COMPOSE_FILES) stop
@@ -39,6 +20,9 @@ restart:
 
 kill:
 	docker-compose -p $(PROJECT_NAME) $(COMPOSE_FILES) kill
+
+remove-image:
+	docker rmi -f relli/$(PROJECT_NAME):latest
 
 clean-all:
 	docker-compose -p $(PROJECT_NAME) $(COMPOSE_FILES) down --rmi all --remove-orphans --volumes
