@@ -1,12 +1,23 @@
 import { red } from '@mui/material/colors'
 import { createTheme } from '@mui/material/styles'
 
-// Create a theme instance.
 const theme = createTheme({
+  typography: {
+    h1: {
+      fontSize: 40,
+    },
+    body1: {
+      marginBottom: 16,
+      marginTop: 16,
+    },
+    body2: {
+      fontSize: 20,
+      marginBottom: 16,
+      marginTop: 16,
+    },
+  },
   palette: {
     primary: {
-      // main: '#6c3082',
-      // main: '#6667AB',
       main: '#a0744b',
     },
     secondary: {
