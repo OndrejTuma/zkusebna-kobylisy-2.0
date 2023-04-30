@@ -9,6 +9,10 @@ const styles = ({ theme }: { theme: Theme }) => ({
     '&': {
       height: 700,
     },
+    '.rbc-btn-group button': {
+      borderColor: theme.palette.primary.main,
+      cursor: 'pointer',
+    },
     '.rbc-header': {
       padding: '0.5rem 0',
     },
@@ -29,6 +33,10 @@ const styles = ({ theme }: { theme: Theme }) => ({
       '&:focus': {
         outline: 'none',
       },
+    },
+    '.rbc-toolbar-label': {
+      fontSize: 24,
+      textTransform: 'capitalize',
     }
   },
 })
