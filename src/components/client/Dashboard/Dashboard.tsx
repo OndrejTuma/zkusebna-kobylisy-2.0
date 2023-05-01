@@ -63,7 +63,7 @@ const Dashboard = () => {
   )
 
   return (
-    <Box sx={{ position: 'relative' }}>
+    <>
       <Container maxWidth={'lg'} sx={{ marginBottom: 5 }}>
         <Typography pt={5} pb={2} variant='h1'>
           Vítejte na rezervační stránce kobyliské zkušebny
@@ -84,24 +84,26 @@ const Dashboard = () => {
           Jak rezervovat?
         </Button>
       </Container>
-      {isFetching && (
-        <Loader
-          sx={{
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            transform: '-50% -50%',
-            zIndex: 1,
-          }}
+      <Box sx={{ position: 'relative' }}>
+        {isFetching && (
+          <Loader
+            sx={{
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              transform: '-50% -50%',
+              zIndex: 1,
+            }}
+          />
+        )}
+        {isError && <ErrorAxios sx={{ marginBottom: 2 }} error={error} />}
+        <Calendar
+          onSelectEvent={handleSelectEvent}
+          onSelectSlot={handleSelectSlot}
+          onNavigate={handleNavigate}
+          reservations={data?.data}
         />
-      )}
-      {isError && <ErrorAxios sx={{ marginBottom: 2 }} error={error} />}
-      <Calendar
-        onSelectEvent={handleSelectEvent}
-        onSelectSlot={handleSelectSlot}
-        onNavigate={handleNavigate}
-        reservations={data?.data}
-      />
+      </Box>
       <ReservationModal
         open={isOpenReservation}
         onClose={hideReservation}
@@ -109,7 +111,7 @@ const Dashboard = () => {
       />
       <EventModal open={isOpenEvent} onClose={hideEvent} event={event} />
       <HowToModal isOpen={isOpenHowTo} onClose={hideHowTo} />
-    </Box>
+    </>
   )
 }
 
