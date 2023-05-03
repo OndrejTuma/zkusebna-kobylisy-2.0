@@ -6,15 +6,6 @@ const theme = createTheme({
     h1: {
       fontSize: 40,
     },
-    body1: {
-      marginBottom: 16,
-      marginTop: 16,
-    },
-    body2: {
-      fontSize: 20,
-      marginBottom: 16,
-      marginTop: 16,
-    },
   },
   palette: {
     primary: {
