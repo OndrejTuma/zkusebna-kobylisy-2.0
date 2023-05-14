@@ -27,7 +27,7 @@ const Information = () => {
             hudební nástroje.
           </Typography>
           <Typography my={2} sx={{ fontSize: 20 }}>
-            Pomoc, dotazy a připomínky na zkusebna.kobylisy@centrum.cz
+            Pomoc, dotazy a připomínky na zkusebna.terezicka@gmail.com
           </Typography>
           <Button variant='text' onClick={showModal}>
             Jak rezervovat?
