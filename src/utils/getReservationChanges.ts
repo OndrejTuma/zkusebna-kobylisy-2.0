@@ -1,11 +1,15 @@
 import { Reservation, ReservationItem, ReservationType } from 'LocalTypes'
+import { format } from 'date-fns'
 
-type ReservationChanges = Pick<Reservation, "reservationType"> & {
+import { dateTimeFormat } from '../consts/dateTimeFormats'
+import getCETDate from './getCETDate'
+
+type ReservationChanges = Pick<Reservation, "reservationType" | "dateStart" | "dateEnd"> & {
   removedItems?: string[]
   addedItems?: string[]
 }
 
-const allowedProps = ['reservationType', 'itemIds']
+const allowedProps = ['reservationType', 'itemIds', 'dateStart', 'dateEnd']
 
 function getReservationChanges(
   oldReservation: Reservation,
@@ -47,6 +51,12 @@ export function convertChangesToString(changes: ReservationChanges, items: Reser
       }
 
       return `Typ rezervace: <strong>${reservationType.title}</strong>`
+    }
+    if (key === 'dateStart') {
+      return `Začátek rezervace: <strong>${format(getCETDate(value!), dateTimeFormat)}</strong>`
+    }
+    if (key === 'dateEnd') {
+      return `Konec rezervace: <strong>${format(getCETDate(value!), dateTimeFormat)}</strong>`
     }
 
     return ''
