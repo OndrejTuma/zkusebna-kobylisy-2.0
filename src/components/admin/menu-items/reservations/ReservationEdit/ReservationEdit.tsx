@@ -6,13 +6,17 @@ import {
   ReferenceArrayInput,
   ReferenceInput,
   required,
+  SaveButton,
   SelectArrayInput,
   SelectInput,
   SimpleForm,
   TextInput,
+  Toolbar,
   useRecordContext,
 } from 'react-admin'
 import { useWatch } from 'react-hook-form'
+
+import DeleteButton from './DeleteButton'
 
 const ArchiveReservation = () => {
   const { archived } = useRecordContext()
@@ -42,16 +46,25 @@ const ReservedItems = () => {
         ignoreBusyItems: itemIds,
       }}
     >
-      <SelectArrayInput disableValue='busy' label='Položky' optionText='title' />
+      <SelectArrayInput
+        disableValue='busy'
+        label='Položky'
+        optionText='title'
+      />
     </ReferenceArrayInput>
   )
 }
+const CustomToolbar = (props: object) => (
+  <Toolbar {...props} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+    <SaveButton />
+    <DeleteButton />
+  </Toolbar>
+)
 
 const ReservationEdit = (props: object) => {
-
   return (
     <Edit {...props}>
-      <SimpleForm>
+      <SimpleForm toolbar={<CustomToolbar />}>
         <TextInput disabled source='id' />
         <TextInput
           label='Název'
@@ -70,7 +83,7 @@ const ReservationEdit = (props: object) => {
         <ReferenceInput reference='reservation-types' source='reservationType'>
           <SelectInput label='Účel rezervace' optionText='title' />
         </ReferenceInput>
-        <ReservedItems />        
+        <ReservedItems />
         <BooleanInput label='Zaplacená' source='paid' />
         <ArchiveReservation />
       </SimpleForm>

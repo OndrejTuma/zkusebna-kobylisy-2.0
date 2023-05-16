@@ -22,14 +22,14 @@ const sendReservationUpdateMail = (previousReservation: Reservation, reservation
     return
   }
 
-  const updateText = `Byly provedeny následující změny: <br/>${convertChangesToString(reservationChanges, items, reservationTypes)}`
+  const customText = `Byly provedeny následující změny: <br/>${convertChangesToString(reservationChanges, items, reservationTypes)}`
 
   const html = populateEmailTemplate({
     title, 
     reservation, 
     items, 
     reservationTypes, 
-    updateText
+    customText
   })
 
   return sendMessage(reservation.email, subject, html)
