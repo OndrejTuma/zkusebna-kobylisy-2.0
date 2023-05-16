@@ -105,6 +105,8 @@ export default async function handler(
       case 'DELETE': {
         await authorizeRequest(req)
 
+        const { reason } = req.query
+
         const { data: calendarEvent } = await events.get(
           {
             calendarId,
@@ -123,7 +125,7 @@ export default async function handler(
 
         const reservation = convertCalendarEventToReservation(calendarEvent)
 
-        await sendReservationDeleteMail(reservation)
+        await sendReservationDeleteMail(reservation, reason)
 
         res.status(200).end()
 

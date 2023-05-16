@@ -79,7 +79,7 @@ interface ReservationMailOptions {
   reservation: Reservation
   items?: ReservationItem[]
   reservationTypes?: ReservationType[]
-  updateText?: string
+  customText?: string
 }
 
 export const populateEmailTemplate = ({
@@ -87,7 +87,7 @@ export const populateEmailTemplate = ({
   reservation,
   items = [],
   reservationTypes = [],
-  updateText,
+  customText,
 }: ReservationMailOptions) => {
   const source = fs.readFileSync(
     path.join(
@@ -130,6 +130,6 @@ export const populateEmailTemplate = ({
     reservation,
     title,
     items: reservationItems,
-    updateText,
+    customText,
   })
 }

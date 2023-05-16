@@ -66,6 +66,13 @@ const useDataProvider = () => {
           deleteImage(params, user)
         }
 
+        if (params.meta?.reason) {
+          return provider.delete(resource, {
+            ...params,
+            id: `${params.id}?reason=${params.meta.reason}`
+          })
+        }
+
         return provider.delete(resource, params)
       },
       create: async (resource: string, params: any) => {
