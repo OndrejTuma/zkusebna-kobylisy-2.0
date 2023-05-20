@@ -1,7 +1,9 @@
 import Box from '@mui/material/Box'
 import { EventProps, Event } from 'react-big-calendar'
 
-const EventComponent = ({ event }: EventProps<Event>) => {
+const borderRadius = 8
+
+const EventComponent = ({ event, continuesPrior, continuesAfter }: EventProps<Event>) => {
   const { title } = event
 
   return (
@@ -9,7 +11,10 @@ const EventComponent = ({ event }: EventProps<Event>) => {
       backgroundColor: 'primary.main',
       py: 0.5,
       px: 1,
-      borderRadius: 1.5,
+      borderTopRightRadius: continuesAfter ? 0 : borderRadius,
+      borderBottomRightRadius: continuesAfter ? 0 : borderRadius,
+      borderTopLeftRadius: continuesPrior ? 0 : borderRadius,
+      borderBottomLeftRadius: continuesPrior ? 0 : borderRadius,
     }}>
       {title}
     </Box>
