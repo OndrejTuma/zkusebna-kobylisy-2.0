@@ -2,11 +2,10 @@ name: Publish to production
 
 on:
   workflow_dispatch:
-
-inputs:
-  tag:
-    description: 'Tag to publish'
-    required: false
+    inputs:
+      tag:
+        description: 'Tag to publish'
+        required: false
 
 jobs:
   build:
