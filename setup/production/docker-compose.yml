@@ -16,15 +16,14 @@ services:
 
   app:
     container_name: zkusebna-kobylisy
-    build: .
+    image: relli/zkusebna-kobylisy:${LATEST_TAG}
     expose:
       - 3000
     volumes:
-      - ../../:/usr/src/app/
+      - ../../.env.local:/usr/src/app/.env.local
+      - ../../credentials:/usr/src/app/credentials
       - ./run.sh:/run.sh
       - app-node-modules:/usr/src/app/node_modules/
-      - /etc/letsencrypt/live/rezervace.zkusebna-kobylisy.cz/cert.pem:/usr/src/app/credentials/cert.pem
-      - /etc/letsencrypt/live/rezervace.zkusebna-kobylisy.cz/privkey.pem:/usr/src/app/credentials/privkey.pem
 
   mongo:
     container_name: zkusebna-kobylisy-mongo
