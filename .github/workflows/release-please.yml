@@ -1,3 +1,5 @@
+name: Create Release Pull Request
+
 on:
   push:
     branches:
@@ -7,8 +9,6 @@ permissions:
   contents: write
   pull-requests: write
 
-name: release-please
-
 jobs:
   release-please:
     runs-on: ubuntu-latest
@@ -16,4 +16,4 @@ jobs:
       - uses: google-github-actions/release-please-action@v3
         with:
           release-type: node
-          package-name: ${{ variables.PROJECT_NAME }}
+          package-name: ${{ vars.PROJECT_NAME }}
