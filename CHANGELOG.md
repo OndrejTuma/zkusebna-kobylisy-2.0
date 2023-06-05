@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.0.0...v1.0.1) (2023-06-05)
+
+
+### Bug Fixes
+
+* update text in HowToModal ([#63](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/63)) ([d1b1182](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/d1b1182363bb15cb7f4340949a2b163f39ff4fda))
+
 ## 1.0.0 (2023-06-04)
 
 
