@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          
+
       - name: Get tag
         if: ${{ github.event.inputs.tag == '' }}
         run: |
@@ -30,8 +30,6 @@ jobs:
 
       - name: Connect to DigitalOcean and execute deployment
         uses: appleboy/ssh-action@v0.1.10
-        env:
-          LATEST_TAG: ${{ env.PARSED_TAG }}
         with:
           host: ${{ secrets.DO_HOST }}
           username: root
@@ -39,4 +37,5 @@ jobs:
           passphrase: ${{ secrets.DO_KEY_PASSPHRASE }}
           script: |
             cd zkusebna-kobylisy-2.0
-            make production run
+            docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_TOKEN }}
+            LATEST_TAG=${{ env.PARSED_TAG }} make production run
