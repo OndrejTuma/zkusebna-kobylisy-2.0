@@ -14,7 +14,7 @@ const HowToModal = ({ isOpen, onClose }: HowToModalProps) => {
           <li>
             V kalendáři zjistěte, zda váš termín nekoliduje s jinou rezervací.
           </li>
-          <li>Zvolte si datum a čas rezervace.</li>
+          <li>Zvolte si datum a čas rezervace. Více dnů můžete označit tažením myši.</li>
           <li>
             Vyplňte všechny požadované údaje jako název akce (např. svatba
             Josefky Novákové), jméno a kontakt toho, kdo si rezervuje a účel
