@@ -25,7 +25,7 @@ const HowToModal = ({ isOpen, onClose }: HowToModalProps) => {
           </li>
           <li>Rezervaci odešlete a vyčkejte na její schválení.</li>
           <li>
-            Případnou platbu poukazujte na účet číslo 2101195475 / 2010
+            Případnou platbu poukazujte na účet číslo <strong>2101195475 / 2010</strong>
             (preferujeme),{' '}
             <strong>do zprávy pro příjemce napište název akce</strong>.
             Nebo hotově správci zkušebny.
