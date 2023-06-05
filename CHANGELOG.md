@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.0.1...v1.0.2) (2023-06-05)
+
+
+### Bug Fixes
+
+* strong account number in HowToModal ([#65](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/65)) ([058c976](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/058c976bd67e98f1e7289d43e13d9cd00936a8b8))
+
 ## [1.0.1](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.0.0...v1.0.1) (2023-06-05)
 
 
