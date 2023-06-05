@@ -28,8 +28,8 @@ const HowToModal = ({ isOpen, onClose }: HowToModalProps) => {
             Případnou platbu poukazujte na účet číslo 2101195475 / 2010
             (preferujeme),{' '}
             <strong>do zprávy pro příjemce napište název akce</strong>.
+            Nebo hotově správci zkušebny.
           </li>
-          <li>Nebo hotově správci zkušebny.</li>
         </ol>
       </Modal.Content>
     </Modal>
