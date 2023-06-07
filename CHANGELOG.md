@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.0.3...v1.0.4) (2023-06-07)
+
+
+### Bug Fixes
+
+* **Modal, Item:** wider modal on bigger screens, fix flex wrap for Item in ItemsTree ([#69](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/69)) ([0b2ea7e](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/0b2ea7e2270f2244134f749715e929f585d0e333))
+
 ## [1.0.3](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.0.2...v1.0.3) (2023-06-05)
 
 
