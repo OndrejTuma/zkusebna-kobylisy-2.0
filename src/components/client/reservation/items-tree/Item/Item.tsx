@@ -5,11 +5,15 @@ import formatNumberToCZK from 'Utils/formatNumberToCZK'
 import getDiscountPrice from 'Utils/getDiscountPrice'
 import { ReservationTypeContext } from '../ReservationTypeContext'
 
-const Item = ({ title, code, price }: Pick<ReservationItem, 'title' | 'code' | 'price'>) => {
+const Item = ({
+  title,
+  code,
+  price,
+}: Pick<ReservationItem, 'title' | 'code' | 'price'>) => {
   const { discount } = useContext(ReservationTypeContext)
 
   return (
-    <Grid container justifyContent="space-between">
+    <Grid container justifyContent='space-between' flexWrap='nowrap'>
       <Grid item>
         {title} <small>{code ? `(${code})` : ''}</small>
       </Grid>

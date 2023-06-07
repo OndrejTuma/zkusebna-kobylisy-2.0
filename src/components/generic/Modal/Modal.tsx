@@ -5,6 +5,8 @@ import MUIModal from '@mui/material/Modal'
 import Close from '@mui/icons-material/Close'
 import Button from 'Components/generic/Button'
 import React from 'react'
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const modalWrapperStyle = {
   display: 'flex',
@@ -16,7 +18,6 @@ const modalWrapperStyle = {
 }
 const modalStyle = {
   position: 'relative',
-  minWidth: 300,
   maxWidth: 600,
   bgcolor: 'background.paper',
   boxShadow: 24,
@@ -41,6 +42,9 @@ type Props = {
 }
 
 const Modal = ({ children, open, onClose }: Props) => {
+  const theme = useTheme();
+  const isAboveMd = useMediaQuery(theme.breakpoints.up('sm'));
+
   return (
     <MUIModal
       aria-labelledby="modal-title"
@@ -55,7 +59,7 @@ const Modal = ({ children, open, onClose }: Props) => {
     >
       <Fade in={open}>
         <Box sx={modalWrapperStyle}>
-          <Box sx={modalStyle}>
+          <Box sx={{...modalStyle, minWidth: isAboveMd ? 600 : 300}}>
             <Button variant="text" sx={closeButtonStyle}>
               <Close onClick={onClose}/>
             </Button>
