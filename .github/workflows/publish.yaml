@@ -39,3 +39,7 @@ jobs:
             cd zkusebna-kobylisy-2.0
             docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_TOKEN }}
             LATEST_TAG=${{ env.PARSED_TAG }} make production run
+
+      - name: Print summary
+        run: |
+          echo "Version **${{ env.PARSED_TAG }}** was successfully deployed to production :rocket:" >> $GITHUB_STEP_SUMMARY
