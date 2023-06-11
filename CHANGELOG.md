@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.0.4...v1.1.0) (2023-06-11)
+
+
+### Features
+
+* **HowToModal:** added stepper with gifs ([#72](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/72)) ([3fbc7d1](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/3fbc7d1099fa7767f74148fb919e196cdb5bcf1d))
+
 ## [1.0.4](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.0.3...v1.0.4) (2023-06-07)
 
 
