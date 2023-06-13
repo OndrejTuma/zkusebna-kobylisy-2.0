@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.1.0...v1.1.1) (2023-06-13)
+
+
+### Bug Fixes
+
+* **ItemsTree:** remember selected form items ([#74](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/74)) ([7b10554](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/7b10554627b3de65b3fffe84097aacaf2697ecf1))
+
 ## [1.1.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.0.4...v1.1.0) (2023-06-11)
 
 
