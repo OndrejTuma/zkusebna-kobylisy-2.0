@@ -13,6 +13,14 @@ export type Reservation = {
   itemIds: string[],
 }
 
+export type AdminReservation = Reservation & {
+  isRecurring: boolean,
+  INTERVAL: 1 | 2 | 3 | 4 | 5,
+  FREQ: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY',
+  UNTIL: string,
+}
+
+
 export type ReservationItemCategory = {
   id: string,
   title: string,

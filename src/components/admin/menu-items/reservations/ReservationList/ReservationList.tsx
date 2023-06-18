@@ -3,15 +3,12 @@ import React from 'react'
 import {
   BooleanField,
   BooleanInput,
-  // ChipField,
+  CreateButton,
   Datagrid,
   DateField,
   List, NumberField,
-  // Pagination,
-  // ReferenceArrayField,
   ReferenceField,
-  // SingleFieldList,
-  TextField, TextInput,
+  TextField, TextInput, TopToolbar,
 } from 'react-admin'
 
 const filters = [
@@ -19,9 +16,15 @@ const filters = [
   <BooleanInput key="current" source="current" label="Skrýt proběhlé" alwaysOn/>,
 ]
 
+const ListActions = () => (
+  <TopToolbar>
+    <CreateButton label={'Vytvořit novou rezervaci'}/>
+  </TopToolbar>
+)
+
 const ReservationList = (props: object) => {
   return (
-    <List {...props} empty={<EmptyList/>} filters={filters}>
+    <List {...props} actions={<ListActions />} empty={<EmptyList/>} filters={filters}>
       <Datagrid rowClick="edit">
         <TextField label="Název" source="reservationName"/>
         <TextField label="Jméno" source="name"/>
@@ -34,11 +37,6 @@ const ReservationList = (props: object) => {
         <ReferenceField label="Účel rezervace" reference="reservation-types" source="reservationType">
           <TextField source="title"/>
         </ReferenceField>
-        {/*<ReferenceArrayField label="Položky" reference="items" source="itemIds" perPage={5} pagination={<Pagination/>}>*/}
-        {/*  <SingleFieldList>*/}
-        {/*    <ChipField source="title"/>*/}
-        {/*  </SingleFieldList>*/}
-        {/*</ReferenceArrayField>*/}
       </Datagrid>
     </List>
   )
