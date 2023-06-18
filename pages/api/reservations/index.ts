@@ -49,6 +49,7 @@ export default async function handler(
         const calendarFilter = new Filter({
           calendarId,
           q: title,
+          singleEvents: true,
         })
 
         // filter expired reservations
