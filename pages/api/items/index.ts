@@ -27,7 +27,6 @@ export default async function handler(
           'timeMax',
           'ignoreBusyItems',
         ])
-        
 
         // return only active items for unauthenticated users (clients)
         try {

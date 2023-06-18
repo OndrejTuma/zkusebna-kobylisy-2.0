@@ -16,6 +16,7 @@ import {
 } from 'react-admin'
 import { useWatch } from 'react-hook-form'
 
+import { ReservationItem } from 'LocalTypes'
 import DeleteButton from './DeleteButton'
 
 const ArchiveReservation = () => {
@@ -30,6 +31,14 @@ const ArchiveReservation = () => {
       )}
     </>
   )
+}
+
+const getReservedItemLabel = (record: ReservationItem) => {
+  if (record.code) {
+    return `${record.title} (${record.code})`
+  }
+
+  return record.title
 }
 const ReservedItems = () => {
   const { dateStart, dateEnd, itemIds } = useRecordContext()
@@ -49,7 +58,7 @@ const ReservedItems = () => {
       <SelectArrayInput
         disableValue='busy'
         label='Položky'
-        optionText='title'
+        optionText={getReservedItemLabel}
       />
     </ReferenceArrayInput>
   )
