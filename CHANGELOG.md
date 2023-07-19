@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.1.2...v1.1.3) (2023-07-19)
+
+
+### Bug Fixes
+
+* **email:** set language to cs ([#79](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/79)) ([3362706](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/3362706073ff4b2f2bd42bb7586dcbd2fedae6f8))
+
 ## [1.1.2](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.1.1...v1.1.2) (2023-07-19)
 
 
