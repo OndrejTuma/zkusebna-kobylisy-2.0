@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.1.1...v1.1.2) (2023-07-19)
+
+
+### Bug Fixes
+
+* **email:** prevent email translations ([#77](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/77)) ([6e9dca8](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/6e9dca85064124a1a322f713952dd4620209686c))
+
 ## [1.1.1](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.1.0...v1.1.1) (2023-06-13)
 
 
