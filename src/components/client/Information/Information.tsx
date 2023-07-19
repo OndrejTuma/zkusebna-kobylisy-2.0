@@ -1,5 +1,6 @@
 import React from 'react'
 import Box from '@mui/material/Box'
+import Link from '@mui/material/Link'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
@@ -19,15 +20,17 @@ const Information = () => {
           </Typography>
           <Typography my={2}>
             Tyto stránky slouží jako rezervační systém{' '}
-            <strong>pouze pro potřeby farnosti Kobylisy</strong> nebo výjimečně
-            po dohodě se správcem zkušebny i jiným zájemcům.
+            <strong>pouze pro potřeby farnosti Kobylisy</strong>.
           </Typography>
           <Typography my={2}>
             Zde si můžete k zapůjčení rezervovat zkušebnu, zvukovou techniku a
             hudební nástroje.
           </Typography>
           <Typography my={2} sx={{ fontSize: 20 }}>
-            Pomoc, dotazy a připomínky na zkusebna.terezicka@gmail.com
+            Pomoc, dotazy, nápady a připomínky pište na{' '}
+            <Link href='mailto:zkusebna.terezicka@gmail.com'>
+              zkusebna.terezicka@gmail.com
+            </Link>
           </Typography>
           <Button variant='text' onClick={showModal}>
             Jak rezervovat?
