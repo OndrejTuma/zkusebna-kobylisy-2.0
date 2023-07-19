@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.1.3...v1.2.0) (2023-07-19)
+
+
+### Features
+
+* **Misc:** minor cosmetic changes that came up from latest sync ([#81](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/81)) ([1f2f0f8](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/1f2f0f881948b986d108d624bda5a88913b66267))
+
 ## [1.1.3](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.1.2...v1.1.3) (2023-07-19)
 
 
