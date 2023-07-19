@@ -102,6 +102,8 @@ export default async function handler(
 
         break
       case 'POST':
+        const isRecurring = req.body.isRecurring
+
         const { data: event } = await events.insert({
           calendarId,
           requestBody: convertReservationToCalendarEvent(req.body),
@@ -113,14 +115,17 @@ export default async function handler(
           reservationTypes
         )
 
-        await sendNewReservationMail(
-          {
-            ...req.body,
-            price: reservationPrice,
-          },
-          items,
-          reservationTypes
-        )
+        // send email for non-recurring reservations
+        if (!isRecurring) {
+          await sendNewReservationMail(
+            {
+              ...req.body,
+              price: reservationPrice,
+            },
+            items,
+            reservationTypes
+          )
+        }
 
         res.status(201).json(convertCalendarEventToReservation(event))
 

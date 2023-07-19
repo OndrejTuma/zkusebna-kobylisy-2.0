@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "test:lint": "next lint",
-    "test:unit": "jest",
+    "test:unit": "cross-env TZ=UTC jest",
     "test:types": "tsc"
   },
   "dependencies": {

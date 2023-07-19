@@ -18,5 +18,6 @@ export type {
   ReservationItemCategory,
   Reservation,
   AdminReservation,
+  RecurrenceType,
 } from './Reservation'
 export type { CategoryItem } from './Category'

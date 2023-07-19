@@ -1,6 +1,6 @@
 import { CalendarEvent, AdminReservation } from 'LocalTypes'
 import { splitItemIdsInChunks } from './itemsChunks'
-import convertToGoogleCalendarUntil from './convertToGoogleCalendarUntil'
+import { createRecurrence } from './recurrence'
 
 const convertReservationToCalendarEvent = (
   reservation: AdminReservation
@@ -50,8 +50,7 @@ const convertReservationToCalendarEvent = (
   if (isRecurring) {
     return {
       ...event,
-      // Composed based on recurring event rules https://developers.google.com/calendar/api/concepts/events-calendars#recurring_events
-      recurrence: [`RRULE:FREQ=${FREQ};INTERVAL=${INTERVAL};UNTIL=${convertToGoogleCalendarUntil(UNTIL)}`]
+      recurrence: [createRecurrence({FREQ,INTERVAL,UNTIL})]
     }
   }
 

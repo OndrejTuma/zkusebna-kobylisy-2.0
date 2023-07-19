@@ -1,4 +1,5 @@
 import { calendar } from '@googleapis/calendar'
+import subSeconds from 'date-fns/subSeconds'
 import {
   sendReservationDeleteMail,
   sendReservationUpdateMail,
@@ -14,6 +15,8 @@ import oAuth2Client, { setOAuthCredentials } from 'Utils/api/oAuth'
 import calculatePriceForReservation from 'Utils/calculatePriceForReservation'
 import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReservation'
 import convertReservationToCalendarEvent from 'Utils/convertReservationToCalendarEvent'
+import { updateRecurrenceUntil } from 'Utils/recurrence'
+import setTimeFromDateToDate from 'Utils/setTimeFromDateToDate'
 
 export default async function handler(
   req: NextApiRequest,
@@ -48,6 +51,9 @@ export default async function handler(
 
         const reservationWithPrice = {
           ...reservation,
+          // if reservation is recurring, set default value for recurrenceType
+          // used in modal on edit page
+          ...(reservation.recurringEventId ? { recurrenceType: 0 } : {}),
           price: reservation.archived
             ? reservation.price
             : calculatePriceForReservation(
@@ -64,25 +70,96 @@ export default async function handler(
       case 'PUT': {
         await authorizeRequest(req)
 
-        const { data: currentCalendarEvent } = await events.get(
-          {
-            calendarId,
-            eventId,
-          },
-          {}
-        )
+        const { data: currentCalendarEvent } = await events.get({
+          calendarId,
+          eventId,
+        })
 
         const previousReservation: Reservation =
           convertCalendarEventToReservation(currentCalendarEvent)
 
-        const { data: calendarEvent } = await events.update(
-          {
+        const recurringEventId = currentCalendarEvent.recurringEventId
+
+        // recurring event
+        if (recurringEventId) {
+          const { recurrenceType } = req.body
+
+          const { data: originalCalendarEvent } = await events.get({
             calendarId,
-            eventId,
-            requestBody: convertReservationToCalendarEvent(req.body),
-          },
-          {}
-        )
+            eventId: recurringEventId,
+          })
+
+          switch (recurrenceType) {
+            // update from current event on
+            case '1': {
+              await events.update({
+                calendarId,
+                eventId: recurringEventId,
+                requestBody: {
+                  ...originalCalendarEvent,
+                  recurrence: [
+                    updateRecurrenceUntil(
+                      originalCalendarEvent.recurrence?.[0] as string,
+                      subSeconds(
+                        new Date(
+                          currentCalendarEvent.start?.dateTime as string
+                        ),
+                        1
+                      ).toISOString()
+                    ),
+                  ],
+                },
+              })
+
+              const { data: event } = await events.insert({
+                calendarId,
+                requestBody: {
+                  ...convertReservationToCalendarEvent(req.body),
+                  recurrence: originalCalendarEvent.recurrence,
+                },
+              })
+
+              return res
+                .status(200)
+                .json(convertCalendarEventToReservation(event))
+            }
+            // update all recurring events
+            case '2': {
+              const { data: calendarEvent } = await events.update({
+                calendarId,
+                eventId: recurringEventId,
+                requestBody: {
+                  ...originalCalendarEvent,
+                  ...convertReservationToCalendarEvent(req.body),
+                  start: {
+                    timeZone: 'Etc/UTC',
+                    dateTime: setTimeFromDateToDate(
+                      new Date(req.body.dateStart),
+                      new Date(originalCalendarEvent.start?.dateTime as string)
+                    ).toISOString(),
+                  },
+                  end: {
+                    timeZone: 'Etc/UTC',
+                    dateTime: setTimeFromDateToDate(
+                      new Date(req.body.dateEnd),
+                      new Date(originalCalendarEvent.end?.dateTime as string)
+                    ).toISOString(),
+                  },
+                },
+              })
+
+              return res
+                .status(200)
+                .json(convertCalendarEventToReservation(calendarEvent))
+            }
+          }
+        }
+
+        const { data: calendarEvent } = await events.update({
+          calendarId,
+          eventId,
+          requestBody: convertReservationToCalendarEvent(req.body),
+        })
 
         const items = await Item.find()
         const reservationTypes = await ReservationTypeModel.find()
@@ -93,10 +170,18 @@ export default async function handler(
           reservationTypes
         )
 
-        await sendReservationUpdateMail(previousReservation, {
-          ...req.body,
-          price: reservationPrice,
-        }, items, reservationTypes)
+        // send email for non-recurring reservations
+        if (!recurringEventId) {
+          await sendReservationUpdateMail(
+            previousReservation,
+            {
+              ...req.body,
+              price: reservationPrice,
+            },
+            items,
+            reservationTypes
+          )
+        }
 
         res.status(200).json(convertCalendarEventToReservation(calendarEvent))
 
@@ -105,27 +190,67 @@ export default async function handler(
       case 'DELETE': {
         await authorizeRequest(req)
 
-        const { reason } = req.query
+        const { reason, recurrenceType } = req.query
 
-        const { data: calendarEvent } = await events.get(
-          {
-            calendarId,
-            eventId,
-          },
-          {}
-        )
+        const { data: calendarEvent } = await events.get({
+          calendarId,
+          eventId,
+        })
 
-        await events.delete(
-          {
+        const recurringEventId = calendarEvent.recurringEventId
+
+        // recurring event
+        if (recurringEventId) {
+          const { data: originalCalendarEvent } = await events.get({
             calendarId,
-            eventId,
-          },
-          {}
-        )
+            eventId: recurringEventId,
+          })
+
+          switch (recurrenceType) {
+            // delete from current event on
+            case '1': {
+              await events.update({
+                calendarId,
+                eventId: recurringEventId,
+                requestBody: {
+                  ...originalCalendarEvent,
+                  recurrence: [
+                    updateRecurrenceUntil(
+                      originalCalendarEvent.recurrence?.[0] as string,
+                      subSeconds(
+                        new Date(calendarEvent.start?.dateTime as string),
+                        1
+                      ).toISOString()
+                    ),
+                  ],
+                },
+              })
+
+              return res.status(200).end()
+            }
+            // delete all recurring events
+            case '2': {
+              await events.delete({
+                calendarId,
+                eventId: recurringEventId,
+              })
+
+              return res.status(200).end()
+            }
+          }
+        }
+
+        await events.delete({
+          calendarId,
+          eventId,
+        })
 
         const reservation = convertCalendarEventToReservation(calendarEvent)
 
-        await sendReservationDeleteMail(reservation, reason)
+        // send email for non-recurring reservations
+        if (!recurringEventId) {
+          await sendReservationDeleteMail(reservation, reason)
+        }
 
         res.status(200).end()
 

@@ -2,6 +2,8 @@ export type Reservation = {
   id?: string | null,
   dateStart?: string | null,
   dateEnd?: string | null,
+  recurrence?: string[] | null,
+  recurringEventId?: string | null,
   reservationType?: string,
   reservationName?: string | null,
   name?: string,
@@ -13,13 +15,15 @@ export type Reservation = {
   itemIds: string[],
 }
 
-export type AdminReservation = Reservation & {
+export type AdminReservation = Reservation & RecurrenceType & {
   isRecurring: boolean,
+}
+
+export type RecurrenceType = {
   INTERVAL: 1 | 2 | 3 | 4 | 5,
   FREQ: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY',
   UNTIL: string,
 }
-
 
 export type ReservationItemCategory = {
   id: string,
