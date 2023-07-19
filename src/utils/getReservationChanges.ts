@@ -50,7 +50,7 @@ export function convertChangesToString(changes: ReservationChanges, items: Reser
         throw new Error(`Reservation type with id ${value} not found`)
       }
 
-      return `Typ rezervace: <strong>${reservationType.title}</strong>`
+      return `Účel rezervace: <strong>${reservationType.title}</strong>`
     }
     if (key === 'dateStart') {
       return `Začátek rezervace: <strong>${format(getCETDate(value!), dateTimeFormat)}</strong>`

@@ -98,7 +98,7 @@ describe('convertChangesToString', () => {
       { id: '1', title: 'Test', discount: 1 },
     ]
     const result = convertChangesToString(changes, items, reservationTypes)
-    expect(result).toEqual('Typ rezervace: <strong>Test</strong>')
+    expect(result).toEqual('Účel rezervace: <strong>Test</strong>')
   })
 
   it('should return removedItems if changed', () => {
@@ -160,7 +160,7 @@ describe('convertChangesToString', () => {
     ]
     const result = convertChangesToString(changes, items, reservationTypes)
     expect(result).toEqual(
-      'Typ rezervace: <strong>Test</strong><br/>Odebrané položky: <strong>Test1</strong><br/>Přidané položky: <strong>Test2</strong>'
+      'Účel rezervace: <strong>Test</strong><br/>Odebrané položky: <strong>Test1</strong><br/>Přidané položky: <strong>Test2</strong>'
     )
   })
 })

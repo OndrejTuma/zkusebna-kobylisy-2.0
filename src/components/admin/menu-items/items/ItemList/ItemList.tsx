@@ -28,6 +28,7 @@ const ItemList = (props: object) => {
   return (
     <List {...props} actions={<ListActions/>} empty={<EmptyList/>} filters={filters}>
       <Datagrid rowClick={'edit'}>
+        <TextField label={'Kód'} source={'code'} />
         <TextField label={'Název'} source={'title'} />
         <NumberField label={'Cena'} source={'price'} locales={'cs-CZ'} options={{ style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }} />
         <ReferenceField label={'Kategorie'} reference={'categories'} source={'category_id'}>

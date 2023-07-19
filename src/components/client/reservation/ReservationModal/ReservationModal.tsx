@@ -24,7 +24,7 @@ type ReservationProps = {
   slotInfo?: SlotInfo
 }
 
-const steps = ['Vyber datum a typ', 'Vyplň své údaje', 'Vyber položky']
+const steps = ['Vyber datum a účel', 'Vyplň své údaje', 'Vyber položky']
 
 const formStyle: React.CSSProperties = {
   overflow: 'auto',
