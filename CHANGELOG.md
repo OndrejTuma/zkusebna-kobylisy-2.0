@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.2.0...v1.3.0) (2023-07-31)
+
+
+### Miscellaneous Chores
+
+* release 1.3.0 ([d74af92](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/d74af928219025e65038be564b5620fd62cf38aa))
+
 ## [1.2.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.1.3...v1.2.0) (2023-07-19)
 
 
