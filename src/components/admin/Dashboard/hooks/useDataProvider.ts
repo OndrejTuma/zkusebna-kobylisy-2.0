@@ -66,10 +66,10 @@ const useDataProvider = () => {
           deleteImage(params, user)
         }
 
-        if (params.meta?.reason) {
+        if (params.meta) {
           return provider.delete(resource, {
             ...params,
-            id: `${params.id}?reason=${params.meta.reason}`
+            id: `${params.id}?${new URLSearchParams(params.meta).toString()}`
           })
         }
 

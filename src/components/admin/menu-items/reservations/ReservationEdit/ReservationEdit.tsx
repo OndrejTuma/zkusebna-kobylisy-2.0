@@ -15,7 +15,12 @@ import {
   useRecordContext,
 } from 'react-admin'
 import { useWatch } from 'react-hook-form'
+import Chip from '@mui/material/Chip'
+import InfoIcon from '@mui/icons-material/Info'
+import Typography from '@mui/material/Typography'
 
+import getReservedItemLabel from '../utils/getReservedItemLabel'
+import { RecurrenceDelete, RecurrenceSave } from './Recurrence'
 import DeleteButton from './DeleteButton'
 
 const ArchiveReservation = () => {
@@ -31,6 +36,21 @@ const ArchiveReservation = () => {
     </>
   )
 }
+
+const RecurrentReservation = () => {
+  const { recurringEventId } = useRecordContext()
+
+  if (!recurringEventId) {
+    return null
+  }
+
+  return (
+    <Typography marginBottom={2}>
+      <Chip icon={<InfoIcon />} label='Opakující se rezervace' />
+    </Typography>
+  )
+}
+
 const ReservedItems = () => {
   const { dateStart, dateEnd, itemIds } = useRecordContext()
 
@@ -49,22 +69,39 @@ const ReservedItems = () => {
       <SelectArrayInput
         disableValue='busy'
         label='Položky'
-        optionText='title'
+        optionText={getReservedItemLabel}
       />
     </ReferenceArrayInput>
   )
 }
-const CustomToolbar = (props: object) => (
-  <Toolbar {...props} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-    <SaveButton />
-    <DeleteButton />
-  </Toolbar>
-)
+const CustomToolbar = (props: object) => {
+  const { recurringEventId } = useRecordContext()
+
+  return (
+    <Toolbar
+      {...props}
+      sx={{ display: 'flex', justifyContent: 'space-between' }}
+    >
+      {recurringEventId ? (
+        <>
+          <RecurrenceSave />
+          <RecurrenceDelete />
+        </>
+      ) : (
+        <>
+          <SaveButton />
+          <DeleteButton />
+        </>
+      )}
+    </Toolbar>
+  )
+}
 
 const ReservationEdit = (props: object) => {
   return (
     <Edit {...props}>
       <SimpleForm toolbar={<CustomToolbar />}>
+        <RecurrentReservation />
         <TextInput disabled source='id' />
         <TextInput
           label='Název'

@@ -2,7 +2,7 @@ import { CalendarEvent, Reservation } from 'LocalTypes'
 import { joinItemIdsFromChunks } from './itemsChunks'
 
 const convertCalendarEventToReservation = (event: CalendarEvent): Reservation => {
-  const { id, start, end, summary, extendedProperties } = event
+  const { id, start, end, summary, extendedProperties, recurrence, recurringEventId } = event
 
   return {
     archived: Boolean(extendedProperties?.shared?.archived),
@@ -15,6 +15,8 @@ const convertCalendarEventToReservation = (event: CalendarEvent): Reservation =>
     phone: extendedProperties?.shared?.phone,
     price: extendedProperties?.shared?.price ? parseInt(extendedProperties?.shared?.price) : 0,
     paid: Boolean(extendedProperties?.shared?.paid),
+    recurrence,
+    recurringEventId,
     reservationName: summary,
     reservationType: extendedProperties?.shared?.reservationType,
   }
