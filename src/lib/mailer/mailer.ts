@@ -80,6 +80,7 @@ interface ReservationMailOptions {
   items?: ReservationItem[]
   reservationTypes?: ReservationType[]
   customText?: string
+  templateName?: 'default' | 'admin'
 }
 
 export const populateEmailTemplate = ({
@@ -88,6 +89,7 @@ export const populateEmailTemplate = ({
   items = [],
   reservationTypes = [],
   customText,
+  templateName = 'default',
 }: ReservationMailOptions) => {
   const source = fs.readFileSync(
     path.join(
@@ -96,7 +98,7 @@ export const populateEmailTemplate = ({
       'lib',
       'mailer',
       'template',
-      'default.html'
+      `${templateName}.html`
     ),
     'utf8'
   )

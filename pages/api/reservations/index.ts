@@ -15,7 +15,7 @@ import calculatePriceForReservation from 'Utils/calculatePriceForReservation'
 import convertCalendarEventToReservation from 'Utils/convertCalendarEventToReservation'
 import convertReservationToCalendarEvent from 'Utils/convertReservationToCalendarEvent'
 import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
-import { sendNewReservationMail } from 'Lib/mailer'
+import { sendNewReservationMail, sendMailToOwner } from 'Lib/mailer'
 import { Filter, parseRAFilters } from 'Lib/filters'
 
 export default async function handler(
@@ -125,6 +125,14 @@ export default async function handler(
             items,
             reservationTypes
           )
+          await sendMailToOwner('new', {
+            reservation: {
+              ...req.body,
+              price: reservationPrice,
+            },
+            items,
+            reservationTypes,
+          })
         }
 
         res.status(201).json(convertCalendarEventToReservation(event))
