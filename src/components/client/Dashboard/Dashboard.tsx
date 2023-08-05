@@ -62,12 +62,14 @@ const Dashboard = () => {
       <Box sx={{ position: 'relative' }}>
         {isFetching && (
           <Loader
+            color='info'
+            size={60}
             sx={{
               position: 'absolute',
               left: '50%',
               top: '50%',
               transform: '-50% -50%',
-              zIndex: 1,
+              zIndex: 5,
             }}
           />
         )}

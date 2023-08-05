@@ -25,6 +25,8 @@ const EventComponent = ({
         borderBottomRightRadius: continuesAfter ? 0 : borderRadius,
         borderTopLeftRadius: continuesPrior ? 0 : borderRadius,
         borderBottomLeftRadius: continuesPrior ? 0 : borderRadius,
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
       }}
     >
       {title}

@@ -1,4 +1,5 @@
-import Typography from '@mui/material/Typography'
+import Chip from '@mui/material/Chip'
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import Button from 'Components/generic/Button'
 import Modal from 'Components/generic/Modal'
 import React from 'react'
@@ -40,17 +41,17 @@ const EventModal = ({ event, open, onClose }: EventProps) => {
   return (
     <Modal onClose={onClose} open={open}>
       <Modal.Title>
-        {title}
+        <p>{title}</p>
+        <Chip
+          icon={<CalendarMonthIcon />}
+          label={dateRange}
+          variant='outlined'
+        />
       </Modal.Title>
       <Modal.Content>
-        <Typography>{dateRange}</Typography>
-
         <DataLoader query={itemsQuery}>
-          {(items) => (
-            <EventModalData items={items} itemIds={itemIds} />
-          )}
+          {(items) => <EventModalData items={items} itemIds={itemIds} />}
         </DataLoader>
-        
       </Modal.Content>
       <Modal.Actions>
         <Button onClick={onClose}>Zavřít</Button>
