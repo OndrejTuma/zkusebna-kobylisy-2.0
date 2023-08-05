@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.3.0...v1.4.0) (2023-08-05)
+
+
+### Features
+
+* **mail:** send emails to owner when reservation is created ([#84](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/84)) ([64bf6f6](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/64bf6f66c151762e6951cd13509bc691889b06d2))
+* **Select All:** add select/unselect all buttons to reservation create ([#86](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/86)) ([ef31ba3](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/ef31ba300ec7630125502b459db74585dd1ab492))
+
+
+### Bug Fixes
+
+* **Mail to Owner:** fix reservation link in email to owner ([#87](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/87)) ([b1fe35f](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/b1fe35f7511614fa51e815a7b9fd14e4ec9c36f4))
+
 ## [1.3.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.2.0...v1.3.0) (2023-07-31)
 
 
