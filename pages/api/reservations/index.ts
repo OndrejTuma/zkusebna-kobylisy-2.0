@@ -2,6 +2,8 @@ import { calendar } from '@googleapis/calendar'
 import dbConnect from 'Lib/dbConnect'
 import startOfMonth from 'date-fns/startOfMonth'
 import endOfMonth from 'date-fns/endOfMonth'
+import subDays from 'date-fns/subDays'
+import addDays from 'date-fns/addDays'
 import Item from 'Models/Item'
 import ReservationTypeModel from 'Models/ReservationType'
 import type { NextApiRequest, NextApiResponse } from 'next'
@@ -40,7 +42,7 @@ export default async function handler(
       case 'GET':
         const {
           filter: {
-            allFilters: { current, month, title },
+            allFilters: { current, clientMonth, title },
           },
           range,
           sort,
@@ -56,12 +58,12 @@ export default async function handler(
         if (current) {
           calendarFilter.add('timeMin', new Date().toISOString())
         }
-        // get reservations for a specific month
-        if (month) {
-          const monthDate = new Date(month)
+        // get reservations for a specific month to client calendar
+        if (clientMonth) {
+          const monthDate = new Date(clientMonth)
 
-          calendarFilter.add('timeMin', startOfMonth(monthDate).toISOString())
-          calendarFilter.add('timeMax', endOfMonth(monthDate).toISOString())
+          calendarFilter.add('timeMin', subDays(startOfMonth(monthDate), 6).toISOString())
+          calendarFilter.add('timeMax', addDays(endOfMonth(monthDate), 6).toISOString())
         }
 
         const {

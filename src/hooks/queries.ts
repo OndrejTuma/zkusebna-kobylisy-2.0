@@ -69,7 +69,7 @@ export const useGetMonthReservation = (currentDate: Date) => {
     () =>
       axios.get(
         `/api/reservations?range=[0,999]&filter=${JSON.stringify({
-          month: currentDate.toISOString(),
+          clientMonth: currentDate.toISOString(),
         })}`
       ),
     { keepPreviousData: true }
