@@ -21,6 +21,13 @@ const theme = createTheme({
     error: {
       main: red.A400,
     },
+    warning: {
+      main: '#f0ad4e',
+    },
+    info: {
+      main: '#404040',
+      light: '#999999'
+    },
   },
 })
 

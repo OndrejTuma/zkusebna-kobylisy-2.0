@@ -1,5 +1,12 @@
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemAvatar from '@mui/material/ListItemAvatar'
+import ListItemText from '@mui/material/ListItemText'
+import Avatar from '@mui/material/Avatar'
+
 import { ReservationItem } from 'LocalTypes'
 import Error from 'Components/generic/Error'
+import EventItemIcon from './EventItemIcon'
 
 type EventModalDataProps = {
   items: ReservationItem[]
@@ -14,11 +21,19 @@ const EventModalData = ({ items, itemIds }: EventModalDataProps) => {
   }
 
   return (
-    <ul>
-      {reservationItems.map(({ id, title }) => (
-        <li key={id}>{title}</li>
+    <List>
+      {reservationItems.map(({ id, title, image, category_id }) => (
+        <ListItem key={id}>
+          <EventItemIcon categoryId={category_id} />
+          {image && (
+            <ListItemAvatar>
+              <Avatar alt={title} src={image.src} />
+            </ListItemAvatar>
+          )}
+          <ListItemText>{title}</ListItemText>
+        </ListItem>
       ))}
-    </ul>
+    </List>
   )
 }
 
