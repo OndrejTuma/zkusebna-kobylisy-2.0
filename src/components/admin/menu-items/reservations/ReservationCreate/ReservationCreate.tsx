@@ -6,7 +6,6 @@ import {
   ReferenceArrayInput,
   ReferenceInput,
   required,
-  SelectArrayInput,
   SelectInput,
   SimpleForm,
   TextInput,
@@ -15,6 +14,7 @@ import { useFormContext } from 'react-hook-form'
 
 import { AdminReservation } from 'LocalTypes'
 import getReservedItemLabel from '../utils/getReservedItemLabel'
+import SelectItems from './SelectItems'
 
 const ReservationItems = () => {
   const { dateStart, dateEnd, itemIds } =
@@ -32,7 +32,7 @@ const ReservationItems = () => {
         ignoreBusyItems: itemIds,
       }}
     >
-      <SelectArrayInput
+      <SelectItems
         disableValue='busy'
         label='Položky'
         optionText={getReservedItemLabel}
@@ -99,7 +99,11 @@ const ReservationCreate = (props: object) => {
         <TextInput label={'E-mail'} source='email' validate={required()} />
         <TextInput label='Telefon' source='phone' validate={required()} />
         <ReferenceInput reference='reservation-types' source='reservationType'>
-          <SelectInput label='Účel rezervace' optionText='title' validate={required()} />
+          <SelectInput
+            label='Účel rezervace'
+            optionText='title'
+            validate={required()}
+          />
         </ReferenceInput>
         <ReservationItems />
         <BooleanInput label='Zaplacená' source='paid' />
