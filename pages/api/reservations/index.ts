@@ -128,6 +128,7 @@ export default async function handler(
           await sendMailToOwner('new', {
             reservation: {
               ...req.body,
+              id: event.id,
               price: reservationPrice,
             },
             items,
