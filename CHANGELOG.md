@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.1](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.4.0...v1.4.1) (2023-08-05)
+
+
+### Bug Fixes
+
+* **Calendar style:** update styles of calendar and event modal ([#90](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/90)) ([7ff82c4](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/7ff82c4b3edda65f360b411219b3d79c811de205))
+* **Calendar:** show reservation from previous months also ([#88](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/88)) ([234267b](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/234267b6633f831336d71baa61124c8aaf3f74ad))
+
 ## [1.4.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.3.0...v1.4.0) (2023-08-05)
 
 
