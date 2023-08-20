@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.4.1...v1.5.0) (2023-08-20)
+
+
+### Features
+
+* **Event Items Grouping:** group reservation items in event modal ([#93](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/93)) ([17849be](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/17849bebb1ffae1db084567f7e975014b981a80b))
+
+
+### Bug Fixes
+
+* **Icon:** add icon for category Stojany ([#91](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/91)) ([261931a](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/261931ab5679681aaa85bc9038745a8a80190133))
+
 ## [1.4.1](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.4.0...v1.4.1) (2023-08-05)
 
 
