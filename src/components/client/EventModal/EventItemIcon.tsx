@@ -7,6 +7,7 @@ import CampaignIcon from '@mui/icons-material/Campaign';
 import TuneIcon from '@mui/icons-material/Tune';
 import LyricsIcon from '@mui/icons-material/Lyrics';
 import PermCameraMicIcon from '@mui/icons-material/PermCameraMic';
+import SurroundSoundIcon from '@mui/icons-material/SurroundSound';
 
 interface EventItemIconProps {
   categoryId?: string
@@ -43,6 +44,9 @@ const EventItemIcon = ({ categoryId }: EventItemIconProps) => {
       break
     case '62f375f35da040f39c3abe55': // Stojany na noty
       icon = <LyricsIcon />
+      break
+    case '62cac2676c722ddc352a8c08': // Stojany
+      icon = <SurroundSoundIcon />
       break
     default:
       icon = <MusicNoteIcon />
