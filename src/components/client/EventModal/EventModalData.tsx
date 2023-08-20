@@ -7,6 +7,7 @@ import Avatar from '@mui/material/Avatar'
 import { ReservationItem } from 'LocalTypes'
 import Error from 'Components/generic/Error'
 import EventItemIcon from './EventItemIcon'
+import getGroupItems from './utils/getGroupItems'
 
 type EventModalDataProps = {
   items: ReservationItem[]
@@ -22,7 +23,7 @@ const EventModalData = ({ items, itemIds }: EventModalDataProps) => {
 
   return (
     <List>
-      {reservationItems.map(({ id, title, image, category_id }) => (
+      {getGroupItems(reservationItems).map(({ id, title, image, category_id }) => (
         <ListItem key={id}>
           <EventItemIcon categoryId={category_id} />
           {image && (
