@@ -1,0 +1,63 @@
+name: Backup database
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * 1
+
+env:
+  PROJECT_PATH: zkusebna-kobylisy-2.0
+  EXPORTED_FILE_NAME: cron-export.tar.gz
+
+jobs:
+  backup:
+    name: Backup production database
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Connect to DigitalOcean and execute backup script
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: root
+          key: ${{ secrets.DO_KEY }}
+          passphrase: ${{ secrets.DO_KEY_PASSPHRASE }}
+          envs: EXPORTED_FILE_NAME,PROJECT_PATH
+          script: |
+            exportFileName=$(bash ./$PROJECT_PATH/backup/export-db.sh | tail -n 1)
+            mv $exportFileName $EXPORTED_FILE_NAME
+
+      - name: Copy exported file to local
+        uses: nicklasfrahm/scp-action@main
+        with:
+          direction: download
+          host: ${{ secrets.DO_HOST }}
+          username: root
+          key: ${{ secrets.DO_KEY }}
+          passphrase: ${{ secrets.DO_KEY_PASSPHRASE }}
+          fingerprint: ${{ secrets.DO_SERVER_FINGERPRINT }}
+          source: ${{ env.EXPORTED_FILE_NAME }}
+          target: ${{ env.EXPORTED_FILE_NAME }}
+
+      - name: Remove exported file from server
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: root
+          key: ${{ secrets.DO_KEY }}
+          passphrase: ${{ secrets.DO_KEY_PASSPHRASE }}
+          envs: EXPORTED_FILE_NAME
+          script: |
+            rm $EXPORTED_FILE_NAME
+
+      - name: Upload exported file to GitHub
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.EXPORTED_FILE_NAME }}
+          path: ./${{ env.EXPORTED_FILE_NAME }}
+
+      - name: Print summary
+        run: |
+          echo "DB export successful :tada:" >> $GITHUB_STEP_SUMMARY
