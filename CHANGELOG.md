@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.5.0...v1.6.0) (2023-08-25)
+
+
+### Features
+
+* **ReservationList:** differentiate repeat reservation in reservation list ([#95](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/95)) ([0cbc463](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/0cbc46300becacfd3c016f40902b9c04479990dc))
+
 ## [1.5.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.4.1...v1.5.0) (2023-08-20)
 
 
