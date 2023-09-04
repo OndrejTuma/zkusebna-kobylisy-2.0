@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.6.0...v1.7.0) (2023-09-04)
+
+
+### Features
+
+* add text about constrains when reserving zkusebna ([#97](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/97)) ([521f492](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/521f49208bb60418f93b1d1f6404c59e9a542179))
+
 ## [1.6.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.5.0...v1.6.0) (2023-08-25)
 
 
