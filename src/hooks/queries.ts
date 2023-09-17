@@ -24,10 +24,24 @@ export const useGetAllItems = () => {
 }
 export const useGetAvailableItems = (timeMin: Date, timeMax: Date) => {
   const query = useQuery<AxiosResponse<ReservationItem[]>, AxiosError<NetworkFailedState>>(
-    ['getAvailableItems'],
+    ['getAvailableItems', timeMin, timeMax],
     () =>
       axios.get(
         `/api/items?range=[0,999]&filter=${JSON.stringify({
+          timeMin: timeMin.toISOString(),
+          timeMax: timeMax.toISOString(),
+        })}`
+      )
+  )
+
+  return query
+}
+export const useIsQuietTime = (timeMin: Date, timeMax: Date) => {
+  const query = useQuery<AxiosResponse<boolean>, AxiosError<NetworkFailedState>>(
+    ['isQuietTime', timeMin, timeMax],
+    () =>
+      axios.get(
+        `/api/reservations/quiet-time?filter=${JSON.stringify({
           timeMin: timeMin.toISOString(),
           timeMax: timeMax.toISOString(),
         })}`
