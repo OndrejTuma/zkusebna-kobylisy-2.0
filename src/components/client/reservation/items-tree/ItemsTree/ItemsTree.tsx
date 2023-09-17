@@ -39,12 +39,10 @@ export type StructuredCategory = ReservationItemCategory & {
   items: ReservationItem[]
 }
 
-const renderStructuredCategory = ({
-  id,
-  title,
-  items,
-  subcategories,
-}: StructuredCategory) => (
+const renderStructuredCategory = (
+  { id, title, items, parent_id, subcategories }: StructuredCategory,
+  isQuietTime?: boolean
+) => (
   <StyledTreeItem
     ContentComponent={CategoryItem}
     key={id}
@@ -53,7 +51,7 @@ const renderStructuredCategory = ({
   >
     {subcategories.map((category) => (
       <React.Fragment key={category.id}>
-        {renderStructuredCategory(category)}
+        {renderStructuredCategory(category, isQuietTime)}
       </React.Fragment>
     ))}
     {items.map(({ id, title, code, price, busy }) => (
@@ -63,7 +61,15 @@ const renderStructuredCategory = ({
         nodeId={id}
         disabled={busy}
         title={busy ? 'Položka je rezervovaná' : undefined}
-        label={<Item title={title} code={code} price={price} />}
+        label={
+          <Item
+            // Show quiet time only for items that are in "Zkušebna" category
+            isQuietTime={isQuietTime && !parent_id && title === 'Zkušebna'}
+            title={title}
+            code={code}
+            price={price}
+          />
+        }
       />
     ))}
   </StyledTreeItem>
@@ -72,11 +78,17 @@ const renderStructuredCategory = ({
 type Props = {
   categories: ReservationItemCategory[]
   items: ReservationItem[]
+  isQuietTime: boolean
   reservationType: ReservationType
 }
 const itemsName = 'itemIds'
 
-const ItemsTree = ({ categories, items, reservationType }: Props) => {
+const ItemsTree = ({
+  categories,
+  items,
+  isQuietTime,
+  reservationType,
+}: Props) => {
   const structuredCategories: StructuredCategory[] = useMemo(
     () =>
       categories
@@ -87,7 +99,9 @@ const ItemsTree = ({ categories, items, reservationType }: Props) => {
     [categories, items]
   )
   const [{ value }, , { setValue }] = useField(itemsName)
-  const [selectedItemIds, setSelectedItemIds] = useState<Set<string>>(new Set(value))
+  const [selectedItemIds, setSelectedItemIds] = useState<Set<string>>(
+    new Set(value)
+  )
 
   const onSelect = (event: React.SyntheticEvent, selectedItemIds: string[]) =>
     setSelectedItemIds((itemIdsSet) => {
@@ -113,7 +127,7 @@ const ItemsTree = ({ categories, items, reservationType }: Props) => {
       >
         {structuredCategories.map((category) => (
           <React.Fragment key={category.id}>
-            {renderStructuredCategory(category)}
+            {renderStructuredCategory(category, isQuietTime)}
           </React.Fragment>
         ))}
       </TreeView>

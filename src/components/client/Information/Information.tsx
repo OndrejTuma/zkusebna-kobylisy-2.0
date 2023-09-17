@@ -26,11 +26,6 @@ const Information = () => {
             Zde si můžete k zapůjčení rezervovat zkušebnu, zvukovou techniku a
             hudební nástroje.
           </Typography>
-          <Typography mt={2}><strong>DŮLEŽITÉ!!!</strong></Typography>
-          <Typography mb={2}>
-            Před rezervací zkušebny zkontrolujte, zda vaší rezervací nebudete
-            rušit akci v kostele nebo knihovně. <Link href='http://zkusebna-kobylisy.cz/ticho-ve-zkusebne/'>„Ticho“ ve zkušebně</Link>
-          </Typography>
           <Typography my={2} sx={{ fontSize: 20 }}>
             Pomoc, dotazy, nápady a připomínky pište na{' '}
             <Link href='mailto:zkusebna.terezicka@gmail.com'>

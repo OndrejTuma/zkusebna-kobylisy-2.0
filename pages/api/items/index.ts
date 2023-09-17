@@ -21,12 +21,13 @@ export default async function handler(
       case 'GET':
         const { filter, range, sort } = parseRAFilters(req.query)
 
-        const [categoryName, timeMin, timeMax, ignoreBusyItems] = filter.popMany([
-          'categoryName',
-          'timeMin',
-          'timeMax',
-          'ignoreBusyItems',
-        ])
+        const [categoryName, timeMin, timeMax, ignoreBusyItems] =
+          filter.popMany([
+            'categoryName',
+            'timeMin',
+            'timeMax',
+            'ignoreBusyItems',
+          ])
 
         // return only active items for unauthenticated users (clients)
         try {
@@ -34,7 +35,7 @@ export default async function handler(
         } catch (error) {
           filter.add('active', true)
         }
-        
+
         // Filter items by category
         if (categoryName) {
           const byCategoryFilter = new Filter({ title: categoryName })
@@ -46,28 +47,40 @@ export default async function handler(
           filter.add('category_id', categoryIds)
         }
 
-        const items = await Item.find(filter.mongoFormat()).skip(range.from).limit(range.itemsCount()).sort(sort.mongoFormat())
+        const items = await Item.find(filter.mongoFormat())
+          .skip(range.from)
+          .limit(range.itemsCount())
+          .sort(sort.mongoFormat())
         const itemsCount = await Item.find(filter.mongoFormat()).count()
 
         const busyItems = await getBusyItems(timeMin, timeMax)
-        const filteredBusyItems = busyItems.filter((id) => !ignoreBusyItems?.includes(id))
+        const filteredBusyItems = busyItems.filter(
+          (id) => !ignoreBusyItems?.includes(id)
+        )
 
-        res.setHeader('Content-Range', `categories ${range.print()}/${itemsCount}`)
-        res.status(200).json(items.map(({ id, category_id, title, code, price, image, active }) => ({
-          id,
-          category_id,
-          title,
-          code,
-          price,
-          image,
-          active,
-          busy: filteredBusyItems.includes(id),
-        })))
+        res.setHeader(
+          'Content-Range',
+          `categories ${range.print()}/${itemsCount}`
+        )
+        res.status(200).json(
+          items.map(
+            ({ id, category_id, title, code, price, image, active }) => ({
+              id,
+              category_id,
+              title,
+              code,
+              price,
+              image,
+              active,
+              busy: filteredBusyItems.includes(id),
+            })
+          )
+        )
 
         break
       case 'POST':
         await authorizeRequest(req)
-        
+
         const { title, category_id, code, price, image, active } = req.body
 
         const item = await Item.create({
