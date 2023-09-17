@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.7.0...v1.8.0) (2023-09-17)
+
+
+### Features
+
+* **QuietTime:** add detection when reservation is during another event in church or library ([#99](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/99)) ([2d1d692](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/2d1d6924102285a1d0aa578e50897c4618761c2b))
+
 ## [1.7.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.6.0...v1.7.0) (2023-09-04)
 
 
