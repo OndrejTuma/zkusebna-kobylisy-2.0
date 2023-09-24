@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.9.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.8.0...v1.9.0) (2023-09-24)
+
+
+### Features
+
+* **Reservations:** return only necessary reservation data for unauthorized request ([b4af320](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/b4af320611fc98431ae813d085e7ba15d87cfe7e))
+
+
+### Bug Fixes
+
+* **Event Modal:** show name of reservation creator ([b4af320](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/b4af320611fc98431ae813d085e7ba15d87cfe7e))
+* move warning before reservation item ([#101](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/101)) ([b4af320](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/b4af320611fc98431ae813d085e7ba15d87cfe7e))
+
 ## [1.8.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.7.0...v1.8.0) (2023-09-17)
 
 
