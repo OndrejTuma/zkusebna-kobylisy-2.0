@@ -19,7 +19,7 @@ const HowToModal = ({ isOpen, onClose }: HowToModalProps) => {
 
   return (
     <Modal open={isOpen} onClose={onClose}>
-      <Modal.Title>Jak vytvořit novou rezervaci?</Modal.Title>
+      <Modal.Header title='Jak vytvořit novou rezervaci?' />
       <Modal.Content>
         <Box mb={4}>
           <Stepper activeStep={activeStep} steps={steps} />

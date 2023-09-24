@@ -116,12 +116,12 @@ const ReservationModal = ({ onClose, open, slotInfo }: ReservationProps) => {
         style={formStyle}
         gridStyle={formGridStyle}
       >
-        <Modal.Title>Nová rezervace</Modal.Title>
+        <Modal.Header title='Nová rezervace' />
         <Modal.Content>
           <Box mb={4}>
             <Stepper activeStep={activeStep} steps={steps} />
           </Box>
-          {isError && <ErrorAxios error={error} sx={{ marginBottom: 2 }}/>}
+          {isError && <ErrorAxios error={error} sx={{ marginBottom: 2 }} />}
           {activeStep === 0 ? (
             <Step1 />
           ) : activeStep === 1 ? (

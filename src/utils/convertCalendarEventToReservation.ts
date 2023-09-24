@@ -1,24 +1,62 @@
 import { CalendarEvent, Reservation } from 'LocalTypes'
 import { joinItemIdsFromChunks } from './itemsChunks'
 
-const convertCalendarEventToReservation = (event: CalendarEvent): Reservation => {
-  const { id, start, end, summary, extendedProperties, recurrence, recurringEventId } = event
-
-  return {
-    archived: Boolean(extendedProperties?.shared?.archived),
+const convertCalendarEventToReservation = (
+  event: CalendarEvent,
+  isAuthorized?: boolean
+): Reservation => {
+  const {
     id,
-    dateStart: start?.date || start?.dateTime,
-    dateEnd: end?.date || end?.dateTime,
-    email: extendedProperties?.shared?.email,
-    itemIds: joinItemIdsFromChunks(extendedProperties?.shared),
-    name: extendedProperties?.shared?.name,
-    phone: extendedProperties?.shared?.phone,
-    price: extendedProperties?.shared?.price ? parseInt(extendedProperties?.shared?.price) : 0,
-    paid: Boolean(extendedProperties?.shared?.paid),
+    start,
+    end,
+    summary,
+    extendedProperties,
     recurrence,
     recurringEventId,
-    reservationName: summary,
-    reservationType: extendedProperties?.shared?.reservationType,
+  } = event
+
+  const dateStart = start?.date || start?.dateTime
+  const dateEnd = end?.date || end?.dateTime
+  const itemIds = joinItemIdsFromChunks(extendedProperties?.shared)
+  const name = extendedProperties?.shared?.name
+  const reservationName = summary
+  const reservationType = extendedProperties?.shared?.reservationType
+
+  if (!isAuthorized) {
+    return {
+      id,
+      dateStart,
+      dateEnd,
+      itemIds,
+      name,
+      reservationName,
+      reservationType,
+    }
+  }
+
+  const archived = Boolean(extendedProperties?.shared?.archived)
+  const email = extendedProperties?.shared?.email
+  const phone = extendedProperties?.shared?.phone
+  const price = extendedProperties?.shared?.price
+    ? parseInt(extendedProperties?.shared?.price)
+    : 0
+  const paid = Boolean(extendedProperties?.shared?.paid)
+
+  return {
+    archived,
+    id,
+    dateStart,
+    dateEnd,
+    email,
+    itemIds,
+    name,
+    phone,
+    price,
+    paid,
+    recurrence,
+    recurringEventId,
+    reservationName,
+    reservationType,
   }
 }
 

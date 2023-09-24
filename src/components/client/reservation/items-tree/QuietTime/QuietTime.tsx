@@ -5,8 +5,14 @@ import Tooltip from '@mui/material/Tooltip'
 import React from 'react'
 
 const QuietTime = () => {
+  // Clicking on Icon should not trigger parent's onClick
+  const handleStopPropagation = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => e.stopPropagation()
+
   return (
     <Tooltip
+      onMouseDown={handleStopPropagation}
       title={
         <Typography>
           V čas vaší rezervace probíhá akce v kostele/knihovně. Ujistěte se, že
