@@ -35,6 +35,13 @@ export default async function handler(
 
     switch (req.method) {
       case 'GET': {
+        let isAuthorized = true
+        try {
+          await authorizeRequest(req)
+        } catch (error) {
+          isAuthorized = false 
+        }
+
         const { data: calendarEvent } = await events.get(
           {
             calendarId,
@@ -44,7 +51,7 @@ export default async function handler(
         )
 
         const reservation: Reservation =
-          convertCalendarEventToReservation(calendarEvent)
+          convertCalendarEventToReservation(calendarEvent, isAuthorized)
 
         const items = await Item.find()
         const reservationTypes = await ReservationTypeModel.find()

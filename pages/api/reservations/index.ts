@@ -19,6 +19,7 @@ import convertReservationToCalendarEvent from 'Utils/convertReservationToCalenda
 import { badRequestCatch, methodNotAllowed } from 'Utils/api/misc'
 import { sendNewReservationMail, sendMailToOwner } from 'Lib/mailer'
 import { Filter, parseRAFilters } from 'Lib/filters'
+import authorizeRequest from 'Utils/api/authorizeRequest'
 
 export default async function handler(
   req: NextApiRequest,
@@ -40,6 +41,13 @@ export default async function handler(
 
     switch (req.method) {
       case 'GET':
+        let isAuthorized = true
+        try {
+          await authorizeRequest(req)
+        } catch (error) {
+          isAuthorized = false 
+        }
+
         const {
           filter: {
             allFilters: { current, clientMonth, title },
@@ -78,7 +86,7 @@ export default async function handler(
         }
 
         const reservations: Reservation[] = reservationEvents.map(
-          convertCalendarEventToReservation
+          event => convertCalendarEventToReservation(event, isAuthorized)
         )
 
         const reservationsWithPrice = reservations.map((reservation) => ({

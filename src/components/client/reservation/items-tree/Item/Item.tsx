@@ -17,8 +17,8 @@ const Item = ({ title, code, price, isQuietTime }: ItemProps) => {
   return (
     <Grid container justifyContent='space-between' flexWrap='nowrap'>
       <Grid item>
-        {title} <small>{code ? `(${code})` : ''}</small>
         {isQuietTime && <QuietTime />}
+        {title} <small>{code ? `(${code})` : ''}</small>
       </Grid>
       <Grid item>{formatNumberToCZK(getDiscountPrice(price, discount))}</Grid>
     </Grid>
