@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.1](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.9.0...v1.9.1) (2024-01-02)
+
+
+### Bug Fixes
+
+* remove main recurring reservations from busy items search ([#103](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/103)) ([b4f1d63](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/b4f1d63501b3a1d65ef1d42f1dce36c3e33b0656))
+
 ## [1.9.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.8.0...v1.9.0) (2023-09-24)
 
 
