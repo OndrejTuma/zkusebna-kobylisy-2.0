@@ -20,6 +20,7 @@ const getBusyItems = async (timeMin?: string, timeMax?: string) => {
     calendarId,
     timeMin,
     timeMax,
+    singleEvents: true,
   })
 
   if (!reservationEvents || reservationEvents.length === 0) {
