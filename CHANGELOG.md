@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.9.1...v1.10.0) (2024-06-30)
+
+
+### Features
+
+* **email:** add reservation type to admin email ([#105](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/105)) ([88154bf](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/88154bf0a8d4e239709f370291551a00ebeea6a7))
+
 ## [1.9.1](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.9.0...v1.9.1) (2024-01-02)
 
 
