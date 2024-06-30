@@ -75,7 +75,7 @@ export const sendMessage = async (
 }
 
 interface ReservationMailOptions {
-  title: string[],
+  title: string[]
   reservation: Reservation
   items?: ReservationItem[]
   reservationTypes?: ReservationType[]
@@ -111,12 +111,17 @@ export const populateEmailTemplate = ({
   const discount =
     reservationTypes.find(({ id }) => id === reservation.reservationType)
       ?.discount ?? 1
-  const reservationItems = items.filter(({ id }) => reservation.itemIds.includes(id))
+      
+  const reservationItems = items
+    .filter(({ id }) => reservation.itemIds.includes(id))
     .map(({ image, price, title }) => ({
       image,
       title,
       price: formatNumberToCZK(getDiscountPrice(price, discount)),
     }))
+  const reservationType = reservationTypes.find(
+    ({ id }) => id === reservation.reservationType
+  )?.title
 
   const qrCode =
     price && reservationName
@@ -133,5 +138,6 @@ export const populateEmailTemplate = ({
     title,
     items: reservationItems,
     customText,
+    reservationType,
   })
 }
