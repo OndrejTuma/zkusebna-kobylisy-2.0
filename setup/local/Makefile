@@ -8,6 +8,7 @@ COMPOSE_FILES := -f docker-compose.yml
 
 run:
 	docker-compose -p $(PROJECT_NAME) $(COMPOSE_FILES) up -d
+	@echo "Open http://localhost or http://zkusebna.local if you have a proxy"
 
 build:
 	docker-compose -p $(PROJECT_NAME) $(COMPOSE_FILES) build
