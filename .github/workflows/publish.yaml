@@ -12,16 +12,16 @@ jobs:
     name: Publish to production
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout tags
+        if: ${{ github.event.inputs.tag == '' }}
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Verify tag
         if: ${{ github.event.inputs.tag != '' }} 
         run: |
           [[ $(git tag -l ${{ github.event.inputs.tag }}) ]] && echo "PARSED_TAG=${{ github.event.inputs.tag }}" >> $GITHUB_ENV || (echo "Tag ${{ github.event.inputs.tag }} does not exist" && exit 1)
-
-      - name: Checkout tags
-        if: ${{ github.event.inputs.tag == '' }}
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       - name: Get tag
         if: ${{ github.event.inputs.tag == '' }}
