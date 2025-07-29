@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.1](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.10.0...v1.10.1) (2025-05-30)
+
+
+### Bug Fixes
+
+* publish workflow ([b11e063](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/b11e0637c5ae0b8d55f38a77bfad607bfea3f415))
+
 ## [1.10.0](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.9.1...v1.10.0) (2024-06-30)
 
 
