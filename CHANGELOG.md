@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.2](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.10.1...v1.10.2) (2025-10-08)
+
+
+### Bug Fixes
+
+* **calendar:** extend max results in calendar to 2500 ([#109](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/issues/109)) ([eb97315](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/commit/eb973157ffbff25177e9d3789ad23e668c4ba340))
+
 ## [1.10.1](https://github.com/OndrejTuma/zkusebna-kobylisy-2.0/compare/v1.10.0...v1.10.1) (2025-05-30)
 
 
