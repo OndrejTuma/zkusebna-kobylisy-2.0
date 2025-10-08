@@ -19,7 +19,7 @@ jobs:
           node-version: 18.14.2
 
       - name: Install packages
-        uses: toptal/davinci-github-actions/yarn-install@v5.0.0
+        run: yarn install --frozen-lockfile
 
       - name: Run lint
         run: yarn test:lint

@@ -60,6 +60,7 @@ export default async function handler(
           calendarId,
           q: title,
           singleEvents: true,
+          maxResults: 2500,
         })
 
         // filter expired reservations
